@@ -1,0 +1,10 @@
+{
+  "name": "ngae",
+  "version": "0.0.0",
+  "description": "NGAE",
+  "main": "app.js",
+  "author": {
+    "name": "joseluis.vaquero"
+  },
+  "dependencies": {}
+}

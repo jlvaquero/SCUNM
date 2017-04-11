@@ -1,0 +1,9 @@
+{
+  "name": "telegram-bot",
+  "version": "0.0.0",
+  "description": "TelegramBot",
+  "main": "app.js",
+  "author": {
+    "name": "joseluis.vaquero"
+  }
+}
