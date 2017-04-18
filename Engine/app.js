@@ -39,13 +39,21 @@
 				doorClosed: {
 					description: "The door of the mansion is key locked."
 				}
+			},
+			interactives: {
 			}
 		},
 		rooms: {
 				"Start Gate": {
 						name: "Start Gate",
-						descriptions: { 0: "You are on the other side of a burnt broken bridge, you look back to see the debris and a steady stream of water. There is an abandoned camp with a still active bonfire on the side of the road." },
-						images: { 0: "http://gameimages/myGame/StartGate.gif" },
+						descriptions: {
+							0: "You are on the other side of a burnt broken bridge, you look back to see the debris and a steady stream of water. There is an abandoned camp with a still active bonfire on the side of the road.",
+							1: "You are on the other side of a burnt broken bridge, you look back to see the debris and a steady stream of water. There is an abandoned camp with a extinguished bonfire on the side of the road."
+						},
+						images: {
+							0: "http://gameimages/myGame/StartGate.gif",
+							1: "http://gameimages/myGame/StartGateExtinguished.gif"
+						},
 						interactives: {
 							bonfire: {
 								name: "Bonfire",
@@ -61,6 +69,16 @@
 									this.state.extinguished = true;
 									this.state.descriptionIndex = 1;
 									this.state.imageIndex = 1;
+								},
+								"look at": function () {
+									game.interactiveGetFromCurrentRoom("key").state.visible = true;
+								},
+								use: function (game, item) {
+									if (item.id == "bottle") {
+										this.extinguish();
+										item.empty();
+										game.interactiveGetFromCurrentRoom("key").state.collectible = true;
+									}
 								}
 							},
 							key: {
@@ -70,6 +88,10 @@
 								},
 								images: {
 									0: "http://gameimages/myGame/copperKey.gif"
+								},
+								"pick up": function (game) {
+									var out = this.state.collectible ? game.roomGetCurrent().keyPickedUp() : game.outPutCreateFromAction("hotKey");
+									return out;
 								}
 							}
 						},
@@ -79,33 +101,9 @@
 								south: null,
 								west: null
 						},
-						"look at": function (game, interactiveId) {
-
-							if (interactiveId == "bonfire") {
-								game.interactiveGetFromCurrentRoom("key").state.visible = true;
-							}
-							return null; //let gobal command handle this
-						},
-						"pick up": function (game, itemId) {
-							if (itemId == "key") {
-								var key = game.interactiveGetFromCurrentRoom("key");
-								if (key.state.visible && !key.state.collectible && !key.state.revomed) return game.outPutCreateFromAction("hotKey");
-							}
-							return null; //let gobal command handle this
-						},
-						use: function (game, firstInteractiveId, secondInteractiveId) {
-							if (firstInteractiveId == "bottle" && secondInteractiveId == "bonfire") {
-								var bottle = game.interactiveGetFromInventory(firstInteractiveId);
-								var bonfire = game.interactiveGetFromCurrentRoom(secondInteractiveId);
-								if (bottle.state.filled && !bonfire.state.extinguished) {
-									game.inventoryRemoveItem(bottle);
-									bonfire.extinguish();
-									var key = game.interactiveGetFromCurrentRoom("key");
-									key.state.collectible = true;
-									return game.outPutCreateFromAction("extinguish");
-								}
-							} 
-							return null;
+						keyPickedUp: function () {
+							this.state.descriptionIndex = 1;
+							this.state.imageIndex = 1;
 						}
 				},
 				"A Fountain": {
@@ -130,6 +128,11 @@
 									this.state.filled = true;
 									this.state.descriptionIndex = 1;
 									this.state.imageIndex = 1;
+								},
+								empty: function () {
+									this.state.filled = false;
+									this.state.descriptionIndex = 0;
+									this.state.imageIndex = 0;
 								}
 							},
 							fountain: {
@@ -226,8 +229,8 @@ game.outPutCreateFromRoom = function (room) {
 };
 
 game.outPutCreateFromInteractive = function (entity) {
-	var text = entity.state ? entity.descriptions[entity.state.descriptionIndex] : entity.descriptions[0];
-	var imgURL = entity.state ? entity.images[entity.state.imageIndex] : entity.descriptions[0];
+	var text = entity.descriptions[entity.state.descriptionIndex];
+	var imgURL = entity.images[entity.state.imageIndex];
 	return this.outPutCreateRaw(text, imgURL);
 };
 
@@ -265,13 +268,8 @@ game.outPutCreateFromAction= function(actionName) {
 	return this.outPutCreateRaw(action.description, action.image);
 };
 
-game.inventoryAddItem = function (item, removeFromRoom) {
-	if (item && item.state.collectible && item.state.visible && !item.state.removed) {
+game.inventoryAddItem = function (item) {
 		this.state.inventory[item.id] = item;
-		item.state.removed = removeFromRoom;
-		return true;
-		}
-	return false;
 };
 
 game.inventoryRemoveItem = function (item) {
@@ -301,11 +299,18 @@ game.globalCommands.go = function (game, direction) {
 	if (!direction) return game.outPutCreateFromRoomExits("Where to?", "go");//output list of directions
 
 	var destRoom = game.roomGetCurrent().exits[direction];
-	if (destRoom) {
-		game.roomSetCurrent(destRoom);
-		return game.outPutCreateFromRoom(game.roomGetCurrent());
-	}
-	return game.outPutCreateRaw("No way to go...");
+	if (!destRoom) return game.outPutCreateRaw("No way to go...");
+
+	var outPut = game["go"] ? game.go(direction) : null;
+	if (output) return outPut;
+
+	var room = game.roomGetCurrent();
+	outPut = room["go"] ? room.go(game, direction) : null;
+	if (output) return outPut;
+
+	//default behaviour
+	game.roomSetCurrent(destRoom);
+	return game.outPutCreateFromRoom(game.roomGetCurrent());
 };
 
 game.globalCommands.inspect = function (game, itemId) {
@@ -317,32 +322,87 @@ game.globalCommands.inventory = function (game) { return game.outPutCreateFromIn
 
 game.globalCommands.use = function (game, firstInteractiveId, secondInteractiveId) {
 	if (!firstInteractiveId) return game.outPutCreateFromRoomInteractives("Use what?", "use", true);
+
 	if (firstInteractiveId == "inventory") { return game.outPutCreateFromInventory("Use what?", "use") };
-	if (firstInteractiveId) {
-		var item = game.interactiveGetFromCurrentRoom(firstInteractiveId) || game.interactiveGetFromInventory(firstInteractiveId);
+
+	firstInteractive = game.interactiveGetFromCurrentRoom(firstInteractiveId) || game.interactiveGetFromInventory(firstInteractiveId);
+
+	if (firstInteractive) {
+		var outPut = game["use"] ? game["use"](firstInteractive) : null;
+		if (output) return outPut;
+
+		var room = game.roomGetCurrent();
+		outPut = room["use"] ? room.use(game, firstInteractive) : null;
+		if (output) return outPut;
+
+		outPut = firstInteractive["use"] ? firstInteractive.use(game) : null;
+		if (output) return outPut;
+
 		if (!secondInteractiveId) return game.outPutCreateFromRoomInteractives("Use " + item.name + " with what?", "use " + item.name, true);
+
 		if (secondInteractiveId == "inventory") { return game.outPutCreateFromInventory("Use " + item.name + " with what?", "use " + item.name) };
-		if (secondInteractiveId) { game.outPutCreateRaw("It does not work."); }
+
+		secondInteractive = game.interactiveGetFromCurrentRoom(secondInteractiveId) || game.interactiveGetFromInventory(secondInteractiveId);
+
+		if (secondInteractiveId) {
+			var outPut = game["use"] ? game["use"](firstInteractive, secondInteractive) : null;
+			if (output) return outPut;
+
+			var room = game.roomGetCurrent();
+			outPut = room["use"] ? room.use(game, firstInteractive, secondInteractive) : null;
+			if (output) return outPut;
+
+			outPut = firstInteractive["use"] ? firstInteractive.use(game, secondInteractive) : null;
+			if (output) return outPut;
+
+			return game.outPutCreateRaw("It does not work.");
+		}
 	}
 };
 
 game.globalCommands["look at"] = function (game, interactiveId) {
 	if (!interactiveId) return game.outPutCreateFromRoomInteractives("Look at what?", "look at"); // ouput list of interactives
 
-	objetive = game.interactiveGetFromCurrentRoom(interactiveId);
-	if (objetive && objetive.state.visible && !objetive.state.removed) return game.outPutCreateFromInteractive(objetive);
+	var interactive = game.interactiveGetFromCurrentRoom(interactiveId);
+	if (!interactive) return game.outPutCreateRaw("You can not see that.");
 
-	return game.outPutCreateRaw("You can not see that.");
+	var outPut = game["look at"] ? game["look at"](interactive) : null;
+	if (output) return outPut;
+
+	var room = game.roomGetCurrent();
+	outPut = room["look at"] ? room["look at"](interactive) : null;
+	if (output) return outPut;
+
+	outPut = interactive["look at"] ? interactive["look at"]() : null;
+	if (output) return outPut;
+
+	//default behaviour
+	if (interactive.state.visible && !objetive.state.removed) return game.outPutCreateFromInteractive(objetive);
 };
 
 game.globalCommands["pick up"] = function (game, interactiveId) {
 	{
 		if (!interactiveId) return game.outPutCreateFromRoomInteractives("Pick up what?", "pick up"); //output list of interactives in the room
 
-		var item = game.interactiveGetFromCurrentRoom(interactiveId);
-		if (game.inventoryAddItem(item, true)) return game.outPutCreateRaw("You picked up " + item.name);
+		var interactive = game.interactiveGetFromCurrentRoom(interactiveId);
+		if (!interactive) return game.outPutCreateRaw("Nothing to pick up.");
 
-		return game.outPutCreateRaw("You can not pick up that.");
+		var outPut = game["pick up"] ? game["pick up"](interactive) : null;
+		if (output) return outPut;
+
+		var room = game.roomGetCurrent();
+		outPut = room["pick up"] ? room["pick up"](interactive) : null;
+		if (output) return outPut;
+
+		outPut = interactive["pick up"] ? interactive["pick up"]() : null;
+		if (output) return outPut;
+
+		//default behaviour
+		if (!interactive.state.visible) return game.outPutCreateRaw("Nothing to pick up.");
+		if (!interactive.state.collectible) return game.outPutCreateRaw("You can not pick up that ");
+		game.inventoryAddItem(interactive);
+		interactive.state.removed = true;
+		return game.outPutCreateRaw("You picked up " + item.name);
 	}
 };
 
@@ -362,7 +422,6 @@ initIDs = function (game) {
 		}
 	}
 };
-
 
 initState = function (game) {
 	game.state.inventory = new Object();
@@ -403,37 +462,18 @@ initState = function (game) {
 
 		}
 	}
-
-};
-
-getCurrentRoom = function (game) { //without injecting state, better performance
-	return game.rooms[game.state.currentRoom];
 };
 
 execCommand = function (game, verb, dObject, iObject) {
-	var currentRoom = getCurrentRoom(game);
-	var cmd = getRoomCommand(game, verb);
-	var outPut = cmd ? cmd.call(game, game, dObject, iObject) : null;
-	if (outPut) return outPut;
-	cmd = getGlobalCommand(game, verb);
-	outPut = cmd ? cmd.call(game, game, dObject, iObject) : { text: "What? Try again..." };
+	outPut = game.globalCommands[verb] ? game.getGlobalCommand[verb](dObject, iObject) : { text: "What? Try again..." };
 	return outPut;
 };
 
-getGlobalCommand = function (game, verb) {
-	return game.globalCommands[verb];
-};
-
-getRoomCommand = function (game, verb) {
-	return getCurrentRoom(game)[verb];
-};
-
 start = function (game) {
-	var currentRoom = getCurrentRoom(game);
-	var roomState = game.state.rooms[game.state.currentRoom];
+	var currentRoom = game.roomGetCurrent();
 	return {
 		text: currentRoom.descriptions[roomState.descriptionIndex],
-		imgUrl: currentRoom.imageUrl ? currentRoom.imageUrl : null
+		imgUrl: currentRoom.images[roomState.imageIndex]
 	};
 };
 
