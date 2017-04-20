@@ -1,11 +1,11 @@
 ﻿var game = {
-	state: { //game state data, this data will be loaded/saved for every command for every player
+	state: { //game state data
 		currentRoom: "Start Gate",
 		inventory: null,
 		rooms: {
 			"A Fountain": { doorOpened: false }
 		},
-		interactives: {
+		actors: {
 			bonfire: {
 				extinguished: false
 			},
@@ -36,11 +36,14 @@
 			hotKey: {
 				description: "Auch! The key is too hot.You can not do that",
 			},
+			bottleEmpty: {
+				description: "You fill the bottle with the water of the fountain."
+			},
 			doorClosed: {
 				description: "The door of the mansion is key locked."
 			}
 		},
-		interactives: {
+		actors: {
 		}
 	},
 	rooms: {
@@ -54,7 +57,7 @@
 				0: "http://gameimages/myGame/StartGate.gif",
 				1: "http://gameimages/myGame/StartGateExtinguished.gif"
 			},
-			interactives: {
+			actors: {
 				bonfire: {
 					name: "Bonfire",
 					descriptions: {
@@ -71,13 +74,14 @@
 						this.state.imageIndex = 1;
 					},
 					"look at": function () {
-						game.interactiveGetFromCurrentRoom("key").state.visible = true;
+						game.actorGet("key").state.visible = true;
 					},
-					use: function (game, item) {
-						if (item.id == "bottle") {
+					use: function (game, secondactor) {
+						if (secondactor.id == "bottle") {
+							if (!secondactor.state.filled) return outPutCreateFromAction("bottleEmpty");
 							this.extinguish();
-							item.empty();
-							game.interactiveGetFromCurrentRoom("key").state.collectible = true;
+							secondactor.empty();
+							game.actorGet("key").state.collectible = true;
 						}
 					}
 				},
@@ -115,7 +119,7 @@
 			images: {
 				0: "http://gameimages/myGame/AFountain.gif"
 			},
-			interactives: {
+			actors: {
 				bottle: {
 					name: "Bottle",
 					descriptions: {
@@ -136,12 +140,21 @@
 						this.state.descriptionIndex = 0;
 						this.state.imageIndex = 0;
 					},
-					use: function (game, secondInteractive) {
-						if (!secondInteractive) return;
-						if (secondInteractive.id == "fountain") {
+					use: function (game, secondactor) {
+						if (!secondactor) return;
+
+						if (secondactor.id == "fountain") {
 							this.fill();
 							return game.outPutCreateFromAction("fillBottle");
 						}
+
+						if (secondactor.id == "bonfire") {
+							if (!secondactor.state.filled) return outPutCreateFromAction("bottleEmpty");
+							secondactor.extinguish();
+							this.empty();
+							game.actorGet("key").state.collectible = true;
+						}
+
 					},
 				},
 				fountain: {
@@ -152,10 +165,10 @@
 					images: {
 						0: "http://gameimages/myGame/fountain.gif"
 					},
-					use: function (game, secondInteractive) {
-						if (!secondInteractive) return;
-						if (secondInteractive.id == "bottle") {
-							secondInteractive.fill();
+					use: function (game, secondactor) {
+						if (!secondactor) return;
+						if (secondactor.id == "bottle") {
+							secondactor.fill();
 							return game.outPutCreateFromAction("fillBottle");
 						}
 					},
@@ -175,8 +188,8 @@
 					return game.outPutCreateFromAction("doorClosed");
 				}
 			},
-			"pick up": function (game, interactive) {
-				if (interactive.id = "bottle") {
+			"pick up": function (game, actor) {
+				if (actor.id = "bottle") {
 					this.bottlePickedUp();
 				}
 			}
@@ -200,28 +213,26 @@
 
 //Inject Game API on init
 game.roomGetCurrent = function () {
-	var room = this.rooms[this.state.currentRoom];
-	room.state = this.state.rooms[room.name];
-	return room;
+	return this.roomGet(this.state.currentRoom);
 };
 
-game.roomSetCurrent = function (destRoom) {
+game.roomSetCurrent = function (destRoomId) {
 	this.state.currentRoom = destRoom;
 };
 
-game.roomGet = function (roomName) {
-	var room = this.rooms[roomName];
-	room.state = this.state.rooms[room.name];
+game.roomGet = function (roomId) {
+	var room = this.rooms[roomId];
+	room.state = this.state.rooms[roomId];
 	return room;
 };
 
-game.interactiveGetFromCurrentRoom = function (interactiveId) {
-	interactive = this.roomGetCurrent().interactives[interactiveId];
-	interactive.state = this.state.interactives[interactiveId];
-	return interactive;
+game.actorGet = function (actorId) {
+	actor = this.roomGetCurrent().actors[actorId];
+	actor.state = this.state.actors[actorId];
+	return actor;
 };
 
-game.interactiveGetFromInventory = function (itemId) {
+game.actorGetFromInventory = function (itemId) {
 	return this.state.inventory[itemId];
 };
 
@@ -242,20 +253,20 @@ game.outPutCreateFromRoom = function (room) {
 	return this.outPutCreateRaw(text, imgURL);
 };
 
-game.outPutCreateFromInteractive = function (entity) {
-	var text = entity.descriptions[entity.state.descriptionIndex];
-	var imgURL = entity.images[entity.state.imageIndex];
+game.outPutCreateFromActor = function (actor) {
+	var text = actor.descriptions[actor.state.descriptionIndex];
+	var imgURL = actor.images[actor.state.imageIndex];
 	return this.outPutCreateRaw(text, imgURL);
 };
 
-game.outPutCreateFromRoomInteractives = function (text, command, showInventory) {
+game.outPutCreateFromRoomActors = function (text, command, showInventory) {
 	var currentGame = this;
 	var room = this.roomGetCurrent();
-	var list = Object.keys(room.interactives).filter(function (id) {
-		var item = currentGame.interactiveGetFromCurrentRoom(id);
+	var list = Object.keys(room.actors).filter(function (id) {
+		var item = currentGame.actorGet(id);
 		return item.state.visible && !item.state.removed;
 	}).map(function (id) {
-		var item = game.interactiveGetFromCurrentRoom(id);
+		var item = game.actorGet(id);
 		return { id: id, name: item.name }
 	});
 	if (showInventory) list.push({ id: "inventory", name: "inventory" })
@@ -264,7 +275,7 @@ game.outPutCreateFromRoomInteractives = function (text, command, showInventory) 
 
 game.outPutCreateFromInventory = function (text, command) {
 	var list = Object.keys(this.state.inventory).map(function (id) {
-		var item = game.interactiveGetFromInventory(id);
+		var item = game.actorGetFromInventory(id);
 		return { id: id, name: item.name }
 	});
 	return this.outPutCreateRaw(text, null, { command: command, list: list });
@@ -290,21 +301,21 @@ game.inventoryRemoveItem = function (item) {
 	delete this.state.inventory[item.id];
 };
 
-game.resourceGet = function (name) { //i.e. "images.TitleImage"
-	var resPath = name.split(".");
-	var resource = this.globalResources;
+//game.resourceGet = function (name) { //i.e. "images.TitleImage"
+//	var resPath = name.split(".");
+//	var resource = this.globalResources;
 
-	gerResource = function () {
-		resource = resource[resPath[index]];
-	};
+//	gerResource = function () {
+//		resource = resource[resPath[index]];
+//	};
 
-	for (var index in resPath) {
-		gerResource();
-	}
+//	for (var index in resPath) {
+//		gerResource();
+//	}
 
-	return resource;
+//	return resource;
 
-};
+//};
 
 game.globalCommands = new Object;
 
@@ -328,102 +339,104 @@ game.globalCommands.go = function (direction) {
 };
 
 game.globalCommands.inspect = function (itemId) {
-	var item = this.interactiveGetFromInventory(itemId);
-	if (item) return this.outPutCreateFromInteractive(item);
+	var item = this.actorGetFromInventory(itemId);
+	if (item) return this.outPutCreateFromActor(item);
 };
 
 game.globalCommands.inventory = function () { return this.outPutCreateFromInventory("This is what you got:", "inspect"); };
 
-game.globalCommands.use = function (firstInteractiveId, secondInteractiveId) {
-	if (!firstInteractiveId) return this.outPutCreateFromRoomInteractives("Use what?", "use", true);
+game.globalCommands.use = function (firstActorId, secondActorId) {
+	if (!firstActorId) return this.outPutCreateFromRoomActors("Use what?", "use", true);
 
-	if (firstInteractiveId == "inventory") { return this.outPutCreateFromInventory("Use what?", "use") };
+	if (firstActorId == "inventory") { return this.outPutCreateFromInventory("Use what?", "use") };
 
-	firstInteractive = this.interactiveGetFromCurrentRoom(firstInteractiveId) || this.interactiveGetFromInventory(firstInteractiveId);
+	var firstActor = this.actorGet(firstActorId) || this.actorGetFromInventory(firstActorId);
 
-	if (firstInteractive) {
-		var outPut = this["use"] ? this["use"](firstInteractive) : null;
+	if (firstActor && !firstActor.state.removed &&  firstActor.state.visile ) {
+		var outPut = this["use"] ? this["use"](firstActor) : null;
 		if (outPut) return outPut;
 
 		var room = this.roomGetCurrent();
-		outPut = room["use"] ? room.use(this, firstInteractive) : null;
+		outPut = room["use"] ? room.use(this, firstActor) : null;
 		if (outPut) return outPut;
 
-		outPut = firstInteractive["use"] ? firstInteractive.use(this) : null;
+		outPut = firstActor["use"] ? firstActor.use(this) : null;
 		if (outPut) return outPut;
 
-		if (!secondInteractiveId) return this.outPutCreateFromRoomInteractives("Use " + firstInteractive.name + " with what?", "use " + firstInteractive.name, true);
+		if (!secondActorId) return this.outPutCreateFromRoomActors("Use " + firstActor.name + " with what?", "use " + firstActor.name, true);
 
-		if (secondInteractiveId == "inventory") { return this.outPutCreateFromInventory("Use " + firstInteractive.name + " with what?", "use " + firstInteractive.name) };
+		if (secondActorId == "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.name) };
 
-		secondInteractive = this.interactiveGetFromCurrentRoom(secondInteractiveId) || this.interactiveGetFromInventory(secondInteractiveId);
+		var secondActor = this.actorGet(secondActorId) || this.actorGetFromInventory(secondActorId);
 
-		if (secondInteractiveId) {
-			var outPut = this["use"] ? this["use"](firstInteractive, secondInteractive) : null;
+		if (secondActor && !secondActor.state.removed && secondActor.state.visile ) {
+			var outPut = this["use"] ? this["use"](firstActor, secondActor) : null;
 			if (outPut) return outPut;
 
 			var room = this.roomGetCurrent();
-			outPut = room["use"] ? room.use(this, firstInteractive, secondInteractive) : null;
+			outPut = room["use"] ? room.use(this, firstActor, secondActor) : null;
 			if (outPut) return outPut;
 
-			outPut = firstInteractive["use"] ? firstInteractive.use(this, secondInteractive) : null;
+			outPut = firstActor["use"] ? firstActor.use(this, secondActor) : null;
 			if (outPut) return outPut;
 
 			return this.outPutCreateRaw("It does not work.");
 		}
 	}
+
+	return this.outPutCreateRaw("I can not use that.");
 };
 
-game.globalCommands["look at"] = function (interactiveId) {
-	if (!interactiveId) return this.outPutCreateFromRoomInteractives("Look at what?", "look at"); // ouput list of interactives
+game.globalCommands["look at"] = function (actorId) {
+	if (!actorId) return this.outPutCreateFromRoomActors("Look at what?", "look at"); // ouput list of actors
 
-	var interactive = this.interactiveGetFromCurrentRoom(interactiveId);
-	if (!interactive) return this.outPutCreateRaw("You can not see that.");
+	var actor = this.actorGet(actorId);
+	if (!actor) return this.outPutCreateRaw("You can not see that.");
 
-	var outPut = this["look at"] ? this["look at"](interactive) : null;
+	var outPut = this["look at"] ? this["look at"](actor) : null;
 	if (outPut) return outPut;
 
 	var room = this.roomGetCurrent();
-	outPut = room["look at"] ? room["look at"](this, interactive) : null;
+	outPut = room["look at"] ? room["look at"](this, actor) : null;
 	if (outPut) return outPut;
 
-	outPut = interactive["look at"] ? interactive["look at"](this) : null;
+	outPut = actor["look at"] ? actor["look at"](this) : null;
 	if (outPut) return outPut;
 
 	//default behaviour
-	if (interactive.state.visible && !interactive.state.removed) {
-		return this.outPutCreateFromInteractive(interactive);
+	if (actor.state.visible && !actor.state.removed) {
+		return this.outPutCreateFromActor(actor);
 	}
 	return this.outPutCreateRaw("You can not see that.");
 };
 
-game.globalCommands["pick up"] = function (interactiveId) {
+game.globalCommands["pick up"] = function (actorId) {
 	{
-		if (!interactiveId) return this.outPutCreateFromRoomInteractives("Pick up what?", "pick up"); //output list of interactives in the room
+		if (!actorId) return this.outPutCreateFromRoomActors("Pick up what?", "pick up"); //output list of actors in the room
 
-		var interactive = this.interactiveGetFromCurrentRoom(interactiveId);
-		if (!interactive) return this.outPutCreateRaw("Nothing to pick up.");
+		var actor = this.actorGet(actorId);
+		if (!actor) return this.outPutCreateRaw("Nothing to pick up.");
 
-		var outPut = this["pick up"] ? this["pick up"](interactive) : null;
+		var outPut = this["pick up"] ? this["pick up"](actor) : null;
 		if (outPut) return outPut;
 
 		var room = this.roomGetCurrent();
-		outPut = room["pick up"] ? room["pick up"](this, interactive) : null;
+		outPut = room["pick up"] ? room["pick up"](this, actor) : null;
 		if (outPut) return outPut;
 
-		outPut = interactive["pick up"] ? interactive["pick up"](this) : null;
+		outPut = actor["pick up"] ? actor["pick up"](this) : null;
 		if (outPut) return outPut;
 
 		//default behaviour
-		if (!interactive.state.visible) return this.outPutCreateRaw("Nothing to pick up.");
-		if (!interactive.state.collectible) return this.outPutCreateRaw("You can not pick up that ");
-		this.inventoryAddItem(interactive);
-		interactive.state.removed = true;
-		return this.outPutCreateRaw("You picked up " + interactive.name);
+		if (!actor.state.visible || actor.state.removed) return this.outPutCreateRaw("Nothing to pick up.");
+		if (!actor.state.collectible) return this.outPutCreateRaw("You can not pick up that ");
+		this.inventoryAddItem(actor);
+		actor.state.removed = true;
+		return this.outPutCreateRaw("You picked up " + actor.name);
 	}
 };
 
-//game will be in memory always (TODO: make a engine for redis that allows just load in memory game assets needed for the task)
+//game will be in memory always
 
 //engine for host
 
@@ -433,9 +446,13 @@ initGame = function (game) {
 };
 
 initIDs = function (game) {
+	for (var actorID in game.globalResources.actors) {
+		game.globalResources.actors[actorID].id = actorID;
+	}
 	for (var roomName in game.rooms) {
-		for (var interactiveID in game.rooms[roomName].interactives) {
-			game.rooms[roomName].interactives[interactiveID].id = interactiveID;
+		game.rooms[roomName].id = roomName;
+		for (var actorID in game.rooms[roomName].actors) {
+			game.rooms[roomName].actors[actorID].id = actorID;
 		}
 	}
 };
@@ -443,38 +460,33 @@ initIDs = function (game) {
 initState = function (game) {
 	game.state.inventory = new Object();
 	for (var roomName in game.rooms) {
-
-		var roomState = game.state.rooms[roomName];
-		if (!roomState) {//not exist, create it
-			roomState = {
-				descriptionIndex: 0,
-				imageIndex: 0
-			};
-			game.state.rooms[roomName] = roomState;
+		
+		var currentRoomState = game.state.rooms[roomName];
+		var defaultRoomState = {
+			descriptionIndex: 0,
+			imageIndex: 0
+		};
+		if (!currentRoomState) {//not exist, create it
+			game.state.rooms[roomName] = defaultRoomState;
 		}
 		else {//add properties needed by the engine 
-			roomState["descriptionIndex"] === undefined ? roomState.descriptionIndex = 0 : null;
-			roomState["imageIndex"] === undefined ? roomState.imageIndex = 0 : null;
+			game.state.rooms[roomName] = Object.assign(defaultRoomState, currentRoomState);
 		}
 
-		for (var interactiveName in game.rooms[roomName].interactives) {
-			var itemState = game.state.interactives[interactiveName];
-			if (!itemState) { //not exist, create it
-				itemState = {
-					descriptionIndex: 0,
-					imageIndex: 0,
-					visible: true,
-					collectible: false,
-					removed: false
-				};
-				game.state.interactives[interactiveName] = itemState;
+		for (var actorName in game.rooms[roomName].actors) {
+			var currentActorState = game.state.actors[actorName];
+			var defaultActorState = {
+				descriptionIndex: 0,
+				imageIndex: 0,
+				visible: true,
+				collectible: false,
+				removed: false
+			};
+			if (!currentActorState) { //not exist, create it
+				game.state.actors[actorName] = defaultActorState;
 			}
 			else { //add properties needed by the engine 
-				itemState["descriptionIndex"] === undefined ? itemState.descriptionIndex = 0 : null;
-				itemState["imageIndex"] === undefined ? itemState.imageIndex = 0 : null;
-				itemState["visible"] === undefined ? itemState.visible = true : null;
-				itemState["collectible"] === undefined ? itemState.collectible = false : null;
-				itemState["removed"] === undefined ? itemState.removed = false : null;
+				game.state.actors[actorName] = Object.assign(defaultActorState, currentActorState);
 			}
 
 		}
