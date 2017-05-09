@@ -1,21 +1,25 @@
 ﻿var game = {
 	state: { //game state data
+		player: null,
 		currentRoom: "Start Gate",
 		inventory: null,
-		rooms: {
-			"A Fountain": { doorOpened: false }
-		},
+		rooms: null,
 		actors: {
 			bonfire: {
 				extinguished: false
 			},
 			bottle: {
-				filled: false,
 				collectible: true
+			},
+			invBottle: {
+				filled: false
 			},
 			key: {
 				visible: false,
 				collectible: false
+			},
+			door: {
+				opened: false
 			}
 		}
 	},//end game state
@@ -37,13 +41,57 @@
 				description: "Auch! The key is too hot.You can not do that",
 			},
 			bottleEmpty: {
-				description: "You fill the bottle with the water of the fountain."
+				description: "The bottle is empty."
 			},
 			doorClosed: {
 				description: "The door of the mansion is key locked."
 			}
 		},
 		actors: {
+			invKey: {
+				name: "Copper key",
+				descriptions: {
+					0: "A copper key."
+				},
+				images: {
+					0: "http://gameimages/myGame/copperKey.gif"
+				}
+			},
+			invBottle: {
+				name: "Bottle",
+				descriptions: {
+					0: "It is a empyt bottle",
+					1: "It is a bottle with some water" //once you fill the bottle in the fountain
+				},
+				images: {
+					0: "http://gameimages/myGame/EmptyBottle.gif",
+					1: "http://gameimages/myGame/WaterBottle.gif"
+				},
+				fill: function () {
+					this.state.filled = true;
+					this.state.descriptionIndex = 1;
+					this.state.imageIndex = 1;
+				},
+				empty: function () {
+					this.statelfilled = false;
+					this.state.descriptionIndex = 0;
+					this.state.imageIndex = 0;
+				},
+				use: function (game, secondactor) {
+					if (!secondactor) return;
+
+					if (secondactor.id == "fountain") {
+						this.fill();
+						return game.outPutCreateFromAction("fillBottle");
+					}
+					if (secondactor.id == "bonfire") {
+						if (!secondactor.state.filled) return outPutCreateFromAction("bottleEmpty");
+						secondactor.extinguish();
+						this.empty();
+						game.actorGetFromCurrentRoom("key").collectible = true;
+					}
+				},
+			}
 		}
 	},
 	rooms: {
@@ -69,19 +117,20 @@
 						1: "http://gameimages/myGame/extinguishedBonfire.gif"
 					},
 					extinguish: function () {
-						this.state.extinguished = true;
+						this.extinguished = true;
 						this.state.descriptionIndex = 1;
 						this.state.imageIndex = 1;
 					},
 					"look at": function () {
-						game.actorGet("key").state.visible = true;
+						game.actorGetFromCurrentRoom("key").state.visible = true;
 					},
-					use: function (game, secondactor) {
-						if (secondactor.id == "bottle") {
-							if (!secondactor.state.filled) return outPutCreateFromAction("bottleEmpty");
+					use: function (game, secondActor) {
+						if (!secondActor) return;
+						if (secondActor.id == "invBottle") {
+							if (!secondActor.state.filled) return outPutCreateFromAction("bottleEmpty");
 							this.extinguish();
-							secondactor.empty();
-							game.actorGet("key").state.collectible = true;
+							secondActor.empty();
+							game.actorGetFromCurrentRoom("key").state.collectible = true;
 						}
 					}
 				},
@@ -93,10 +142,11 @@
 					images: {
 						0: "http://gameimages/myGame/copperKey.gif"
 					},
+					inventoryActor: "invKey",
 					"pick up": function (game) {
-						var out = this.state.collectible ? game.roomGetCurrent().keyPickedUp() : game.outPutCreateFromAction("hotKey");
-						return out;
-					}
+						var outPut = this.state.collectible ? game.roomGetCurrent().keyPickedUp() : game.outPutCreateFromAction("hotKey");
+						return outPut;
+					},
 				}
 			},
 			exits: {
@@ -124,38 +174,14 @@
 					name: "Bottle",
 					descriptions: {
 						0: "It is a empyt bottle",
-						1: "It is a bottle with some water" //once you fill the bottle in the fountain
 					},
 					images: {
 						0: "http://gameimages/myGame/EmptyBottle.gif",
-						1: "http://gameimages/myGame/WaterBottle.gif"
 					},
-					fill: function () {
-						this.state.filled = true;
-						this.state.descriptionIndex = 1;
-						this.state.imageIndex = 1;
-					},
-					empty: function () {
-						this.state.filled = false;
-						this.state.descriptionIndex = 0;
-						this.state.imageIndex = 0;
-					},
-					use: function (game, secondactor) {
-						if (!secondactor) return;
-
-						if (secondactor.id == "fountain") {
-							this.fill();
-							return game.outPutCreateFromAction("fillBottle");
-						}
-
-						if (secondactor.id == "bonfire") {
-							if (!secondactor.state.filled) return outPutCreateFromAction("bottleEmpty");
-							secondactor.extinguish();
-							this.empty();
-							game.actorGet("key").state.collectible = true;
-						}
-
-					},
+					inventoryActor: "invBottle",
+					"pick up": function (game) {
+						game.roomGetCurrent().bottlePickedUp();
+					}
 				},
 				fountain: {
 					name: "Marble fountain",
@@ -165,10 +191,10 @@
 					images: {
 						0: "http://gameimages/myGame/fountain.gif"
 					},
-					use: function (game, secondactor) {
-						if (!secondactor) return;
-						if (secondactor.id == "bottle") {
-							secondactor.fill();
+					use: function (game, secondActor) {
+						if (!secondActor) return;
+						if (secondActor.id == "invBottle") {
+							secondActor.fill();
 							return game.outPutCreateFromAction("fillBottle");
 						}
 					},
@@ -184,13 +210,8 @@
 				this.state.descriptionIndex = 1;
 			},
 			go: function (game, direction) {
-				if (direction == "north" && game.roomGetCurrent().state.doorOpened == false) {
+				if (direction == "north" && game.roomGetCurrent().doorOpened == false) {
 					return game.outPutCreateFromAction("doorClosed");
-				}
-			},
-			"pick up": function (game, actor) {
-				if (actor.id = "bottle") {
-					this.bottlePickedUp();
 				}
 			}
 		},
@@ -217,7 +238,7 @@ game.roomGetCurrent = function () {
 };
 
 game.roomSetCurrent = function (destRoomId) {
-	this.state.currentRoom = destRoom;
+	this.state.currentRoom = destRoomId;
 };
 
 game.roomGet = function (roomId) {
@@ -226,14 +247,21 @@ game.roomGet = function (roomId) {
 	return room;
 };
 
-game.actorGet = function (actorId) {
-	actor = this.roomGetCurrent().actors[actorId];
+game.actorGetFromCurrentRoom = function (actorId) {
+	var actor = this.roomGetCurrent().actors[actorId];
+	if (!actor) return;
 	actor.state = this.state.actors[actorId];
 	return actor;
 };
 
 game.actorGetFromInventory = function (itemId) {
 	return this.state.inventory[itemId];
+};
+
+game.actorGetFromGlobal = function (actorId) {
+	var actor = this.globalResources.actors[actorId];
+	actor.state = this.state.actors[actorId];
+	return actor;
 };
 
 game.outPutCreateRaw = function (text, imgURL, selection) {
@@ -263,10 +291,10 @@ game.outPutCreateFromRoomActors = function (text, command, showInventory) {
 	var currentGame = this;
 	var room = this.roomGetCurrent();
 	var list = Object.keys(room.actors).filter(function (id) {
-		var item = currentGame.actorGet(id);
-		return item.state.visible && !item.state.removed;
+		var actor = currentGame.actorGetFromCurrentRoom(id);
+		return actor.state.visible && !actor.state.removed;
 	}).map(function (id) {
-		var item = game.actorGet(id);
+		var item = game.actorGetFromCurrentRoom(id);
 		return { id: id, name: item.name }
 	});
 	if (showInventory) list.push({ id: "inventory", name: "inventory" })
@@ -294,28 +322,13 @@ game.outPutCreateFromAction = function (actionName) {
 };
 
 game.inventoryAddItem = function (item) {
+	item = this.actorGetFromGlobal(item.inventoryActor);
 	this.state.inventory[item.id] = item;
 };
 
 game.inventoryRemoveItem = function (item) {
 	delete this.state.inventory[item.id];
 };
-
-//game.resourceGet = function (name) { //i.e. "images.TitleImage"
-//	var resPath = name.split(".");
-//	var resource = this.globalResources;
-
-//	gerResource = function () {
-//		resource = resource[resPath[index]];
-//	};
-
-//	for (var index in resPath) {
-//		gerResource();
-//	}
-
-//	return resource;
-
-//};
 
 game.globalCommands = new Object;
 
@@ -340,6 +353,7 @@ game.globalCommands.go = function (direction) {
 
 game.globalCommands.inspect = function (itemId) {
 	var item = this.actorGetFromInventory(itemId);
+	if (!item) return this.outPutCreateRaw("I can not find that in my inventory");
 	if (item) return this.outPutCreateFromActor(item);
 };
 
@@ -350,9 +364,9 @@ game.globalCommands.use = function (firstActorId, secondActorId) {
 
 	if (firstActorId == "inventory") { return this.outPutCreateFromInventory("Use what?", "use") };
 
-	var firstActor = this.actorGet(firstActorId) || this.actorGetFromInventory(firstActorId);
+	var firstActor = this.actorGetFromCurrentRoom(firstActorId) || this.actorGetFromInventory(firstActorId);
 
-	if (firstActor && !firstActor.state.removed &&  firstActor.state.visile ) {
+	if (firstActor && !firstActor.state.removed &&  firstActor.state.visible ) {
 		var outPut = this["use"] ? this["use"](firstActor) : null;
 		if (outPut) return outPut;
 
@@ -367,7 +381,7 @@ game.globalCommands.use = function (firstActorId, secondActorId) {
 
 		if (secondActorId == "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.name) };
 
-		var secondActor = this.actorGet(secondActorId) || this.actorGetFromInventory(secondActorId);
+		var secondActor = this.actorGetFromCurrentRoom(secondActorId) || this.actorGetFromInventory(secondActorId);
 
 		if (secondActor && !secondActor.state.removed && secondActor.state.visile ) {
 			var outPut = this["use"] ? this["use"](firstActor, secondActor) : null;
@@ -390,7 +404,7 @@ game.globalCommands.use = function (firstActorId, secondActorId) {
 game.globalCommands["look at"] = function (actorId) {
 	if (!actorId) return this.outPutCreateFromRoomActors("Look at what?", "look at"); // ouput list of actors
 
-	var actor = this.actorGet(actorId);
+	var actor = this.actorGetFromCurrentRoom(actorId);
 	if (!actor) return this.outPutCreateRaw("You can not see that.");
 
 	var outPut = this["look at"] ? this["look at"](actor) : null;
@@ -414,7 +428,7 @@ game.globalCommands["pick up"] = function (actorId) {
 	{
 		if (!actorId) return this.outPutCreateFromRoomActors("Pick up what?", "pick up"); //output list of actors in the room
 
-		var actor = this.actorGet(actorId);
+		var actor = this.actorGetFromCurrentRoom(actorId);
 		if (!actor) return this.outPutCreateRaw("Nothing to pick up.");
 
 		var outPut = this["pick up"] ? this["pick up"](actor) : null;
@@ -458,7 +472,29 @@ initIDs = function (game) {
 };
 
 initState = function (game) {
-	game.state.inventory = new Object();
+	if (!game.state.inventory) game.state.inventory = new Object();
+	if (!game.state.rooms) game.state.rooms = new Object();
+	if (!game.state.player) game.state.player = new Object();
+	if (!game.state.actors) game.state.actors = new Object();
+
+	for (var actorName in game.globalResources.actors) {
+		var currentActorState = game.state.actors[actorName];
+		var defaultActorState = {
+			descriptionIndex: 0,
+			imageIndex: 0,
+			visible: true,
+			collectible: false,
+			removed: false,
+		};
+		if (!currentActorState) { //not exist, create it
+			game.state.actors[actorName] = defaultActorState;
+		}
+		else { //add properties needed by the engine 
+			game.state.actors[actorName] = Object.assign(defaultActorState, currentActorState);
+		}
+
+	}
+
 	for (var roomName in game.rooms) {
 		
 		var currentRoomState = game.state.rooms[roomName];
@@ -480,7 +516,7 @@ initState = function (game) {
 				imageIndex: 0,
 				visible: true,
 				collectible: false,
-				removed: false
+				removed: false,
 			};
 			if (!currentActorState) { //not exist, create it
 				game.state.actors[actorName] = defaultActorState;
@@ -488,7 +524,6 @@ initState = function (game) {
 			else { //add properties needed by the engine 
 				game.state.actors[actorName] = Object.assign(defaultActorState, currentActorState);
 			}
-
 		}
 	}
 };
@@ -515,15 +550,17 @@ var verbs = {
 };
 
 initGame(game);
+//var jgame = JSON.stringify(game);
 var res;
-console.log("> Commands: " + Object.keys(verbs).join(", ")); // this will be custom keyboard in telegram chat
+//console.log("> Commands: " + Object.keys(verbs).join(", ")); // this will be custom keyboard in telegram chat
 
 console.log("start");
 console.log("> " + start(game).text);
 
 console.log("look at");
 res = execCommand(game, "look at");
-console.log("> " + res.text + " " + res.selection.list); // this will be inline buttons in telegram chat
+console.log("> " + res.text);
+console.dir(res.selection.list); // this will be inline buttons in telegram chat
 
 console.log("look at key");
 console.log("> " + execCommand(game, "look at", "key").text);
@@ -531,19 +568,29 @@ console.log("> " + execCommand(game, "look at", "key").text);
 console.log("look at bonfire");
 console.log("> " + execCommand(game, "look at", "bonfire").text);
 
+console.log("look at");
+res = execCommand(game, "look at");
+console.log("> " + res.text);
+console.dir(res.selection.list); // this will be inline buttons in telegram chat
+
 console.log("look at key");
 console.log("> " + execCommand(game, "look at", "key").text);
 
 console.log("pick up");
 res = execCommand(game, "pick up");
-console.log("> " + res.text + " " + res.selection.list.join(", ")); // this will be inline buttons in telegram chat
+console.log("> " + res.text); // this will be inline buttons in telegram chat
+console.dir(res.selection.list);
+
+console.log("pick up bonfire");
+console.log("> " + execCommand(game, "pick up", "bonfire").text);
 
 console.log("pick up key");
 console.log("> " + execCommand(game, "pick up", "key").text);
 
 console.log("go");
 res = execCommand(game, "go");
-console.log("> " + res.text + " " + res.selection.list.join(", ")); // this will be inline buttons in telegram chat
+console.log("> " + res.text); // this will be inline buttons in telegram chat
+console.dir(res.selection.list);
 
 console.log("go north");
 console.log("> " + execCommand(game, "go", "north").text);
@@ -559,10 +606,11 @@ console.log("> " + execCommand(game, "pick up", "bottle").text);
 
 console.log("inventory");
 res = execCommand(game, "inventory");
-console.log("> " + res.text + " " + res.selection.list.join(", ")); // this will be inline buttons in telegram chat
+console.log("> " + res.text); // this will be inline buttons in telegram chat
+console.dir(res.selection.list);
 
-console.log("inspect bottle");
-console.log("> " + execCommand(game, "inspect", "bottle").text);
+console.log("inspect invBottle");
+console.log("> " + execCommand(game, "inspect", "invBottle").text);
 
 console.log("go south");
 console.log("> " + execCommand(game, "go", "south").text);
@@ -572,7 +620,8 @@ console.log("> " + execCommand(game, "go", "north").text);
 
 console.log("use");
 res = execCommand(game, "use");
-console.log("> " + res.text + " " + res.selection.list.join(", ")); // this will be inline buttons in telegram chat
+console.log("> " + res.text); // this will be inline buttons in telegram chat
+console.dir(res.selection.list);
 
 console.log("use fountain");
 res = execCommand(game, "use", "fountain");
@@ -584,15 +633,18 @@ console.log("> " + res.text); // this will be inline buttons in telegram chat
 
 console.log("use inventory");
 res = execCommand(game, "use", "inventory");
-console.log("> " + res.text + " " + res.selection.list.join(", ")); // this will be inline buttons in telegram chat
+console.log("> " + res.text); // this will be inline buttons in telegram chat
+console.dir(res.selection.list);
 
-console.log("use bottle");
-res = execCommand(game, "use", "bottle");
-console.log("> " + res.text + " " + res.selection.list.join(", ")); // this will be inline buttons in telegram chat
+console.log("use invBottle");
+res = execCommand(game, "use", "invBottle");
+console.log("> " + res.text); // this will be inline buttons in telegram chat
+console.dir(res.selection.list);
 
-console.log("use bottle inventory");
-res = execCommand(game, "use", "bottle", "inventory");
-console.log("> " + res.text + " " + res.selection.list.join(", ")); // this will be inline buttons in telegram chat
+console.log("use invBottle inventory");
+res = execCommand(game, "use", "invBottle", "inventory");
+console.log("> " + res.text); // this will be inline buttons in telegram chat
+console.dir(res.selection.list);
 
 console.log("use bottle bottle");
 res = execCommand(game, "use", "bottle", "bottle");
