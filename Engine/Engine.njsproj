@@ -13,7 +13,7 @@
     <ProjectGuid>dadd5f8e-1a85-4b26-9677-b54e94d5de0f</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>app.js</StartupFile>
+    <StartupFile>test.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="test.js" />
     <Content Include="package.json" />
   </ItemGroup>
   <ItemGroup>
