@@ -240,7 +240,7 @@ var res;
 //console.log("> Commands: " + Object.keys(verbs).join(", ")); // this will be custom keyboard in telegram chat
 
 console.log("start");
-console.log("> " + engine.start().text);
+console.log("> " + engine.continue().text);
 
 console.log("look at");
 res = engine.execCommand("look at");

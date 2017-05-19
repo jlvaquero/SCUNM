@@ -1,6 +1,4 @@
-﻿
-
-module.exports = function (assets) {
+﻿module.exports = function (assets) {
 
 	injectGameAPI(assets);
 	initVerbsCommands(assets);
@@ -8,16 +6,12 @@ module.exports = function (assets) {
 	assets.init();
 
 	var engine = {};
+	engine.continue = function () {
+		return assets.outPutCreateFromCurrentRoom();
+	};
 	engine.execCommand = function (verb, dObject, iObject) {
 		outPut = assets.globalCommands[verb] ? assets.globalCommands[verb].call(assets, dObject, iObject) : { text: "What? Try again..." };
 		return outPut;
-	};
-	engine.start = function () {
-		var currentRoom = assets.roomGetCurrent();
-		return {
-			text: currentRoom.descriptions[currentRoom.state.descriptionIndex],
-			imgUrl: currentRoom.images[currentRoom.state.imageIndex]
-		};
 	};
 	engine.name = function () { return assets.meta.name; };
 	engine.setState = function (state) { assets.state = state; };
@@ -79,6 +73,10 @@ function injectGameAPI(game) {
 		var text = room.descriptions[room.state.descriptionIndex];
 		var imgURL = room.images[room.state.imageIndex];
 		return this.outPutCreateRaw(text, imgURL);
+	};
+
+	game.outPutCreateFromCurrentRoom = function () {
+		return this.outPutCreateFromRoom(this.roomGetCurrent());
 	};
 
 	game.outPutCreateFromActor = function (actor) {
