@@ -1,0 +1,10 @@
+{
+	"name": "SCUNMGames",
+	"version": "0.0.0",
+	"description": "Games for SCUNM Engine",
+	"main": "Games.js",
+	"author": {
+		"name": "joseluis.vaquero"
+	},
+	"dependencies": {}
+}

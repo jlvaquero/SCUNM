@@ -1,8 +1,8 @@
 {
-  "name": "scunm",
+  "name": "SCUNMEngine",
   "version": "0.0.0",
-  "description": "SCUMN",
-  "main": "test.js",
+  "description": "SCUNM engine",
+  "main": "Engine.js",
   "author": {
     "name": "joseluis.vaquero"
   },

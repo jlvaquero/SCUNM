@@ -2,11 +2,13 @@
   "name": "telegram-bot",
   "version": "0.0.0",
   "description": "TelegramBot",
-  "main": "app.js",
+  "main": "test.js",
   "author": {
-    "name": "joseluis.vaquero"
+	"name": "joseluis.vaquero"
   },
   "dependencies": {
-    "node-telegram-bot-api": "^0.27.1"
+			"SCUNMEngine": "file:../Engine",
+			"SCUNMGames": "file:../Games",
+	"node-telegram-bot-api": "^0.27.1"
   }
 }
