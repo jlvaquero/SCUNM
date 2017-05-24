@@ -107,25 +107,3 @@ console.log("> " + res.text); // this will be inline buttons in telegram chat
 console.log("use fountain invBottle");
 res = demoEngine.execCommand("use", "fountain", "invBottle");
 console.log("> " + res.text); // this will be inline buttons in telegram chat
-
-console.log("go south");
-console.log("> " + execCommand(game, "go", "south").text);
-
-console.log("use bottle bonfire");
-console.log("> " + execCommand(game, "use", "bottle", "bonfire").text);
-
-console.log("look at bonfire");
-console.log("> " + execCommand(game, "look at", "bonfire").text);
-
-console.log("pick up key");
-console.log("> " + execCommand(game, "pick up", "key").text);
-
-console.log("go north");
-console.log("> " + execCommand(game, "go", "north").text);
-console.log("pick up bottle");
-console.log("> " + game.execCommand("pick_up", "bottle").description);
-console.log("go south");
-console.log("> " + game.execCommand("go", "south").description);
-console.log("go north");
-console.log("> " + game.execCommand("go", "north").description);
-console.log(game.state.inventory);

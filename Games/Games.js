@@ -41,7 +41,7 @@
 				image: "http://gameimages/myGame/fillBottle.gif"  //animated gif
 			},
 			hotKey: {
-				description: "Auch! The key is too hot.You can not do that",
+				description: "Auch! The key is too hot.You can not do that"
 			},
 			bottleEmpty: {
 				description: "The bottle is empty."
@@ -83,17 +83,17 @@
 				use: function (game, secondactor) {
 					if (!secondactor) return;
 
-					if (secondactor.id == "fountain") {
+					if (secondactor.id === "fountain") {
 						this.fill();
 						return game.outPutCreateFromAction("fillBottle");
 					}
-					if (secondactor.id == "bonfire") {
+					if (secondactor.id === "bonfire") {
 						if (!secondactor.state.filled) return outPutCreateFromAction("bottleEmpty");
 						secondactor.extinguish();
 						this.empty();
 						game.actorGetFromCurrentRoom("key").collectible = true;
 					}
-				},
+				}
 			}
 		}
 	},
@@ -129,7 +129,7 @@
 					},
 					use: function (game, secondActor) {
 						if (!secondActor) return;
-						if (secondActor.id == "invBottle") {
+						if (secondActor.id === "invBottle") {
 							if (!secondActor.state.filled) return outPutCreateFromAction("bottleEmpty");
 							this.extinguish();
 							secondActor.empty();
@@ -149,7 +149,7 @@
 					"pick up": function (game) {
 						var outPut = this.state.collectible ? game.roomGetCurrent().keyPickedUp() : game.outPutCreateFromAction("hotKey");
 						return outPut;
-					},
+					}
 				}
 			},
 			exits: {
@@ -176,10 +176,10 @@
 				bottle: {
 					name: "Bottle",
 					descriptions: {
-						0: "It is a empyt bottle",
+						0: "It is a empyt bottle"
 					},
 					images: {
-						0: "http://gameimages/myGame/EmptyBottle.gif",
+						0: "http://gameimages/myGame/EmptyBottle.gif"
 					},
 					inventoryActor: "invBottle",
 					"pick up": function (game) {
@@ -196,11 +196,11 @@
 					},
 					use: function (game, secondActor) {
 						if (!secondActor) return;
-						if (secondActor.id == "invBottle") {
+						if (secondActor.id === "invBottle") {
 							secondActor.fill();
 							return game.outPutCreateFromAction("fillBottle");
 						}
-					},
+					}
 				}
 			},
 			exits: {
@@ -213,7 +213,7 @@
 				this.state.descriptionIndex = 1;
 			},
 			go: function (game, direction) {
-				if (direction == "north" && game.roomGetCurrent().doorOpened == false) {
+				if (direction === "north" && game.roomGetCurrent().doorOpened === false) {
 					return game.outPutCreateFromAction("doorClosed");
 				}
 			}

@@ -23,8 +23,8 @@
 		"look at": null,
 		inventory: null
 	};
-	return engine; 
-}
+	return engine;
+};
 
 function injectGameAPI(game) {
 	//get the room where the player is
@@ -93,9 +93,9 @@ function injectGameAPI(game) {
 			return actor.state.visible && !actor.state.removed;
 		}).map(function (id) {
 			var item = game.actorGetFromCurrentRoom(id);
-			return { id: id, name: item.name }
+			return { id: id, name: item.name };
 		});
-		if (showInventory) list.push({ id: "inventory", name: "inventory" })
+		if (showInventory) list.push({ id: "inventory", name: "inventory" });
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
 	};
 	//create standard outPut with the list of actors in the inventory.
@@ -103,15 +103,15 @@ function injectGameAPI(game) {
 		var game = this;
 		var list = Object.keys(this.state.inventory).map(function (id) {
 			var item = game.actorGetFromInventory(id);
-			return { id: id, name: item.name }
+			return { id: id, name: item.name };
 		});
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
 	};
 	//create standard outPut with the list of exits of the room.
 	game.outPutCreateFromRoomExits = function (text, command) {
 		var list = Object.keys(this.rooms[this.state.currentRoom].exits).map(function (id) {
-			return { id: id, name: id }
-		});;
+			return { id: id, name: id };
+		});
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
 	};
 	//create standard outPut of an action defined in actions asset
@@ -165,7 +165,7 @@ function initVerbsCommands(game) {
 	game.globalCommands.use = function (firstActorId, secondActorId) {
 		if (!firstActorId) return this.outPutCreateFromRoomActors("Use what?", "use", true);
 
-		if (firstActorId == "inventory") { return this.outPutCreateFromInventory("Use what?", "use") };
+		if (firstActorId == "inventory") { return this.outPutCreateFromInventory("Use what?", "use"); }
 
 		var firstActor = this.actorGetFromCurrentRoom(firstActorId) || this.actorGetFromInventory(firstActorId);
 
@@ -182,15 +182,15 @@ function initVerbsCommands(game) {
 
 			if (!secondActorId) return this.outPutCreateFromRoomActors("Use " + firstActor.name + " with what?", "use " + firstActor.name, true);
 
-			if (secondActorId == "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.name) };
+			if (secondActorId == "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.name); }
 
 			var secondActor = this.actorGetFromCurrentRoom(secondActorId) || this.actorGetFromInventory(secondActorId);
 
 			if (secondActor && !secondActor.state.removed && secondActor.state.visible) {
-				var outPut = this["use"] ? this["use"](firstActor, secondActor) : null;
+				outPut = this["use"] ? this["use"](firstActor, secondActor) : null;
 				if (outPut) return outPut;
 
-				var room = this.roomGetCurrent();
+				room = this.roomGetCurrent();
 				outPut = room["use"] ? room.use(this, firstActor, secondActor) : null;
 				if (outPut) return outPut;
 
@@ -259,13 +259,14 @@ function initGame(game) {
 	initState(game);
 }
 //initialize rooms and actors ID's
-function initIDs (game) {
-	for (var actorID in game.globalResources.actors) {
+function initIDs(game) {
+	var actorID;
+	for (actorID in game.globalResources.actors) {
 		game.globalResources.actors[actorID].id = actorID;
 	}
 	for (var roomName in game.rooms) {
 		game.rooms[roomName].id = roomName;
-		for (var actorID in game.rooms[roomName].actors) {
+		for (actorID in game.rooms[roomName].actors) {
 			game.rooms[roomName].actors[actorID].id = actorID;
 		}
 	}
@@ -276,15 +277,17 @@ function initState(game) {
 	if (!game.state.rooms) game.state.rooms = new Object();
 	if (!game.state.player) game.state.player = new Object();
 	if (!game.state.actors) game.state.actors = new Object();
-
-	for (var actorName in game.globalResources.actors) {
-		var currentActorState = game.state.actors[actorName];
-		var defaultActorState = {
+	var currentActorState;
+	var defaultActorState;
+	var actorName;
+	for (actorName in game.globalResources.actors) {
+		currentActorState = game.state.actors[actorName];
+		defaultActorState = {
 			descriptionIndex: 0,
 			imageIndex: 0,
 			visible: true,
 			collectible: false,
-			removed: false,
+			removed: false
 		};
 		if (!currentActorState) { //not exist, create it
 			game.state.actors[actorName] = defaultActorState;
@@ -309,14 +312,14 @@ function initState(game) {
 			game.state.rooms[roomName] = Object.assign(defaultRoomState, currentRoomState);
 		}
 
-		for (var actorName in game.rooms[roomName].actors) {
-			var currentActorState = game.state.actors[actorName];
-			var defaultActorState = {
+		for (actorName in game.rooms[roomName].actors) {
+			currentActorState = game.state.actors[actorName];
+			defaultActorState = {
 				descriptionIndex: 0,
 				imageIndex: 0,
 				visible: true,
 				collectible: false,
-				removed: false,
+				removed: false
 			};
 			if (!currentActorState) { //not exist, create it
 				game.state.actors[actorName] = defaultActorState;
