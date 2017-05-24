@@ -1,9 +1,13 @@
 ﻿var gamesAssets = require("SCUNMGames");
 var demoEngine = require("SCUNMEngine")(gamesAssets.Demo);
+var sizeof = require('object-sizeof');
+
 
 var res;
 //console.log("> Commands: " + Object.keys(verbs).join(", ")); // this will be custom keyboard in telegram chat
-
+console.dir(process.memoryUsage());
+console.dir(sizeof(gamesAssets));
+console.dir(sizeof(demoEngine));
 console.log("start");
 console.log("> " + demoEngine.continue().text);
 

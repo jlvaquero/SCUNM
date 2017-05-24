@@ -3,6 +3,8 @@
 	"version": "0.0.0",
 	"description": "Games for SCUNM Engine",
 	"main": "Games.js",
+	"license": "MIT",
+	"repository": "https://github.com/jlvaquero/SCUNM",
 	"author": {
 		"name": "joseluis.vaquero"
 	},

@@ -1,10 +1,12 @@
 {
-  "name": "SCUNMEngine",
-  "version": "0.0.0",
-  "description": "SCUNM engine",
-  "main": "Engine.js",
-  "author": {
-    "name": "joseluis.vaquero"
-  },
-  "dependencies": {}
+	"name": "SCUNMEngine",
+	"version": "0.0.0",
+	"description": "SCUNM engine",
+	"license": "MIT",
+	"repository": "https://github.com/jlvaquero/SCUNM",
+	"main": "Engine.js",
+	"author": {
+		"name": "joseluis.vaquero"
+	},
+	"dependencies": {}
 }

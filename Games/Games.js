@@ -88,7 +88,7 @@
 						return game.outPutCreateFromAction("fillBottle");
 					}
 					if (secondactor.id === "bonfire") {
-						if (!secondactor.state.filled) return outPutCreateFromAction("bottleEmpty");
+						if (!this.state.filled) return outPutCreateFromAction("bottleEmpty");
 						secondactor.extinguish();
 						this.empty();
 						game.actorGetFromCurrentRoom("key").collectible = true;
