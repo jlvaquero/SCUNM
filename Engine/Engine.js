@@ -165,7 +165,7 @@ function initVerbsCommands(game) {
 	game.globalCommands.use = function (firstActorId, secondActorId) {
 		if (!firstActorId) return this.outPutCreateFromRoomActors("Use what?", "use", true);
 
-		if (firstActorId == "inventory") { return this.outPutCreateFromInventory("Use what?", "use"); }
+		if (firstActorId === "inventory") { return this.outPutCreateFromInventory("Use what?", "use"); }
 
 		var firstActor = this.actorGetFromCurrentRoom(firstActorId) || this.actorGetFromInventory(firstActorId);
 
@@ -182,7 +182,7 @@ function initVerbsCommands(game) {
 
 			if (!secondActorId) return this.outPutCreateFromRoomActors("Use " + firstActor.name + " with what?", "use " + firstActor.name, true);
 
-			if (secondActorId == "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.name); }
+			if (secondActorId === "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.name); }
 
 			var secondActor = this.actorGetFromCurrentRoom(secondActorId) || this.actorGetFromInventory(secondActorId);
 
