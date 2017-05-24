@@ -35,17 +35,11 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="obj\" />
-    <Folder Include="obj\typings\" />
-    <Folder Include="obj\typings\globals\" />
-    <Folder Include="obj\typings\globals\node\" />
     <Folder Include="typings\" />
     <Folder Include="typings\globals\" />
     <Folder Include="typings\globals\node\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="obj\typings\globals\node\index.d.ts" />
-    <TypeScriptCompile Include="obj\typings\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />
   </ItemGroup>
