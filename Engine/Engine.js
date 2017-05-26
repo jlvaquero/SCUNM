@@ -6,23 +6,47 @@
 	assets.init(); //call init script of the game
 
 	var engine = {};
+
+	var stateHandler = {
+		set: function (target, key, value) {
+			target[key] = value;
+			engine.updatedState = true;
+		}
+	};
+
+	engine.stateProxy = new Proxy(assets.state, stateHandler);
+
+	engine.initialState = assets.state;
+
 	engine.continue = function () {
 		return assets.outPutCreateFromCurrentRoom();
 	};
+
+	engine.updatedState = false;
+	
 	engine.execCommand = function (verb, dObject, iObject) {
+		engine.updatedState = false;
 		outPut = assets.globalCommands[verb] ? assets.globalCommands[verb].call(assets, dObject, iObject) : { text: "What? Try again..." };
 		return outPut;
 	};
 	engine.name = function () { return assets.meta.name; };
 	engine.setState = function (state) { assets.state = state; }; //assets will be in memory always, restore user "savegame" on every request
 	engine.getState = function () { return assets.state; }; //retrieve "savegame" to persist it
-	engine.verbs = { //needed to be retrieved by telegram bot and show custom keyboard
-		go: null,
-		use: null,
+	engine.verbs = Object.keys({ //needed to be retrieved by telegram bot and show custom keyboard
+		give: null,
 		"pick up": null,
+		use: null,
+		open: null,
 		"look at": null,
+		push: null,
+		close: null,
+		"talk to": null,
+		pull: null,
+		go: null,
 		inventory: null
-	};
+	});
+	engine.reset = function () { this.setState = this.initialState; };
+	
 	return engine;
 };
 

@@ -1,13 +1,59 @@
 ﻿var gamesAssets = require("SCUNMGames");
 var demoEngine = require("SCUNMEngine")(gamesAssets.Demo);
-var sizeof = require('object-sizeof');
+var TelegramBot = require('node-telegram-bot-api');
+//var token = '';
+//var port = process.env.OPENSHIFT_NODEJS_PORT;
+//var host = process.env.OPENSHIFT_NODEJS_IP;
+//var externalUrl = process.env.OPENSHIFT_APP_DNS;
+//var token = process.env.TOKEN || token;
+var bot = new TelegramBot(token, {
+ polling: true
+});
 
+bot.setKeyboard = function (verbArray) {
+	var verbsKeyboardMarkUp = [];
+
+	var part = 3;
+	for (var i = 0; i < verbArray.length; i += part) {
+		verbsKeyboardMarkUp.push(verbArray.slice(i, i + part));
+	}
+
+	this.verbsKeyboard = {
+		keyboard: verbsKeyboardMarkUp,
+		resize_keyboard: true,
+		one_time_keyboard: false
+	};
+};
+
+/*var bot = new TelegramBot(token, {
+	webHook: {
+		port: port,
+		host: host
+	}
+});
+bot.setWebHook(externalUrl + ':443/bot' + token);*/
+
+//var Redis = require('ioredis');
+//var redis = new Redis(6379, process.env.IP);
+/*var redis = new Redis({
+	port: process.env.OPENSHIFT_REDIS_DB_PORT, // Redis port
+	host: process.env.OPENSHIFT_REDIS_DB_HOST, // Redis host
+	password: process.env.OPENSHIFT_REDIS_DB_PASSWORD
+});*/
+
+bot.setKeyboard(demoEngine.verbs);
+
+bot.onText(/\/start$/, function (msg, match) {
+	var fromId = msg.from.id;
+	redis.set(fromId + ':comeFromInline', 'false');
+	redis.set(fromId + ':query', '', 'EX', 300);
+	bot.sendMessage(fromId, 'Hello ' + msg.from.first_name + '. What do you wish to do?', {
+		reply_markup: optionsReplyKeyboard
+	});
+});
 
 var res;
-//console.log("> Commands: " + Object.keys(verbs).join(", ")); // this will be custom keyboard in telegram chat
-console.dir(process.memoryUsage());
-console.dir(sizeof(gamesAssets));
-console.dir(sizeof(demoEngine));
+
 console.log("start");
 console.log("> " + demoEngine.continue().text);
 
