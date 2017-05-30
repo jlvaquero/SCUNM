@@ -3,23 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Engine", "Engine\Engine.njsproj", "{DADD5F8E-1A85-4B26-9677-B54E94D5DE0F}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SCUNMEngine", "SCUNMEngine\SCUNMEngine.njsproj", "{DADD5F8E-1A85-4B26-9677-B54E94D5DE0F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1315C8E9-6DE9-41A8-8B60-6C0EDA1A65C5}"
-	ProjectSection(SolutionItems) = preProject
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		LICENSE = LICENSE
-		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "TelegramBot", "TelegramBot\TelegramBot.njsproj", "{D7A8B6CD-F015-4B2A-BAAC-F4040951730F}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SCUNMBot", "SCUNMBot\SCUNMBot.njsproj", "{D7A8B6CD-F015-4B2A-BAAC-F4040951730F}"
 	ProjectSection(ProjectDependencies) = postProject
-		{7C6AEC07-B080-4956-9E21-78D59D3B1A46} = {7C6AEC07-B080-4956-9E21-78D59D3B1A46}
 		{DADD5F8E-1A85-4B26-9677-B54E94D5DE0F} = {DADD5F8E-1A85-4B26-9677-B54E94D5DE0F}
 	EndProjectSection
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Games", "Games\Games.njsproj", "{7C6AEC07-B080-4956-9E21-78D59D3B1A46}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "DemoGame", "DemoGame\DemoGame.njsproj", "{CA5864D7-A12B-458F-9AEA-488E80579312}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Application", "Application\Application.njsproj", "{520C2A94-EFA7-4B03-9CC3-10F9E215984E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +28,14 @@ Global
 		{D7A8B6CD-F015-4B2A-BAAC-F4040951730F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7A8B6CD-F015-4B2A-BAAC-F4040951730F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7A8B6CD-F015-4B2A-BAAC-F4040951730F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C6AEC07-B080-4956-9E21-78D59D3B1A46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C6AEC07-B080-4956-9E21-78D59D3B1A46}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C6AEC07-B080-4956-9E21-78D59D3B1A46}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C6AEC07-B080-4956-9E21-78D59D3B1A46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA5864D7-A12B-458F-9AEA-488E80579312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA5864D7-A12B-458F-9AEA-488E80579312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA5864D7-A12B-458F-9AEA-488E80579312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA5864D7-A12B-458F-9AEA-488E80579312}.Release|Any CPU.Build.0 = Release|Any CPU
+		{520C2A94-EFA7-4B03-9CC3-10F9E215984E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{520C2A94-EFA7-4B03-9CC3-10F9E215984E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{520C2A94-EFA7-4B03-9CC3-10F9E215984E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{520C2A94-EFA7-4B03-9CC3-10F9E215984E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,6 @@
 	injectGameAPI(assets);//inject functions to be used by developers scritps in the game
 	initVerbsCommands(assets);//create command handlers that exec game scripts in order and default verb behaviour
 	initGame(assets); //initialize rooms and actors identifiers and its state
-	assets.init(); //call init script of the game
 
 	var engine = {};
 
@@ -21,6 +20,7 @@
 		}
 	};
 
+	engine.initialState = JSON.parse(JSON.stringify(assets.state));
 	assets.state = new Proxy(assets.state, stateChangedHandler);
 	//engine.initialState = assets.state;
 	
@@ -35,23 +35,11 @@
 	};
 	engine.name = function () { return assets.meta.name; };
 	engine.setState = function (state) {
-		assets.state = new Proxy(assets.state, stateChangedHandler);
+		assets.state = new Proxy(state, stateChangedHandler);
 	}; //assets will be in memory always, restore user "savegame" on every request
 	engine.getState = function () { return assets.state; }; //retrieve "savegame" to persist it
-	engine.verbs = Object.keys({ //needed to be retrieved by telegram bot and show custom keyboard
-		give: null,
-		"pick up": null,
-		use: null,
-		open: null,
-		"look at": null,
-		push: null,
-		close: null,
-		"talk to": null,
-		pull: null,
-		go: null,
-		inventory: null
-	});
-	engine.reset = function () { this.setState = this.initialState; };
+	engine.verbs = ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by telegram bot and show custom keyboard
+	engine.reset = function () { this.setState(this.initialState);  };
 	
 	return engine;
 };
@@ -78,9 +66,10 @@ function injectGameAPI(game) {
 		actor.state = this.state.actors[actorId];
 		return actor;
 	};
-	//get actor from inventory given its id. Inventory actors has the state already injected.
+	//get actor from inventory given its id.
 	game.actorGetFromInventory = function (itemId) {
-		return this.state.inventory[itemId];
+		if (!this.state.inventory.hasOwnProperty(itemId)) return null;
+		return actorGetFromGlobal[itemId];
 	};
 		//get actor from global actor pool given its id. Returns static assets and current state in one object
 	game.actorGetFromGlobal = function (actorId) {
@@ -152,7 +141,7 @@ function injectGameAPI(game) {
 	//add an actor from global actor pool to the inventory. Use the linked inventory actor definded in source actor
 	game.inventoryAddItem = function (item) {
 		item = this.actorGetFromGlobal(item.inventoryActor);
-		this.state.inventory[item.id] = item;
+		this.state.inventory[item.id] = null;
 	};
 	//remove the item from the inventory
 	game.inventoryRemoveItem = function (item) {

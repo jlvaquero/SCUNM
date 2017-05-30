@@ -1,8 +1,8 @@
 {
-	"name": "SCUNMGames",
+	"name": "SCUNM-demo-game",
 	"version": "0.0.0",
-	"description": "Games for SCUNM Engine",
-	"main": "Games.js",
+	"description": "Demo game for SCUNM Engine",
+	"main": "Demo.js",
 	"license": "MIT",
 	"repository": "https://github.com/jlvaquero/SCUNM",
 	"author": {

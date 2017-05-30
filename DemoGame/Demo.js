@@ -1,10 +1,9 @@
 ﻿module.exports.Demo = {
 	meta: {
 		name: "Demo",
-		author: "jlvaquero",
+		authors: ["jlvaquero"],
 		description: "Just a demo."
 	},
-	init: function () {/*init the inventory here*/ },
 	state: { //game state data
 		player: null,
 		currentRoom: "Start Gate",

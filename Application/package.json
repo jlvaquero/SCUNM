@@ -1,0 +1,17 @@
+{
+	"name": "application",
+	"version": "0.0.0",
+	"description": "Application host for SCUNMBot",
+	"main": "app.js",
+	"license": "MIT",
+	"repository": "https://github.com/jlvaquero/SCUNM",
+	"author": {
+		"name": "joseluis.vaquero"
+	},
+	"dependencies": {
+		"SCUNMBot": "file:..\\SCUNMBot",
+		"SCUNMEngine": "file:..\\SCUNMEngine",
+		"SCUNM-demo-game": "file:..\\DemoGame",
+		"ioredis": "^3.1.1"
+	}
+}
