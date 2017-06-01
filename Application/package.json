@@ -9,9 +9,9 @@
 		"name": "joseluis.vaquero"
 	},
 	"dependencies": {
+		"SCUNM-demo-game": "file:..\\DemoGame",
 		"SCUNMBot": "file:..\\SCUNMBot",
 		"SCUNMEngine": "file:..\\SCUNMEngine",
-		"SCUNM-demo-game": "file:..\\DemoGame",
 		"ioredis": "^3.1.1"
 	}
 }

@@ -19,7 +19,7 @@
 			invBottle: {
 				filled: false
 			},
-			key: {
+			coin: {
 				visible: false,
 				collectible: false
 			},
@@ -33,14 +33,14 @@
 		actions: {
 			extinguish: {
 				description: "A dense cloud of steam raises when you throw the water into the bonfire.",
-				image: "http://gameimages/myGame/ExtinguishingBonfire.gif"  //animated gif
+				image: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"  //animated gif
 			},
 			fillBottle: {
 				description: "You fill the bottle with the water of the fountain.",
-				image: "http://gameimages/myGame/fillBottle.gif"  //animated gif
+				image: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"  //animated gif
 			},
-			hotKey: {
-				description: "Auch! The key is too hot.You can not do that"
+			hotCoin: {
+				description: "Auch! The coin is too hot.You can not do that"
 			},
 			bottleEmpty: {
 				description: "The bottle is empty."
@@ -50,13 +50,13 @@
 			}
 		},
 		actors: {
-			invKey: {
-				name: "Copper key",
+			invCoin: {
+				name: "Silver Coin",
 				descriptions: {
-					0: "A copper key."
+					0: "A silver coin."
 				},
 				images: {
-					0: "http://gameimages/myGame/copperKey.gif"
+					0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 				}
 			},
 			invBottle: {
@@ -66,8 +66,8 @@
 					1: "It is a bottle with some water" //once you fill the bottle in the fountain
 				},
 				images: {
-					0: "http://gameimages/myGame/EmptyBottle.gif",
-					1: "http://gameimages/myGame/WaterBottle.gif"
+					0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif",
+					1: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 				},
 				fill: function () {
 					this.state.filled = true;
@@ -90,7 +90,7 @@
 						if (!this.state.filled) return outPutCreateFromAction("bottleEmpty");
 						secondactor.extinguish();
 						this.empty();
-						game.actorGetFromCurrentRoom("key").collectible = true;
+						game.actorGetFromCurrentRoom("coin").collectible = true;
 					}
 				}
 			}
@@ -104,19 +104,19 @@
 				1: "You are on the other side of a burnt broken bridge, you look back to see the debris and a steady stream of water. There is an abandoned camp with a extinguished bonfire on the side of the road."
 			},
 			images: {
-				0: "http://gameimages/myGame/StartGate.gif",
-				1: "http://gameimages/myGame/StartGateExtinguished.gif"
+				0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif",
+				1: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 			},
 			actors: {
 				bonfire: {
 					name: "Bonfire",
 					descriptions: {
-						0: "A pretty hot bonfire. Looks like a key shines among the embers.",
+						0: "A pretty hot bonfire. Looks like a coin shines among the embers.",
 						1: "A extinguished bonfire." //once you use the water to extinguish it
 					},
 					images: {
-						0: "http://gameimages/myGame/bonfire.gif",
-						1: "http://gameimages/myGame/extinguishedBonfire.gif"
+						0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif",
+						1: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 					},
 					extinguish: function () {
 						this.extinguished = true;
@@ -124,7 +124,7 @@
 						this.state.imageIndex = 1;
 					},
 					"look at": function (game) {
-						game.actorGetFromCurrentRoom("key").state.visible = true;
+						game.actorGetFromCurrentRoom("coin").state.visible = true;
 					},
 					use: function (game, secondActor) {
 						if (!secondActor) return;
@@ -132,21 +132,21 @@
 							if (!secondActor.state.filled) return outPutCreateFromAction("bottleEmpty");
 							this.extinguish();
 							secondActor.empty();
-							game.actorGetFromCurrentRoom("key").state.collectible = true;
+							game.actorGetFromCurrentRoom("coin").state.collectible = true;
 						}
 					}
 				},
-				key: {
-					name: "Copper key",
+				coin: {
+					name: "Silver coin",
 					descriptions: {
-						0: "A copper key."
+						0: "A silver coin."
 					},
 					images: {
-						0: "http://gameimages/myGame/copperKey.gif"
+						0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 					},
-					inventoryActor: "invKey",
+					inventoryActor: "invCoin",
 					"pick up": function (game) {
-						var outPut = this.state.collectible ? game.roomGetCurrent().keyPickedUp() : game.outPutCreateFromAction("hotKey");
+						var outPut = this.state.collectible ? game.roomGetCurrent().coinPickedUp() : game.outPutCreateFromAction("hotCoin");
 						return outPut;
 					}
 				}
@@ -157,7 +157,7 @@
 				south: null,
 				west: null
 			},
-			keyPickedUp: function () {
+			coinPickedUp: function () {
 				this.state.descriptionIndex = 1;
 				this.state.imageIndex = 1;
 			}
@@ -169,7 +169,7 @@
 				1: "You are near a fountain. It is in front of a huge mansion."//once you pick up the bottle
 			},
 			images: {
-				0: "http://gameimages/myGame/AFountain.gif"
+				0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 			},
 			actors: {
 				bottle: {
@@ -178,7 +178,7 @@
 						0: "It is a empyt bottle"
 					},
 					images: {
-						0: "http://gameimages/myGame/EmptyBottle.gif"
+						0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 					},
 					inventoryActor: "invBottle",
 					"pick up": function (game) {
@@ -191,7 +191,7 @@
 						0: "A marble fountain with lots of water."
 					},
 					images: {
-						0: "http://gameimages/myGame/fountain.gif"
+						0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 					},
 					use: function (game, secondActor) {
 						if (!secondActor) return;
@@ -222,7 +222,7 @@
 			descriptions: {
 				0: "You are in a huge mansion. Seems abandoned."
 			},
-			images: { 0: "http://gameimages/myGame/Mansion.gif" },
+			images: { 0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif" },
 			exits: {
 				north: null,
 				east: null,

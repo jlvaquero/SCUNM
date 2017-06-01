@@ -3,18 +3,33 @@
 	var TelegramBot = require("node-telegram-bot-api");
 	var verbsKeyboard = createKeyboard(engine.verbs);
 
-	var bot = new TelegramBot(token, options);
-	setEvents(bot, engine.verbs, verbsKeyboard);
-	if (!options.polling) bot.setWebHook(options.url + "/bot" + token);
+	//options.webHook.autoOpen = false;
+	var bot = new TelegramBot(token, { polling: true });
 
-}
+	//var bot = new TelegramBot(token, options);
+	setEvents(bot, engine, verbsKeyboard);
+
+	/*bot.setWebHook(options.webHook.url + "/bot" + token, {
+		certificate: options.webHook.cert,
+		max_connections: options.webHook.maxconn,
+		allowed_updates: ["message", "callback_query"]
+	});*/
+
+	this.start = function () {
+		//bot.openWebHook();
+	};
+
+	this.stop = function () {
+		//bot.closeWebHook();
+	};
+};
 
 function createKeyboard(verbArray) {
 	var verbsKeyboardMarkUp = [];
 
 	var part = 3;
 	for (var i = 0; i < verbArray.length; i += part) {
-		verbsKeyboardMarkUp.push(verbArray.slice(i, i + part).map(function (verb) { return {text : verb}}));
+		verbsKeyboardMarkUp.push(verbArray.slice(i, i + part).map(function (verb) { return { text: verb }; }));
 	}
 
 	return {
@@ -29,7 +44,7 @@ function createInlineButtons(selection) {
 
 	var part = 3;
 	for (var i = 0; i < selection.list.length; i += part) {
-		actorsKeyboardMarkUp.push(selection.list.slice(i, i + part).map(function (actor) { return { text: actor.name, callback_data: selection.execCommand+ " " + actor.id } }));
+		actorsKeyboardMarkUp.push(selection.list.slice(i, i + part).map(function (actor) { return { text: actor.name, callback_data: selection.command + " " + actor.id }; }));
 	}
 
 	return {
@@ -39,85 +54,77 @@ function createInlineButtons(selection) {
 	};
 }
 
-function setEvents(bot, verbArray, verbsKeyboard) {
+function parseQueryData(data) {
+
+}
+
+function setEvents(bot, engine, verbsKeyboard) {
 
 	bot.onText(/^\/start$/, function (msg, match) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name;
-		var gameState = await store.get(storeKey);
+		var gameState; //= await store.get(storeKey);
 		if (!gameState) {
-			store.set(storeKey, JSON.stringify(engine.initialState));
+			//		store.set(storeKey, JSON.stringify(engine.initialState));
 			gameState = engine.initialState;
 		}
 		engine.setState(gameState);
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
-			await bot.sendDocument(userId, outPut.imgURL);
+			bot.sendDocument(userId, outPut.imgURL);
 		}
-		await bot.sendMessage(userId, outPut.text, {
+		bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard
 		});
 	});
 
-	bot.onText(/^\/restart$/, function (msg, match) {
+	bot.onText(/^\/restart$/, function (msg) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name;
 		engine.reset();
-		store.set(storeKey, JSON.stringify(engine.getState));
+		//	store.set(storeKey, JSON.stringify(engine.getState));
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
-			await bot.sendDocument(userId, outPut.imgURL);
+			bot.sendDocument(userId, outPut.imgURL);
 		}
-		await bot.sendMessage(userId, outPut.text, {
+		bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard
 		});
 	});
 
-	verbArray.forEach(function (verb) {
-		bot.onText(new RegExp("^" + verb + "$"), function (msg, match) {
+	engine.verbs.forEach(function (verb) {
+		bot.onText(new RegExp("^" + verb + "$"), function (msg) {
 			var userId = msg.from.id;
-			var storeKey = userId + ":" + demoEngine.name;
-			var gameState = await store.get(storeKey);
-			demoEngine.setState(gameState);
-			var outPut = demoEngine.execCommand(verb);
-			if (demoEngine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState))}
-			var inlineButtons = createOnlineButtons(outPut.selection);
+			var storeKey = userId + ":" + engine.name;
+			//	var gameState = await store.get(storeKey);
+			//		engine.setState(gameState);
+			var outPut = engine.execCommand(verb);
+			//	if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState)); }
+			var inlineButtons = createInlineButtons(outPut.selection);
 			if (outPut.imgURL) {
-				await bot.sendDocument(userId, outPut.imgURL);
+				bot.sendDocument(userId, outPut.imgURL);
 			}
-			await bot.sendMessage(userId, outPut.text, {
+			bot.sendMessage(userId, outPut.text, {
 				reply_markup: inlineButtons
 			});
 		});
 
-		bot.onText(new RegExp("^" + verb + "\s([\S]+)$"), function (msg, match) {
+		bot.on("callback_query", function (msg) {
 			var userId = msg.from.id;
-			var storeKey = userId + ":" + demoEngine.name;
-			var gameState = await store.get(storeKey);
-			demoEngine.setState(gameState);
-			var outPut = demoEngine.execCommand(verb, match[1]);
-			var inlineButtons = createOnlineButtons(outPut.selection);
+			var storeKey = userId + ":" + engine.name;
+			//	var gameState = await store.get(storeKey);
+			//	engine.setState(gameState);
+			var clientQuery = parseQueryData(msg.data);
+			var outPut = engine.execCommand.apply(engine, clientQuery);
+			//	if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState)); }
+			var inlineButtons = createInlineButtons(outPut.selection);
 			if (outPut.imgURL) {
-				await bot.sendDocument(userId, outPut.imgURL);
+				bot.sendDocument(userId, outPut.imgURL);
 			}
-			await bot.sendMessage(userId, outPut.text, {
+			bot.sendMessage(userId, outPut.text, {
 				reply_markup: inlineButtons
 			});
 		});
 
-		bot.onText(new RegExp("^" + verb + "\s([\S]+)\s([\S]+)$"), function (msg, match) {
-			var userId = msg.from.id;
-			var storeKey = userId + ":" + demoEngine.name;
-			var gameState = await store.get(storeKey);
-			demoEngine.setState(gameState);
-			var outPut = demoEngine.execCommand(verb, match[1], match[2]);
-			var inlineButtons = createOnlineButtons(outPut.selection);
-			if (outPut.imgURL) {
-				await bot.sendDocument(userId, outPut.imgURL);
-			}
-			await bot.sendMessage(userId, outPut.text, {
-				reply_markup: inlineButtons
-			});
-		});
 	});
 }
