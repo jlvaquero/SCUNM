@@ -40,6 +40,7 @@ function createKeyboard(verbArray) {
 }
 
 function createInlineButtons(selection) {
+	if (!selection || !selection.list) return null;
 	var actorsKeyboardMarkUp = [];
 
 	var part = 3;
@@ -55,12 +56,17 @@ function createInlineButtons(selection) {
 }
 
 function parseQueryData(data) {
-
+	var cmndar = data.split(" ");
+	var query = [];
+	query.push(cmndar[0]);
+	query.push(cmndar[1]);
+	if (cmndar[2]) query.push(cmndar[2]);
+	return query;
 }
 
 function setEvents(bot, engine, verbsKeyboard) {
 
-	bot.onText(/^\/start$/, function (msg, match) {
+	bot.onText(/^\/start$/, async function (msg, match) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name;
 		var gameState; //= await store.get(storeKey);
@@ -71,29 +77,29 @@ function setEvents(bot, engine, verbsKeyboard) {
 		engine.setState(gameState);
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
-			bot.sendDocument(userId, outPut.imgURL);
+			await bot.sendDocument(userId, outPut.imgURL);
 		}
-		bot.sendMessage(userId, outPut.text, {
+		await	bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard
 		});
 	});
 
-	bot.onText(/^\/restart$/, function (msg) {
+	bot.onText(/^\/restart$/, async function (msg) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name;
 		engine.reset();
 		//	store.set(storeKey, JSON.stringify(engine.getState));
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
-			bot.sendDocument(userId, outPut.imgURL);
+		await	bot.sendDocument(userId, outPut.imgURL);
 		}
-		bot.sendMessage(userId, outPut.text, {
+	await	bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard
 		});
 	});
 
 	engine.verbs.forEach(function (verb) {
-		bot.onText(new RegExp("^" + verb + "$"), function (msg) {
+		bot.onText(new RegExp("^" + verb + "$"), async function (msg) {
 			var userId = msg.from.id;
 			var storeKey = userId + ":" + engine.name;
 			//	var gameState = await store.get(storeKey);
@@ -102,29 +108,31 @@ function setEvents(bot, engine, verbsKeyboard) {
 			//	if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState)); }
 			var inlineButtons = createInlineButtons(outPut.selection);
 			if (outPut.imgURL) {
-				bot.sendDocument(userId, outPut.imgURL);
+			await	bot.sendDocument(userId, outPut.imgURL);
 			}
-			bot.sendMessage(userId, outPut.text, {
+		await	bot.sendMessage(userId, outPut.text, {
 				reply_markup: inlineButtons
 			});
 		});
-
-		bot.on("callback_query", function (msg) {
-			var userId = msg.from.id;
-			var storeKey = userId + ":" + engine.name;
-			//	var gameState = await store.get(storeKey);
-			//	engine.setState(gameState);
-			var clientQuery = parseQueryData(msg.data);
-			var outPut = engine.execCommand.apply(engine, clientQuery);
-			//	if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState)); }
-			var inlineButtons = createInlineButtons(outPut.selection);
-			if (outPut.imgURL) {
-				bot.sendDocument(userId, outPut.imgURL);
-			}
-			bot.sendMessage(userId, outPut.text, {
-				reply_markup: inlineButtons
-			});
-		});
-
 	});
+
+	bot.on("callback_query", async function (msg) {
+		var userId = msg.from.id;
+		var storeKey = userId + ":" + engine.name;
+		//	var gameState = await store.get(storeKey);
+		//	engine.setState(gameState);
+		var clientQuery = parseQueryData(msg.data);
+		var outPut = engine.execCommand.apply(engine, clientQuery);
+		//	if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState)); }
+		var inlineButtons = createInlineButtons(outPut.selection);
+		if (outPut.imgURL) {
+		await	bot.sendDocument(userId, outPut.imgURL);
+		}
+		await bot.sendMessage(userId, outPut.text, {
+			reply_markup: inlineButtons
+		});
+		bot.answerCallbackQuery(msg.id);
+	});
+
+
 }

@@ -199,9 +199,9 @@ function initVerbsCommands(game) {
 			outPut = firstActor["use"] ? firstActor.use(this) : null;
 			if (outPut) return outPut;
 
-			if (!secondActorId) return this.outPutCreateFromRoomActors("Use " + firstActor.name + " with what?", "use " + firstActor.name, true);
+			if (!secondActorId) return this.outPutCreateFromRoomActors("Use " + firstActor.name + " with what?", "use " + firstActor.id, true);
 
-			if (secondActorId === "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.name); }
+			if (secondActorId === "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.id); }
 
 			var secondActor = this.actorGetFromCurrentRoom(secondActorId) || this.actorGetFromInventory(secondActorId);
 
@@ -354,7 +354,7 @@ function initVerbsCommands(game) {
 	};
 
 	game.globalCommands.pull = function (actorId) {
-		if (!actorId) return this.outPutCreateFromRoomActors("Push what?", "pull"); // ouput list of actors
+		if (!actorId) return this.outPutCreateFromRoomActors("Pull what?", "pull"); // ouput list of actors
 
 		var actor = this.actorGetFromCurrentRoom(actorId);
 		if (!actor) return this.outPutCreateRaw("You can not pull that.");
