@@ -20,11 +20,7 @@
 				filled: false
 			},
 			coin: {
-				visible: false,
-				collectible: false
-			},
-			door: {
-				opened: false
+				visible: false
 			}
 		}
 	},//end game state
@@ -44,9 +40,6 @@
 			},
 			bottleEmpty: {
 				description: "The bottle is empty."
-			},
-			doorClosed: {
-				description: "The door of the mansion is key locked."
 			}
 		},
 		actors: {
@@ -220,7 +213,7 @@
 		Mansion: {
 			name: "Mansion",
 			descriptions: {
-				0: "You are in a huge mansion. Seems abandoned."
+				0: "You are in the hall of a huge mansion. Seems abandoned. This is the end of the demo. Now go and make a great adventure with SCUNM engine!"
 			},
 			images: { 0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif" },
 			exits: {

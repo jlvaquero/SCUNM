@@ -82,9 +82,7 @@ function injectGameAPI(game) {
 		var outPut = new Object();
 		outPut.text = text;
 		if (imgURL) outPut.imgURL = imgURL;
-		if (selection) {
-			outPut.selection = { command: selection.command, list: selection.list };
-		}
+		outPut.selection = selection;
 		return outPut;
 	};
 	//create standard room outPut
@@ -254,7 +252,7 @@ function initVerbsCommands(game) {
 
 	game.globalCommands["look at"] = function (actorId) {
 
-		if (!actorId) return this.outPutCreateFromRoomActors("Look at what?", "look at"); // ouput list of actors
+		if (!actorId) return this.outPutCreateFromRoomActors("Look at what?", "look_at"); // ouput list of actors
 		var actor = this.actorGetFromCurrentRoom(actorId);
 		if (!actor) return this.outPutCreateRaw("You can not see that.");
 		if (!actor.state.visible || actor.state.removed) return this.outPutCreateRaw("You can not see that.");
@@ -274,7 +272,7 @@ function initVerbsCommands(game) {
 	};
 
 	game.globalCommands["talk to"] = function (actorId) {
-		if (!actorId) return this.outPutCreateFromRoomActors("talk to what?", "look at"); // ouput list of actors
+		if (!actorId) return this.outPutCreateFromRoomActors("talk to who?", "talk_to"); // ouput list of actors
 		var actor = this.actorGetFromCurrentRoom(actorId);
 		if (!actor) return this.outPutCreateRaw("You can not talk to that.");
 		if (!actor.state.visible || actor.state.removed) return this.outPutCreateRaw("You can not talk to that.");
@@ -375,7 +373,7 @@ function initVerbsCommands(game) {
 
 	game.globalCommands["pick up"] = function (actorId) {
 		{
-			if (!actorId) return this.outPutCreateFromRoomActors("Pick up what?", "pick up"); //output list of actors in the room
+			if (!actorId) return this.outPutCreateFromRoomActors("Pick up what?", "pick_up"); //output list of actors in the room
 
 			var actor = this.actorGetFromCurrentRoom(actorId);
 			if (!actor) return this.outPutCreateRaw("Nothing to pick up.");

@@ -57,11 +57,8 @@ function createInlineButtons(selection) {
 
 function parseQueryData(data) {
 	var cmndar = data.split(" ");
-	var query = [];
-	query.push(cmndar[0]);
-	query.push(cmndar[1]);
-	if (cmndar[2]) query.push(cmndar[2]);
-	return query;
+	cmndar[0] = cmndar[0].replace("_", " ");
+	return cmndar;
 }
 
 function setEvents(bot, engine, verbsKeyboard) {
