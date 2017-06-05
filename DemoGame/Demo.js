@@ -97,7 +97,7 @@
 						return game.outPutCreateFromAction("fillBottle");
 					}
 					if (secondactor.id === "bonfire") {
-						if (!this.state.filled) return outPutCreateFromAction("bottleEmpty");
+						if (!this.state.filled) return game.outPutCreateFromAction("bottleEmpty");
 						secondactor.extinguish();
 						this.empty();
 						game.actorGetFromCurrentRoom("coin").collectible = true;
@@ -128,13 +128,13 @@
 					},
 					images: {
 						0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif",
-						1: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
+						1: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif",
+						2: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 					},
 					extinguish: function () {
 						this.extinguished = true;
-						var index = game.actorGetFromCurrentRoom("coin").state.removed ? 2 : 1;
-						this.state.descriptionIndex = index;
-						this.state.imageIndex = index;
+						this.state.descriptionIndex = 1;
+						this.state.imageIndex = 1;
 					},
 					"look at": function (game) {
 						game.actorGetFromCurrentRoom("coin").state.visible = true;
@@ -142,7 +142,7 @@
 					use: function (game, secondActor) {
 						if (!secondActor) return;
 						if (secondActor.id === "invBottle") {
-							if (!secondActor.state.filled) return outPutCreateFromAction("bottleEmpty");
+							if (!secondActor.state.filled) return game.outPutCreateFromAction("bottleEmpty");
 							this.extinguish();
 							secondActor.empty();
 							game.actorGetFromCurrentRoom("coin").state.collectible = true;
@@ -161,6 +161,9 @@
 					inventoryActor: "invCoin",
 					"pick up": function (game) {
 						var outPut = this.state.collectible ? game.roomGetCurrent().coinPickedUp() : game.outPutCreateFromAction("hotCoin");
+						var bonfire = game.actorGetFromCurrentRoom("bonfire");
+						bonfire.state.descriptionIndex = 2;
+						bonfire.state.imageIndex = 2;
 						return outPut;
 					}
 				}
@@ -231,13 +234,6 @@
 					},
 					pull: function (game) {
 						return game.outPutCreateRaw("To an guard with an axe? No way!");
-					},
-					give: function (game, secondActor) {
-						if (!secondActor) return null;
-						if (secondActor.id !== "invCoin") return null;
-						this.state.removed = true;//guard left
-						game.inventoryRemoveItem(secondActor);//coin removed from inventory
-						return game.outPutCreateFromAction("giveCoin");
 					}
 				}
 			},

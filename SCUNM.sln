@@ -14,6 +14,8 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "DemoGame", "DemoGame\DemoGa
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Application", "Application\Application.njsproj", "{520C2A94-EFA7-4B03-9CC3-10F9E215984E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redis", "Redis\Redis.csproj", "{8F0EA5EF-3275-4CED-99A6-62D14F75B5C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{520C2A94-EFA7-4B03-9CC3-10F9E215984E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{520C2A94-EFA7-4B03-9CC3-10F9E215984E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{520C2A94-EFA7-4B03-9CC3-10F9E215984E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F0EA5EF-3275-4CED-99A6-62D14F75B5C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F0EA5EF-3275-4CED-99A6-62D14F75B5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F0EA5EF-3275-4CED-99A6-62D14F75B5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F0EA5EF-3275-4CED-99A6-62D14F75B5C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -237,7 +237,7 @@ function initVerbsCommands(game) {
 
 		if (firstActor) {
 
-			if (!secondActorId) return this.outPutCreateFromRoomActors("Give " + firstActor.name + " to...", "give " + firstActor.name, true);
+			if (!secondActorId) return this.outPutCreateFromRoomActors("Give " + firstActor.name + " to...", "give " + firstActor.id, true);
 
 			var secondActor = this.actorGetFromCurrentRoom(secondActorId);
 
@@ -255,7 +255,6 @@ function initVerbsCommands(game) {
 				return this.outPutCreateRaw("I can not give that.");
 			}
 		}
-
 		return this.outPutCreateRaw("I can not give that.");
 	};
 
