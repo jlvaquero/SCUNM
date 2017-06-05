@@ -40,6 +40,12 @@
 			},
 			bottleEmpty: {
 				description: "The bottle is empty."
+			},
+			youShallNotPass: {
+				description: "The guard says: Give me a Dragon and I let you pass."
+			},
+			giveCoin: {
+				description: "The guard takes the coin and left."
 			}
 		},
 		actors: {
@@ -50,6 +56,17 @@
 				},
 				images: {
 					0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
+				},
+				give: function (game, secondActor) {
+					if (!secondActor) return null;
+					if (secondActor.id !== "guard") return null;
+					secondActor.state.removed = true;//guard left
+					game.inventoryRemoveItem(this);//coin removed from inventory
+					return game.outPutCreateFromAction("giveCoin");
+				},
+				use: function (game, secondActor) {
+					if (!secondActor) return null;
+					return game.outPutCreateRaw("There is no coin slot!");
 				}
 			},
 			invBottle: {
@@ -84,6 +101,7 @@
 						secondactor.extinguish();
 						this.empty();
 						game.actorGetFromCurrentRoom("coin").collectible = true;
+						return game.outPutCreateFromAction("extinguish");
 					}
 				}
 			}
@@ -105,7 +123,8 @@
 					name: "Bonfire",
 					descriptions: {
 						0: "A pretty hot bonfire. Looks like a coin shines among the embers.",
-						1: "A extinguished bonfire." //once you use the water to extinguish it
+						1: "A extinguished bonfire.  Looks like a coin shines among the embers.", //once you use the water to extinguish it
+						2: "A extinguished bonfire."
 					},
 					images: {
 						0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif",
@@ -113,8 +132,9 @@
 					},
 					extinguish: function () {
 						this.extinguished = true;
-						this.state.descriptionIndex = 1;
-						this.state.imageIndex = 1;
+						var index = game.actorGetFromCurrentRoom("coin").state.removed ? 2 : 1;
+						this.state.descriptionIndex = index;
+						this.state.imageIndex = index;
 					},
 					"look at": function (game) {
 						game.actorGetFromCurrentRoom("coin").state.visible = true;
@@ -126,6 +146,7 @@
 							this.extinguish();
 							secondActor.empty();
 							game.actorGetFromCurrentRoom("coin").state.collectible = true;
+							return game.outPutCreateFromAction("extinguish");
 						}
 					}
 				},
@@ -158,8 +179,8 @@
 		"A Fountain": {
 			name: "A Fountain",
 			descriptions: {
-				0: "You are near a fountain. It is in front of a huge mansion. There is a empty bottle just besides it",
-				1: "You are near a fountain. It is in front of a huge mansion."//once you pick up the bottle
+				0: "You are near a fountain. It is in front of a huge mansion. There is a empty bottle just besides the fountain and an armed guard at the mansion entrance.",
+				1: "You are near a fountain. It is in front of a huge mansion. There is an armed guard at the mansion entrance."//once you pick up the bottle
 			},
 			images: {
 				0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
@@ -193,6 +214,31 @@
 							return game.outPutCreateFromAction("fillBottle");
 						}
 					}
+				},
+				guard: {
+					name: "Armed guard",
+					descriptions: {
+						0: "A guard with an axe that keeps you form enter the mansion."
+					},
+					images: {
+						0: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
+					},
+					"talk to": function (game) {
+						return game.outPutCreateFromAction("youShallNotPass");
+					},
+					push: function (game) {
+						return game.outPutCreateRaw("To an guard with an axe? No way!");
+					},
+					pull: function (game) {
+						return game.outPutCreateRaw("To an guard with an axe? No way!");
+					},
+					give: function (game, secondActor) {
+						if (!secondActor) return null;
+						if (secondActor.id !== "invCoin") return null;
+						this.state.removed = true;//guard left
+						game.inventoryRemoveItem(secondActor);//coin removed from inventory
+						return game.outPutCreateFromAction("giveCoin");
+					}
 				}
 			},
 			exits: {
@@ -205,8 +251,10 @@
 				this.state.descriptionIndex = 1;
 			},
 			go: function (game, direction) {
-				if (direction === "north" && game.roomGetCurrent().doorOpened === false) {
-					return game.outPutCreateFromAction("doorClosed");
+				if (direction === "north") {
+					if (!game.actorGetFromCurrentRoom("guard").state.removed) {
+						return game.outPutCreateFromAction("youShallNotPass");
+					}
 				}
 			}
 		},

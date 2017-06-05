@@ -43,21 +43,19 @@ function createInlineButtons(selection) {
 	if (!selection || !selection.list) return null;
 	var actorsKeyboardMarkUp = [];
 
-	var part = 3;
+	var part = 2;
 	for (var i = 0; i < selection.list.length; i += part) {
 		actorsKeyboardMarkUp.push(selection.list.slice(i, i + part).map(function (actor) { return { text: actor.name, callback_data: selection.command + " " + actor.id }; }));
 	}
 
 	return {
-		inline_keyboard: actorsKeyboardMarkUp,
-		resize_keyboard: true,
-		one_time_keyboard: false
+		inline_keyboard: actorsKeyboardMarkUp
 	};
 }
 
 function parseQueryData(data) {
 	var cmndar = data.split(" ");
-	cmndar[0] = cmndar[0].replace("_", " ");
+	cmndar[0] = cmndar[0].replace("_", " ");//Phrasal Verbs should come with "_" instead of blank space
 	return cmndar;
 }
 

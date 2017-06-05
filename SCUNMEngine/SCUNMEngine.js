@@ -11,7 +11,7 @@
 			target[key] = value;
 			engine.updatedState = true;
 		},
-		get: function(target, key) {
+		get: function (target, key) {
 			if (typeof target[key] === 'object' && target[key] !== null) {
 				return new Proxy(target[key], stateChangedHandler);
 			} else {
@@ -23,11 +23,11 @@
 	engine.initialState = JSON.parse(JSON.stringify(assets.state));
 	assets.state = new Proxy(assets.state, stateChangedHandler);
 	//engine.initialState = assets.state;
-	
+
 	engine.continue = function () {
 		return assets.outPutCreateFromCurrentRoom();
 	};
-	
+
 	engine.execCommand = function (verb, dObject, iObject) {
 		engine.updatedState = false;
 		outPut = assets.globalCommands[verb] ? assets.globalCommands[verb].call(assets, dObject, iObject) : { text: "What? Try again..." };
@@ -39,8 +39,8 @@
 	}; //assets will be in memory always, restore user "savegame" on every request
 	engine.getState = function () { return assets.state; }; //retrieve "savegame" to persist it
 	engine.verbs = ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by telegram bot and show custom keyboard
-	engine.reset = function () { this.setState(this.initialState);  };
-	
+	engine.reset = function () { this.setState(this.initialState); };
+
 	return engine;
 };
 
@@ -69,9 +69,9 @@ function injectGameAPI(game) {
 	//get actor from inventory given its id.
 	game.actorGetFromInventory = function (itemId) {
 		if (!this.state.inventory.hasOwnProperty(itemId)) return null;
-		return actorGetFromGlobal[itemId];
+		return this.actorGetFromGlobal(itemId);
 	};
-		//get actor from global actor pool given its id. Returns static assets and current state in one object
+	//get actor from global actor pool given its id. Returns static assets and current state in one object
 	game.actorGetFromGlobal = function (actorId) {
 		var actor = this.globalResources.actors[actorId];
 		actor.state = this.state.actors[actorId];
@@ -149,7 +149,7 @@ function injectGameAPI(game) {
 
 function initVerbsCommands(game) {
 	game.globalCommands = new Object;
-//execute scripts chain, stop on any script returning	outPut or exec default behaviour if not
+	//execute scripts chain, stop on any script returning	outPut or exec default behaviour if not
 	game.globalCommands.go = function (direction) {
 
 		if (!direction) return this.outPutCreateFromRoomExits("Where to?", "go");//output list of directions
@@ -176,18 +176,24 @@ function initVerbsCommands(game) {
 	};
 	//outPut inventory items
 	game.globalCommands.inventory = function () {
-		return this.outPutCreateFromInventory("This is what you got:", "inspect");
+		var outPut = this.outPutCreateFromInventory("This is what you got:", "inspect");
+		if (outPut.selection.list.length === 0) return this.outPutCreateRaw("Your pockets are empty");
+		return outPut;
 	};
 
 	game.globalCommands.use = function (firstActorId, secondActorId) {
 		if (!firstActorId) return this.outPutCreateFromRoomActors("Use what?", "use", true);
-
-		if (firstActorId === "inventory") { return this.outPutCreateFromInventory("Use what?", "use"); }
+		var outPut;
+		if (firstActorId === "inventory") {
+			outPut = this.outPutCreateFromInventory("Use what?", "use");
+			if (outPut.selection.list.length === 0) return this.outPutCreateRaw("My pockets are empty.");
+			return outPut;
+		}
 
 		var firstActor = this.actorGetFromCurrentRoom(firstActorId) || this.actorGetFromInventory(firstActorId);
 
 		if (firstActor && !firstActor.state.removed && firstActor.state.visible) {
-			var outPut = this["use"] ? this["use"](firstActor) : null;
+			outPut = this["use"] ? this["use"](firstActor) : null;
 			if (outPut) return outPut;
 
 			var room = this.roomGetCurrent();
@@ -222,13 +228,16 @@ function initVerbsCommands(game) {
 	};
 
 	game.globalCommands.give = function (firstActorId, secondActorId) {
-		if (!firstActorId) return this.outPutCreateFromInventory("Give what?", "give");
-
+		if (!firstActorId) {
+			var outPut = this.outPutCreateFromInventory("Give what?", "give");
+			if (outPut.selection.list.length === 0) return this.outPutCreateRaw("My pockets are empty.");
+			return outPut;
+		}
 		var firstActor = this.actorGetFromInventory(firstActorId);
 
 		if (firstActor) {
 
-			if (!secondActorId) return this.outPutCreateFromRoomActors("Give " + firstActor.name + " to...", "give " + firstActor.name);
+			if (!secondActorId) return this.outPutCreateFromRoomActors("Give " + firstActor.name + " to...", "give " + firstActor.name, true);
 
 			var secondActor = this.actorGetFromCurrentRoom(secondActorId);
 
@@ -268,7 +277,7 @@ function initVerbsCommands(game) {
 		if (outPut) return outPut;
 
 		//default behaviour
-			return this.outPutCreateFromActor(actor);
+		return this.outPutCreateFromActor(actor);
 	};
 
 	game.globalCommands["talk to"] = function (actorId) {
@@ -288,16 +297,23 @@ function initVerbsCommands(game) {
 		if (outPut) return outPut;
 
 		//default behaviour
-			return this.outPutCreateRaw("You can not talk to that");
+		return this.outPutCreateRaw("You can not talk to that");
 	};
 
 	game.globalCommands.open = function (actorId) {
-		if(!actorId) return this.outPutCreateFromRoomActors("Open what?", "open"); // ouput list of actors
+		if (!actorId) return this.outPutCreateFromRoomActors("Open what?", "open", true); // ouput list of actors
+		var outPut;
+		if (actorId === "inventory") {
+			outPut = this.outPutCreateFromInventory("Open what?", "open");
+			if (outPut.selection.list.length === 0) return this.outPutCreateRaw("My pockets are empty.");
+			return outPut;
+		}
 
-		var actor = this.actorGetFromCurrentRoom(actorId);
+		var actor = this.actorGetFromCurrentRoom(actorId) || this.actorGetFromInventory(actorId);
+
 		if (!actor) return this.outPutCreateRaw("You can not open that.");
 
-		var outPut = this["open"] ? this["open"](actor) : null;
+		outPut = this["open"] ? this["open"](actor) : null;
 		if (outPut) return outPut;
 
 		var room = this.roomGetCurrent();
@@ -312,12 +328,19 @@ function initVerbsCommands(game) {
 	};
 
 	game.globalCommands.close = function (actorId) {
-		if (!actorId) return this.outPutCreateFromRoomActors("Close what?", "close"); // ouput list of actors
+		if (!actorId) return this.outPutCreateFromRoomActors("Close what?", "close", true); // ouput list of actors
+		var outPut
+		if (actorId === "inventory") {
+			outPut = this.outPutCreateFromInventory("Close what?", "close");
+			if (outPut.selection.list.length === 0) return this.outPutCreateRaw("My pockets are empty.");
+			return outPut;
+		}
 
-		var actor = this.actorGetFromCurrentRoom(actorId);
+		var actor = this.actorGetFromCurrentRoom(actorId) || this.actorGetFromInventory(actorId);
+
 		if (!actor) return this.outPutCreateRaw("You can not close that.");
 
-		var outPut = this["close"] ? this["close"](actor) : null;
+		outPut = this["close"] ? this["close"](actor) : null;
 		if (outPut) return outPut;
 
 		var room = this.roomGetCurrent();
@@ -444,7 +467,7 @@ function initState(game) {
 	}
 
 	for (var roomName in game.rooms) {
-		
+
 		var currentRoomState = game.state.rooms[roomName];
 		var defaultRoomState = {
 			descriptionIndex: 0,
