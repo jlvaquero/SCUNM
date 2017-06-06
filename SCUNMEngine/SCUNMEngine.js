@@ -66,6 +66,14 @@ function injectGameAPI(game) {
 		actor.state = this.state.actors[actorId];
 		return actor;
 	};
+
+	game.actorGetFromRoom = function (roomId, actorId) {
+		var actor = this.roomGet(roomId).actors[actorId];
+		if (!actor) return;
+		actor.state = this.state.actors[actorId];
+		return actor;
+	};
+
 	//get actor from inventory given its id.
 	game.actorGetFromInventory = function (itemId) {
 		if (!this.state.inventory.hasOwnProperty(itemId)) return null;
