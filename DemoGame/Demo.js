@@ -115,7 +115,7 @@
 				1: "You are on the other side of a burnt broken bridge, you look back to see the debris and a steady stream of water. There is an abandoned camp with a extinguished bonfire on the side of the road."
 			},
 			images: {
-				0: "http://www.nelive.in/sites/default/files/Untitled-4%20%282%29.gif",
+				0: "http://www.nelive.in/sites/default/files/Untitled-4%20%282%29.gif"
 			},
 			actors: {
 				bonfire: {
@@ -127,7 +127,7 @@
 					},
 					images: {
 						0: "https://68.media.tumblr.com/3b279a1c80608f8c6b350254ebaca533/tumblr_nv0pqzmWTF1uejtspo1_500.gif",
-						1: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif",
+						1: "http://www.ks.uiuc.edu/Training/SumSchool/materials/sources/tutorials/01-vmd-tutorial/vmd-tutorial-pictures/placeholder.gif"
 					},
 					extinguish: function (game) {
 						this.extinguished = true;
@@ -194,7 +194,7 @@
 						0: "It is a empyt bottle"
 					},
 					images: {
-						0: "hhttps://media.giphy.com/media/12IK01JJiBXtvi/giphy.gif"
+						0: "https://media.giphy.com/media/12IK01JJiBXtvi/giphy.gif"
 					},
 					inventoryActor: "invBottle",
 					"pick up": function (game) {

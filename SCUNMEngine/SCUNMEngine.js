@@ -96,7 +96,7 @@ function injectGameAPI(game) {
 	//create standard room outPut
 	game.outPutCreateFromRoom = function (room) {
 		var text = room.descriptions[room.state.descriptionIndex];
-		var imgURL = room.images[room.state.imageIndex];
+		var imgURL = room.images ? room.images[room.state.imageIndex] : null;
 		return this.outPutCreateRaw(text, imgURL);
 	};
 	//create standard room outPut from room where the player is
@@ -106,7 +106,7 @@ function injectGameAPI(game) {
 	//create standard actor outPut
 	game.outPutCreateFromActor = function (actor) {
 		var text = actor.descriptions[actor.state.descriptionIndex];
-		var imgURL = actor.images[actor.state.imageIndex];
+		var imgURL = actor.images ? actor.images[actor.state.imageIndex] : null;
 		return this.outPutCreateRaw(text, imgURL);
 	};
 	//create standard outPut with the list of actors in a room. Filters invisible and removed actor (player can not interact with that)
@@ -336,7 +336,7 @@ function initVerbsCommands(game) {
 
 	game.globalCommands.close = function (actorId) {
 		if (!actorId) return this.outPutCreateFromRoomActors("Close what?", "close", true); // ouput list of actors
-		var outPut
+		var outPut;
 		if (actorId === "inventory") {
 			outPut = this.outPutCreateFromInventory("Close what?", "close");
 			if (outPut.selection.list.length === 0) return this.outPutCreateRaw("My pockets are empty.");
