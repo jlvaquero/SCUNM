@@ -8,4 +8,4 @@ The engine also allows you to keep in memory shared game assets for all players 
 
 Game assets are defined using object initializer with embedded game scrips and images will be references from any CDN (google drive, dropbox, ms onedrive, etc should work).
 
-WARNING : I am still prototyping and changing everything every days so no pullrequest yet. If you want to discuss something open issue.
+It is in Alpha state. You can fork it and pull request.
