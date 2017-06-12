@@ -5,24 +5,24 @@
 		description: "Just a demo."
 	},
 	state: { //game state data
-		player: null, //no need of custom player state
-		currentRoom: "Start Gate",
-		inventory: null,//no initial inventory
-		rooms: null,//no need of custom room state
+		player: null, //optional; no need of custom player state in this game
+		currentRoom: "Start Gate",//mandatory! The start room id
+		inventory: null,//optional; no initial inventory in this game
+		rooms: null,//optional; no need of custom room state in this game
 		actors: {
 			bonfire: {
 				extinguished: false //custom state
 			},
 			bottle: {
-				collectible: true //default collectible state is false
+				collectible: true //default collectible state is false. need true for the bottle
 			},
 			invBottle: {
 				filled: false //custom state 
 			},
 			coin: {
-				visible: false //default visible state is true
+				visible: false //default visible state is true, need false for the coin
 			}
-		}
+		}//optional; need custom state and non default values in this game
 	},//end game state
 	//game assets
 	globalResources: {
@@ -47,7 +47,7 @@
 			giveCoin: {
 				description: "The guard takes the coin and left."
 			}
-		},
+		}, //optional
 		actors: { //actor that does not belong to a room  (i.e. inventory items)
 			invCoin: { //id=invCoin property will be created by the engine
 				name: "Silver Coin",//show the player a pretty name
@@ -58,7 +58,6 @@
 					0: "https://ferrebeekeeper.files.wordpress.com/2016/03/1ae50e13e41a882c2b10acf4e2db3cbb.gif"
 				},
 				give: function (game, secondActor) { //script for give action (i.e. give coin guard)
-					if (!secondActor) return null;
 					if (secondActor.id !== "guard") return null;
 					secondActor.state.removed = true;//guard left
 					game.roomGetCurrent().guardLeft();
@@ -66,7 +65,6 @@
 					return game.outPutCreateFromAction("giveCoin");//reference to globalResources.actions
 				},
 				use: function (game, secondActor) { //script for use action (i.e. use coin fountain)
-					if (!secondActor) return null; 
 					return game.outPutCreateRaw("There is no coin slot!"); //no coin slot exist in this game
 				}
 			},
@@ -91,8 +89,6 @@
 					this.state.imageIndex = 0;
 				},
 				use: function (game, secondactor) { 
-					if (!secondactor) return;
-
 					if (secondactor.id === "fountain") {
 						this.fill();
 						return game.outPutCreateFromAction("fillBottle");
@@ -106,8 +102,14 @@
 					}
 				}
 			}
-		}
+		} //optional
+		//verbs: ["jump", "go"]// optional; custom verbs; WARNING: overrides (does not combine with) default verbs
+		//the engine provides handlers for default verbs, custom verbs requires custom handlers in globalCommands section.
 	},
+	/*globalCommands: { //mandatory if custom verbs are defined
+			jump: function(actorId){...} //i.e. jump fence
+			//<go> not defined, the engine will inject default <go> handler
+	},*/
 	rooms: {
 		"Start Gate": { //id="Start Gate" property will be created by the engine
 			name: "Start Gate",
@@ -139,11 +141,10 @@
 					coinPickedUp: function () { 
 						this.state.descriptionIndex = 2;
 					},
-					"look at": function (game) { //make coin visible but let default look at action to work
+					"look at": function (game) { //make coin visible but let default look_at action work
 						game.actorGetFromCurrentRoom("coin").state.visible = true;
 					},
 					use: function (game, secondActor) {
-						if (!secondActor) return;
 						if (secondActor.id === "invBottle") {
 							if (!secondActor.state.filled) return game.outPutCreateFromAction("bottleEmpty");
 							this.extinguish(game);
@@ -160,7 +161,7 @@
 					},
 					inventoryActor: "invCoin", //globalResources.actors reference. invCoin will be added to player inventory 
 					"pick up": function (game) { //can not pick up untin bonfire is extinguished
-						if(!this.state.collectible) return game.outPutCreateFromAction("hotCoin");
+						if (!this.state.collectible) return game.outPutCreateFromAction("hotCoin");
 						game.actorGetFromCurrentRoom("bonfire").coinPickedUp();
 						return null;
 					}
@@ -212,7 +213,6 @@
 						0: "https://hugemega.files.wordpress.com/2014/04/owl14.gif"
 					},
 					use: function (game, secondActor) {
-						if (!secondActor) return;
 						if (secondActor.id === "invBottle") {
 							secondActor.fill();
 							return game.outPutCreateFromAction("fillBottle");

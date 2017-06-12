@@ -11,7 +11,4 @@ var SCUNMBot = require("scunmBot");
 var options = { polling: true };
 
 var myGameBot = new SCUNMBot("399277036:AAHcs_4T6RBK2IjJEwSMKMWH69P2QmBjhOE", options, demoEngine, store);
-//var outPut;
-//outPut = demoEngine.continue();
-//console.dir(outPut);
 
