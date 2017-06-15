@@ -9,7 +9,5 @@ var gamesAssets = require("SCUNM-demo-game");//load games assets
 var demoEngine = require("SCUNMEngine")(gamesAssets.Demo);//create a engine for every game asset
 var SCUNMBot = require("scunmBot");
 
-var options = { polling: true };
-
-var myGameBot = new SCUNMBot("399277036:AAHcs_4T6RBK2IjJEwSMKMWH69P2QmBjhOE", options, demoEngine, store);
+var myGameBot = new SCUNMBot("399277036:AAHcs_4T6RBK2IjJEwSMKMWH69P2QmBjhOE", { polling: true }, demoEngine, store);
 

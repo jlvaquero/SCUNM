@@ -3,10 +3,8 @@
 	var TelegramBot = require("node-telegram-bot-api");
 	var verbsKeyboard = createKeyboard(engine.verbs);
 
-	//options.webHook.autoOpen = false;
-	var bot = new TelegramBot(token, { polling: true });
+	bot = new TelegramBot(token, options);
 
-	//var bot = new TelegramBot(token, options);
 	setEvents(bot, engine, store, verbsKeyboard);
 
 	/*bot.setWebHook(options.webHook.url + "/bot" + token, {
@@ -15,13 +13,7 @@
 		allowed_updates: ["message", "callback_query"]
 	});*/
 
-	this.start = function () {
-		//bot.openWebHook();
-	};
-
-	this.stop = function () {
-		//bot.closeWebHook();
-	};
+	return bot; 
 };
 
 function createKeyboard(verbArray) {
