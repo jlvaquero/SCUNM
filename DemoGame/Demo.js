@@ -9,7 +9,7 @@
 		currentRoom: "Start Gate",//mandatory! The start room id
 		inventory: null,//optional; no initial inventory in this game
 		rooms: null,//optional; no need of custom room state in this game
-		actors: {
+		actors: { //optional; need custom state and non default values in this game
 			bonfire: {
 				extinguished: false //custom state
 			},
@@ -22,7 +22,7 @@
 			coin: {
 				visible: false //default visible state is true, need false for the coin
 			}
-		}//optional; need custom state and non default values in this game
+		}
 	},//end game state
 	//game assets
 	globalResources: {
@@ -58,7 +58,7 @@
 					0: "https://ferrebeekeeper.files.wordpress.com/2016/03/1ae50e13e41a882c2b10acf4e2db3cbb.gif"
 				},
 				give: function (game, secondActor) { //script for give action (i.e. give coin guard)
-					if (secondActor.id !== "guard") return null;
+					if (secondActor.id !== "guard") return null; //let default behaviour works
 					secondActor.state.removed = true;//guard left
 					game.roomGetCurrent().guardLeft();
 					game.inventoryRemoveItem(this);//coin removed from inventory
@@ -66,6 +66,7 @@
 				},
 				use: function (game, secondActor) { //script for use action (i.e. use coin fountain)
 					if (!secondActor) return null;
+					if (secondActor.id === "fountain") return game.outPutCreateRaw("My only wish is not loosing this coin...");
 					return game.outPutCreateRaw("There is no coin slot!"); //no coin slot exist in this game
 				}
 			},
