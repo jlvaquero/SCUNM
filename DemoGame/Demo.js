@@ -65,7 +65,7 @@
 					return game.outPutCreateFromAction("giveCoin");//reference to globalResources.actions
 				},
 				use: function (game, secondActor) { //script for use action (i.e. use coin fountain)
-					if (!secondActor) return null;
+					if (secondActor.doNotExist) return null;
 					if (secondActor.id === "fountain") return game.outPutCreateRaw("My only wish is not loosing this coin...");
 					return game.outPutCreateRaw("There is no coin slot!"); //no coin slot exist in this game
 				}

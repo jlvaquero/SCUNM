@@ -158,7 +158,8 @@ function injectGameAPI(game) {
 function initVerbsHandlers(game) {
 
 	var nullActor = {
-		id: ""
+		id: "",
+		doNotExist : true
 	};
 
 	var globalCommands = {};
