@@ -65,6 +65,7 @@
 					return game.outPutCreateFromAction("giveCoin");//reference to globalResources.actions
 				},
 				use: function (game, secondActor) { //script for use action (i.e. use coin fountain)
+					if (!secondActor) return null;
 					return game.outPutCreateRaw("There is no coin slot!"); //no coin slot exist in this game
 				}
 			},
@@ -88,7 +89,7 @@
 					this.state.descriptionIndex = 0;
 					this.state.imageIndex = 0;
 				},
-				use: function (game, secondactor) { 
+				use: function (game, secondactor) {
 					if (secondactor.id === "fountain") {
 						this.fill();
 						return game.outPutCreateFromAction("fillBottle");
@@ -138,7 +139,7 @@
 						this.state.imageIndex = 1;
 						game.roomGetCurrent().bonfireExtinguished();
 					},
-					coinPickedUp: function () { 
+					coinPickedUp: function () {
 						this.state.descriptionIndex = 2;
 					},
 					"look at": function (game) { //make coin visible but let default look_at action work

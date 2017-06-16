@@ -120,7 +120,7 @@ function injectGameAPI(game) {
 			var item = game.actorGetFromCurrentRoom(id);
 			return { id: id, name: item.name };
 		});
-		if (showInventory) list.push({ id: "inventory", name: "inventory" });
+		if (showInventory && Object.keys(this.state.inventory).length > 0) list.push({ id: "inventory", name: "inventory" });
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
 	};
 	//create standard outPut with the list of actors in the inventory.
@@ -240,8 +240,15 @@ function initVerbsHandlers(game) {
 
 	function setUse() {
 		globalCommands.use = function (firstActorId, secondActorId) {
-			if (!firstActorId) return this.outPutCreateFromRoomActors("Use what?", "use", true);
 			var outPut;
+			if (!firstActorId) {
+				outPut = this.outPutCreateFromRoomActors("Use what?", "use", true);
+				if (!outPut.selection || !outPut.selection.list || outPut.selection.list.length < 1) {
+					return this.outPutCreateRaw("Nothing here to use.");
+				}
+				return outPut;
+			}
+
 			if (firstActorId === "inventory") {
 				outPut = this.outPutCreateFromInventory("Use what?", "use");
 				if (outPut.selection.list.length === 0) return this.outPutCreateRaw("My pockets are empty.");
