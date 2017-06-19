@@ -1,47 +1,78 @@
-﻿module.exports = function (assets) {
+﻿module.exports = initEngine();
 
-	injectGameAPI(assets);//inject functions to be used by developers scritps in the game
-	initVerbsHandlers(assets);//create command handlers that exec game scripts in order and default verb behaviour
-	initGame(assets); //initialize rooms and actors identifiers and its state
+function initEngine() {
 
-	var engine = {};
+	//define Engine constructor
+	function Engine(assets) {
+		injectGameAPI(assets);//inject functions to be used by developers scritps in the game
+		initVerbsHandlers(assets);//create command handlers that exec game scripts in order and default verb behaviour
+		initGame(assets); //initialize rooms and actors identifiers and its state
+		this.initialState = JSON.parse(JSON.stringify(assets.state));//brute copy constructor
+		assets.state = new Proxy(assets.state, getProxyHandler(this));//proxy game state
+		this.assets = assets;
+		this.verbs = this.assets.globalResources.verbs || ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by telegram bot and show custom keyboard
+	};
 
-	var stateChangedHandler = {
+	//define engine public methods and atributes
+	Engine.prototype.assets = null;
+	Engine.prototype.initialState = null;
+	Engine.prototype.updatedState = false;
+	Engine.prototype.verbs = null;
+
+	Engine.prototype.continue = function () {
+		return this.assets.outPutCreateFromCurrentRoom();
+	};
+
+	Engine.prototype.execCommand = function (verb, dObject, iObject) {
+		this.updatedState = false;
+		outPut = this.assets.globalCommands[verb] ? this.assets.globalCommands[verb].call(this.assets, dObject, iObject) : { text: "What? Try again..." };
+		return outPut;
+	};
+
+	Engine.prototype.name = function () {
+		return this.assets.meta.name;
+	};
+
+	Engine.prototype.setState = function (state) {
+		this.assets.state = new Proxy(state, getProxyHandler(this));
+	};
+
+	Engine.prototype.getState = function () {
+		return this.assets.state;
+	};
+
+	Engine.prototype.reset = function () {
+		this.setState(this.initialState);
+	};
+
+	return Engine;
+};
+
+function getProxyHandler(engine) {
+	//create proxy object to notify changes to host
+	return {
 		set: function (target, key, value) {
 			target[key] = value;
 			engine.updatedState = true;
 		},
 		get: function (target, key) {
 			if (typeof target[key] === 'object' && target[key] !== null) {
-				return new Proxy(target[key], stateChangedHandler);
+				return new Proxy(target[key], getProxyHandler(engine));
 			} else {
 				return target[key];
 			}
+		},
+		defineProperty: function (target, property, descriptor) {
+			engine.updatedState = true;
+			Reflect.defineProperty(target, property, descriptor);
+			return true;
+		},
+		deleteProperty: function (target, prop) {
+			engine.updatedState = true;
+			delete target[prop];
+			return true;
 		}
 	};
-
-	engine.initialState = JSON.parse(JSON.stringify(assets.state));
-	assets.state = new Proxy(assets.state, stateChangedHandler);
-	//engine.initialState = assets.state;
-
-	engine.continue = function () {
-		return assets.outPutCreateFromCurrentRoom();
-	};
-
-	engine.execCommand = function (verb, dObject, iObject) {
-		engine.updatedState = false;
-		outPut = assets.globalCommands[verb] ? assets.globalCommands[verb].call(assets, dObject, iObject) : { text: "What? Try again..." };
-		return outPut;
-	};
-	engine.name = function () { return assets.meta.name; };
-	engine.setState = function (state) {
-		assets.state = new Proxy(state, stateChangedHandler);
-	}; //assets will be in memory always, restore user "savegame" on every request
-	engine.getState = function () { return assets.state; }; //retrieve "savegame" to persist it
-	engine.verbs = assets.globalResources.verbs || ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by telegram bot and show custom keyboard
-	engine.reset = function () { this.setState(this.initialState); };
-
-	return engine;
 };
 
 function injectGameAPI(game) {
@@ -147,7 +178,7 @@ function injectGameAPI(game) {
 	//add an actor from global actor pool to the inventory. Use the linked inventory actor definded in source actor
 	game.inventoryAddItem = function (item) {
 		item = this.actorGetFromGlobal(item.inventoryActor);
-		this.state.inventory[item.id] = null;
+		Reflect.defineProperty(this.state.inventory, item.id, { value: null, configurable: true, enumerable: true });
 	};
 	//remove the item from the inventory
 	game.inventoryRemoveItem = function (item) {
@@ -159,7 +190,7 @@ function initVerbsHandlers(game) {
 
 	var nullActor = {
 		id: "",
-		doNotExist : true
+		doNotExist: true
 	};
 
 	var globalCommands = {};
@@ -523,10 +554,10 @@ function initIDs(game) {
 }
 //initialize rooms and actors state. Create default states when needed.
 function initState(game) {
-	if (!game.state.inventory) game.state.inventory = new Object();
-	if (!game.state.rooms) game.state.rooms = new Object();
-	if (!game.state.player) game.state.player = new Object();
-	if (!game.state.actors) game.state.actors = new Object();
+	if (!game.state.inventory) game.state.inventory = {};
+	if (!game.state.rooms) game.state.rooms = {};
+	if (!game.state.player) game.state.player = {};
+	if (!game.state.actors) game.state.actors = {};
 	var currentActorState;
 	var defaultActorState;
 	var actorName;
@@ -542,7 +573,7 @@ function initState(game) {
 		if (!currentActorState) { //not exist, create it
 			game.state.actors[actorName] = defaultActorState;
 		}
-		else { //add properties needed by the engine 
+		else { //merge states
 			game.state.actors[actorName] = Object.assign(defaultActorState, currentActorState);
 		}
 
@@ -558,7 +589,7 @@ function initState(game) {
 		if (!currentRoomState) {//not exist, create it
 			game.state.rooms[roomName] = defaultRoomState;
 		}
-		else {//add properties needed by the engine 
+		else {//merge states
 			game.state.rooms[roomName] = Object.assign(defaultRoomState, currentRoomState);
 		}
 
@@ -574,7 +605,7 @@ function initState(game) {
 			if (!currentActorState) { //not exist, create it
 				game.state.actors[actorName] = defaultActorState;
 			}
-			else { //add properties needed by the engine 
+			else { //merge states 
 				game.state.actors[actorName] = Object.assign(defaultActorState, currentActorState);
 			}
 		}
