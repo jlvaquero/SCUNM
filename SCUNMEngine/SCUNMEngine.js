@@ -142,12 +142,12 @@ function injectGameAPI(game) {
 	};
 	//create standard outPut with the list of actors in a room. Filters invisible and removed actor (player can not interact with that)
 	game.outPutCreateFromRoomActors = function (text, command, showInventory) {
-		var currentGame = this;
+	//	var currentGame = this;
 		var room = this.roomGetCurrent();
 		var list = Object.keys(room.actors).filter(function (id) {
-			var actor = currentGame.actorGetFromCurrentRoom(id);
+			var actor = this.actorGetFromCurrentRoom(id);
 			return actor.state.visible && !actor.state.removed;
-		}).map(function (id) {
+		}, this).map(function (id) {
 			var item = game.actorGetFromCurrentRoom(id);
 			return { id: id, name: item.name };
 		});
@@ -156,11 +156,10 @@ function injectGameAPI(game) {
 	};
 	//create standard outPut with the list of actors in the inventory.
 	game.outPutCreateFromInventory = function (text, command) {
-		var game = this;
 		var list = Object.keys(this.state.inventory).map(function (id) {
-			var item = game.actorGetFromInventory(id);
+			var item = this.actorGetFromInventory(id);
 			return { id: id, name: item.name };
-		});
+		}, this);
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
 	};
 	//create standard outPut with the list of exits of the room.
