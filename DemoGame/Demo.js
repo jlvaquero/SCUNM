@@ -6,7 +6,7 @@
 	},
 	state: { //game state data
 		player: null, //optional; no need of custom player state in this game
-		currentRoom: "Start Gate",//mandatory! The start room id
+		currentRoom: "Start Gate",//The start room id
 		inventory: null,//optional; no initial inventory in this game
 		rooms: null,//optional; no need of custom room state in this game
 		actors: { //optional; need custom state and non default values in this game
@@ -19,14 +19,14 @@
 			invBottle: {
 				filled: false //custom state 
 			},
-			coin: {
+			"silver coin": {
 				visible: false //default visible state is true, need false for the coin
 			}
 		}
 	},//end game state
 	//game assets
 	globalResources: {
-		actions: { //outPut in response of user actions
+		actions: { //optional, outPut in response of user actions
 			extinguish: {
 				description: "A dense cloud of steam raises when you throw the water into the bonfire.",
 				image: "http://skullappreciationsociety.com/wp-content/uploads/2012/11/fire-skull-gif.gif"
@@ -47,10 +47,10 @@
 			giveCoin: {
 				description: "The guard takes the coin and left."
 			}
-		}, //optional
-		actors: { //actor that does not belong to a room  (i.e. inventory items)
+		},
+		actors: { //optional, actor that does not belong to a room  (i.e. inventory items)
 			invCoin: { //id=invCoin property will be created by the engine
-				name: "Silver Coin",//show the player a pretty name
+				name: "Silver Coin",// show the player a pretty name
 				descriptions: {
 					0: "A silver coin with a octopus impressed on it."
 				},
@@ -99,12 +99,12 @@
 						if (!this.state.filled) return game.outPutCreateFromAction("bottleEmpty");
 						secondactor.extinguish(game);//extinguish bonfire
 						this.empty();
-						game.actorGetFromCurrentRoom("coin").state.collectible = true;//now tha coin can be picked up
+						game.actorGetFromCurrentRoom("silver coin").state.collectible = true;//now tha coin can be picked up
 						return game.outPutCreateFromAction("extinguish");
 					}
 				}
 			}
-		} //optional
+		} //optional //default are ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"];
 		//verbs: ["jump", "go"]// optional; custom verbs; WARNING: overrides (does not combine with) default verbs
 		//the engine provides handlers for default verbs, custom verbs requires custom handlers in globalCommands section.
 	},
@@ -144,19 +144,19 @@
 						this.state.descriptionIndex = 2;
 					},
 					"look at": function (game) { //make coin visible but let default look_at action work
-						game.actorGetFromCurrentRoom("coin").state.visible = true;
+						game.actorGetFromCurrentRoom("silver coin").state.visible = true;
 					},
 					use: function (game, secondActor) {
 						if (secondActor.id === "invBottle") {
 							if (!secondActor.state.filled) return game.outPutCreateFromAction("bottleEmpty");
 							this.extinguish(game);
 							secondActor.empty();
-							game.actorGetFromCurrentRoom("coin").state.collectible = true;
+							game.actorGetFromCurrentRoom("silver coin").state.collectible = true;
 							return game.outPutCreateFromAction("extinguish");
 						}
 					}
 				},
-				coin: {
+				"silver coin": {
 					name: "Silver coin",
 					descriptions: {
 						0: "A silver coin shines among the bonfire embers. I can not see the details."
@@ -173,10 +173,10 @@
 				this.state.descriptionIndex = 1;//change room state (description) when bonfire is extinguished
 			},
 			exits: {//exits from this room
-				north: "A Fountain",
-				east: null,
-				south: null,
-				west: null
+				"Mansion yard": "A Fountain",
+				//east: null,
+				//south: null, 
+				//west: null
 			}
 		},
 		"A Fountain": {
@@ -241,16 +241,16 @@
 				}
 			},
 			exits: {
-				north: "Mansion",
-				east: null,
-				south: "Start Gate",
-				west: null
+				"Inside mansion": "Mansion",
+				//		east: null,
+				"Burnt bridge": "Start Gate",
+				//		west: null
 			},
 			bottlePickedUp: function () {
 				this.state.descriptionIndex = 1;
 			},
 			go: function (game, direction) { //restrict movement at room level until condition is met
-				if (direction === "north") {
+				if (direction === "Inside mansion") {
 					if (!game.actorGetFromCurrentRoom("guard").state.removed) {
 						return game.outPutCreateFromAction("youShallNotPass");
 					}
@@ -264,10 +264,10 @@
 			},
 			images: { 0: "http://68.media.tumblr.com/8151d789c24e297a14f5de9305a4526a/tumblr_o1tljezAKb1um9ovfo9_r3_500.gif" },
 			exits: {
-				north: null,
-				east: null,
-				south: "A Fountain",
-				west: null
+				//			north: null,
+				//			east: null,
+				"Back to the yard": "A Fountain",
+				//			west: null
 			}
 		}
 	}

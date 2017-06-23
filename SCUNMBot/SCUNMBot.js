@@ -13,7 +13,7 @@
 		allowed_updates: ["message", "callback_query"]
 	});*/
 
-	return bot; 
+	return bot;
 };
 
 function createKeyboard(verbArray) {
@@ -46,9 +46,12 @@ function createInlineButtons(selection) {
 }
 
 function parseQueryData(data) {
-	var cmndar = data.split(" ");
-	cmndar[0] = cmndar[0].replace("_", " ");//Phrasal Verbs should come with "_" instead of blank space
-	return cmndar;
+	var cmndLst = data.split(" ");
+	cmndLst.forEach(function (value, indx) {
+		cmndLst[indx] = cmndLst[indx].replace("_", " ");
+	});
+	//cmndLst[0] = cmndLst[0].replace("_", " ");//Phrasal Verbs should come with "_" instead of blank space
+	return cmndLst;
 }
 
 function setEvents(bot, engine, store, verbsKeyboard) {
@@ -66,7 +69,7 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		if (outPut.imgURL) {
 			await bot.sendDocument(userId, outPut.imgURL);
 		}
-		await	bot.sendMessage(userId, outPut.text, {
+		await bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard
 		});
 	});
@@ -78,9 +81,9 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		store.setAsync(storeKey, JSON.stringify(engine.getState()));
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
-		await	bot.sendDocument(userId, outPut.imgURL);
+			await bot.sendDocument(userId, outPut.imgURL);
 		}
-	await	bot.sendMessage(userId, outPut.text, {
+		await bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard
 		});
 	});
@@ -92,12 +95,12 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 			var gameState = await store.getAsync(storeKey);
 			engine.setState(JSON.parse(gameState));
 			var outPut = engine.execCommand(verb);
-			if (engine.updatedState) { store.setAsync(storeKey, JSON.stringify(engine.getState)); }
+			/*if (engine.updatedState) {*/ store.setAsync(storeKey, JSON.stringify(engine.getState())); //}
 			var inlineButtons = createInlineButtons(outPut.selection);
 			if (outPut.imgURL) {
-			await	bot.sendDocument(userId, outPut.imgURL);
+				await bot.sendDocument(userId, outPut.imgURL);
 			}
-		await	bot.sendMessage(userId, outPut.text, {
+			await bot.sendMessage(userId, outPut.text, {
 				reply_markup: inlineButtons
 			});
 		});
@@ -110,10 +113,10 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		engine.setState(JSON.parse(gameState));
 		var clientQuery = parseQueryData(msg.data);
 		var outPut = engine.execCommand.apply(engine, clientQuery);
-		if (engine.updatedState) { store.setAsync(storeKey, JSON.stringify(engine.getState())); }
+	/*	if (engine.updatedState) { */store.setAsync(storeKey, JSON.stringify(engine.getState()));// }
 		var inlineButtons = createInlineButtons(outPut.selection);
 		if (outPut.imgURL) {
-		await	bot.sendDocument(userId, outPut.imgURL);
+			await bot.sendDocument(userId, outPut.imgURL);
 		}
 		await bot.sendMessage(userId, outPut.text, {
 			reply_markup: inlineButtons

@@ -8,7 +8,7 @@ function initEngine() {
 		initVerbsHandlers(assets);//create command handlers that exec game scripts in order and default verb behaviour
 		initGame(assets); //initialize rooms and actors identifiers and its state
 		this.initialState = JSON.parse(JSON.stringify(assets.state));//brute copy constructor
-		assets.state = new Proxy(assets.state, getProxyHandler(this));//proxy game state
+		assets.state = assets.state;//new Proxy(assets.state, getProxyHandler(this));//proxy game state
 		this.assets = assets;
 		this.verbs = this.assets.globalResources.verbs || ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by UI and show custom keyboard
 	}
@@ -34,7 +34,7 @@ function initEngine() {
 	};
 
 	Engine.prototype.setState = function (state) {
-		this.assets.state = new Proxy(state, getProxyHandler(this));
+		this.assets.state = state;//new Proxy(state, getProxyHandler(this));
 	};
 
 	Engine.prototype.getState = function () {
@@ -140,7 +140,7 @@ function injectGameAPI(game) {
 		var imgURL = actor.images ? actor.images[actor.state.imageIndex] : null;
 		return this.outPutCreateRaw(text, imgURL);
 	};
-	//create standard outPut with the list of actors in a room. Filters invisible and removed actor (player can not interact with that)
+	//create standard outPut with the list of actors in a room. Filters invisible and removed actors (player can not interact with that)
 	game.outPutCreateFromRoomActors = function (text, command, showInventory) {
 	//	var currentGame = this;
 		var room = this.roomGetCurrent();
@@ -149,7 +149,7 @@ function injectGameAPI(game) {
 			return actor.state.visible && !actor.state.removed;
 		}, this).map(function (id) {
 			var item = game.actorGetFromCurrentRoom(id);
-			return { id: id, name: item.name };
+			return { id: id.replace(" ", "_"), name: item.name };
 		});
 		if (showInventory && Object.keys(this.state.inventory).length > 0) list.push({ id: "inventory", name: "inventory" });
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
@@ -158,14 +158,14 @@ function injectGameAPI(game) {
 	game.outPutCreateFromInventory = function (text, command) {
 		var list = Object.keys(this.state.inventory).map(function (id) {
 			var item = this.actorGetFromInventory(id);
-			return { id: id, name: item.name };
+			return { id: id.replace(" ", "_"), name: item.name };
 		}, this);
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
 	};
 	//create standard outPut with the list of exits of the room.
 	game.outPutCreateFromRoomExits = function (text, command) {
 		var list = Object.keys(this.rooms[this.state.currentRoom].exits).map(function (id) {
-			return { id: id, name: id };
+			return { id: id.replace(" ", "_"), name: id };
 		});
 		return this.outPutCreateRaw(text, null, { command: command, list: list });
 	};
