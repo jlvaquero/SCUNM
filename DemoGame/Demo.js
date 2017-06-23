@@ -172,8 +172,8 @@
 			bonfireExtinguished: function () {
 				this.state.descriptionIndex = 1;//change room state (description) when bonfire is extinguished
 			},
-			exits: {//exits from this room
-				"Mansion yard": "A Fountain",
+			exits: {//exits from this room (exitText : roomID)
+				"Mansion yard": "A Fountain"
 				//east: null,
 				//south: null, 
 				//west: null
@@ -243,7 +243,7 @@
 			exits: {
 				"Inside mansion": "Mansion",
 				//		east: null,
-				"Burnt bridge": "Start Gate",
+				"Burnt bridge": "Start Gate"
 				//		west: null
 			},
 			bottlePickedUp: function () {
@@ -266,7 +266,7 @@
 			exits: {
 				//			north: null,
 				//			east: null,
-				"Back to the yard": "A Fountain",
+				"Back to the yard": "A Fountain"
 				//			west: null
 			}
 		}
