@@ -161,7 +161,7 @@
 					descriptions: {
 						0: "A silver coin shines among the bonfire embers. I can not see the details."
 					},
-					inventoryActor: "invCoin", //globalResources.actors reference. invCoin will be added to player inventory 
+					inventoryActor: "invCoin", //globalResources.actors Id reference. invCoin will be added to player inventory as default pick up action
 					"pick up": function (game) { //can not pick up untin bonfire is extinguished
 						if (!this.state.collectible) return game.outPutCreateFromAction("hotCoin");
 						game.actorGetFromCurrentRoom("bonfire").coinPickedUp();
@@ -174,7 +174,7 @@
 			},
 			exits: {//exits from this room (exitText : roomID)
 				"Mansion yard": "A Fountain"
-				//east: null,
+				//east: null, //a null value shows the player the option but response with "No way to go"
 				//south: null, 
 				//west: null
 			}
