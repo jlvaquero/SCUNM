@@ -48,9 +48,8 @@ function createInlineButtons(selection) {
 function parseQueryData(data) {
 	var cmndLst = data.split(" ");
 	cmndLst.forEach(function (value, indx) {
-		cmndLst[indx] = cmndLst[indx].replace("_", " ");
+		cmndLst[indx] = cmndLst[indx].replace("_", " "); //from "pick_up silver_coin" to ["pick up", "silver coin" ]
 	});
-	//cmndLst[0] = cmndLst[0].replace("_", " ");//Phrasal Verbs should come with "_" instead of blank space
 	return cmndLst;
 }
 
