@@ -5,10 +5,10 @@
 		description: "Just a demo."
 	},
 	state: { //game state data
-		player: null, //optional; no need of custom player state in this game
+	//	player: {brokenleg: false}, //developer can add its own state at convenience
 		currentRoom: "Start Gate",//The start room id
-		inventory: null,//optional; no initial inventory in this game
-		rooms: null,//optional; no need of custom room state in this game
+	//	inventory: null,//optional; no initial inventory in this game; engine will create empty inventory
+		//rooms: null,//optional; no need of custom room state in this game; engine will create default room state values  {descriptionIndex: 0, imageIndex: 0}
 		actors: { //optional; need custom state and non default values in this game
 			bonfire: {
 				extinguished: false //custom state

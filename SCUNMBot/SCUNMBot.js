@@ -58,9 +58,9 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 	bot.onText(/^\/start$/, async function (msg, match) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name();
-		var gameState = JSON.parse(await store.getAsync(storeKey));
+		var gameState = JSON.parse(await store.get(storeKey));
 		if (!gameState) {
-			store.setAsync(storeKey, JSON.stringify(engine.initialState));
+			store.set(storeKey, JSON.stringify(engine.initialState));
 			gameState = engine.initialState;
 		}
 		engine.setState(gameState);
@@ -77,7 +77,7 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name();
 		engine.reset();
-		store.setAsync(storeKey, JSON.stringify(engine.getState()));
+		store.set(storeKey, JSON.stringify(engine.getState()));
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
 			await bot.sendDocument(userId, outPut.imgURL);
@@ -91,10 +91,10 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		bot.onText(new RegExp("^" + verb + "$"), async function (msg) {
 			var userId = msg.from.id;
 			var storeKey = userId + ":" + engine.name();
-			var gameState = await store.getAsync(storeKey);
+			var gameState = await store.get(storeKey);
 			engine.setState(JSON.parse(gameState));
 			var outPut = engine.execCommand(verb);
-			/*if (engine.updatedState) {*/ store.setAsync(storeKey, JSON.stringify(engine.getState())); //}
+			/*if (engine.updatedState) {*/ store.set(storeKey, JSON.stringify(engine.getState())); //}
 			var inlineButtons = createInlineButtons(outPut.selection);
 			if (outPut.imgURL) {
 				await bot.sendDocument(userId, outPut.imgURL);
@@ -108,11 +108,11 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 	bot.on("callback_query", async function (msg) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name();
-		var gameState = await store.getAsync(storeKey);
+		var gameState = await store.get(storeKey);
 		engine.setState(JSON.parse(gameState));
 		var clientQuery = parseQueryData(msg.data);
 		var outPut = engine.execCommand.apply(engine, clientQuery);
-	/*	if (engine.updatedState) { */store.setAsync(storeKey, JSON.stringify(engine.getState()));// }
+	/*	if (engine.updatedState) { */store.set(storeKey, JSON.stringify(engine.getState()));// }
 		var inlineButtons = createInlineButtons(outPut.selection);
 		if (outPut.imgURL) {
 			await bot.sendDocument(userId, outPut.imgURL);
