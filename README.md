@@ -9,3 +9,23 @@ The engine keeps in memory shared game assets for all players and allows the hos
 Game assets are defined using plain javascript object initializer with embedded game custom scrips and images will be http references from any host (your host site, google drive, dropbox, ms onedrive, etc should work).
 
 It is in Alpha state. You can fork it and pull request.
+
+# Runing in your machine
+
+Create your bot with https://t.me/BotFather.
+
+Change "var botTokenAuth = "399277036:AAHmfEFe3LcfDkvejKaz_RPxcNHhkQRvf2E"" in Application\app.js with the token botfather provides you.
+
+Visual Studio:
+Open SCUNM.sln in VS. Restore Nuget packages for Redis. Restore NPM dependecies. Run Application\start.bat.
+
+Other:
+Restore NPM dependecies. Run redis server. Modify Application\app.js with redis connection config. Run "npm start".
+
+You should be able to play Demo in your bot.
+
+
+
+
+
+
