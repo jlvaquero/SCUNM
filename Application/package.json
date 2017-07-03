@@ -15,7 +15,6 @@
 		"SCUNM-demo-game": "file:..\\DemoGame",
 		"SCUNMBot": "file:..\\SCUNMBot",
 		"SCUNMEngine": "file:..\\SCUNMEngine",
-		"bluebird": "^3.5.0",
-		"redis": "^2.7.1"
+		"ioredis": "^3.1.1"
 	}
 }

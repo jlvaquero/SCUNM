@@ -558,7 +558,6 @@ function initIDs(game) {
 function initState(game) {
 	if (!game.state.inventory) game.state.inventory = {};
 	if (!game.state.rooms) game.state.rooms = {};
-	if (!game.state.player) game.state.player = {};
 	if (!game.state.actors) game.state.actors = {};
 	var currentActorState;
 	var defaultActorState;
