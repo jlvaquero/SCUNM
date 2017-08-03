@@ -4,11 +4,11 @@ function initEngine() {
 
 	//define Engine constructor
 	function Engine(assets) {
-		injectGameAPI(assets);//inject functions to be used by developers scritps in the game
+		injectGameAPI(assets);//inject functions to be used by scritps developers in the game
 		initVerbsHandlers(assets);//create command handlers that exec game scripts in order and default verb behaviour
 		initGame(assets); //initialize rooms and actors identifiers and its state
 		this.initialState = JSON.parse(JSON.stringify(assets.state));//brute copy constructor
-		assets.state = assets.state;//new Proxy(assets.state, getProxyHandler(this));//proxy game state
+		assets.state = new Proxy(assets.state, getProxyHandler(this));//proxy game state
 		this.assets = assets;
 		this.verbs = this.assets.globalResources.verbs || ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by UI and show custom keyboard
 	}
@@ -34,7 +34,7 @@ function initEngine() {
 	};
 
 	Engine.prototype.setState = function (state) {
-		this.assets.state = state;//new Proxy(state, getProxyHandler(this));
+		this.assets.state = new Proxy(state, getProxyHandler(this));
 	};
 
 	Engine.prototype.getState = function () {
@@ -62,7 +62,7 @@ function getProxyHandler(engine) {
 				return target[key];
 			}
 		},
-		defineProperty: function (target, property, descriptor) { //
+		defineProperty: function (target, property, descriptor) { //game scripts could add new states
 			engine.updatedState = true;
 			Reflect.defineProperty(target, property, descriptor);
 			return true;
@@ -141,7 +141,7 @@ function injectGameAPI(game) {
 		return this.outPutCreateRaw(text, imgURL);
 	};
 	//create standard outPut with the list of actors in a room. Filters invisible and removed actors (player can not interact with that)
-	game.outPutCreateFromRoomActors = function (text, command, showInventory) {
+	game.outPutCreateFromRoomActors = function (text, command, showInventory) { //showInventory=true to add inventory actor into the output
 	//	var currentGame = this;
 		var room = this.roomGetCurrent();
 		var list = Object.keys(room.actors).filter(function (id) {
@@ -288,7 +288,7 @@ function initVerbsHandlers(game) {
 
 			var firstActor = this.actorGetFromCurrentRoom(firstActorId) || this.actorGetFromInventory(firstActorId);//'use bottle'
 
-			if (firstActor && !firstActor.state.removed && firstActor.state.visible) {//actor exist, not removed from game and is visible
+			if (firstActor && !firstActor.state.removed && firstActor.state.visible) {//actor exist, not removed and visible
 				//exec game scripts chain
 				outPut = this["use"] ? this["use"](firstActor, nullActor) : null; //game script
 				if (outPut) return outPut;
@@ -300,14 +300,14 @@ function initVerbsHandlers(game) {
 				outPut = firstActor["use"] ? firstActor.use(this, nullActor) : null; //actor script
 				if (outPut) return outPut; //return response
 
-				//if not response form game script a second actor is expected ('use bottle with?')
+				//if not response from game scripts; a second actor is expected ('use bottle with?')
 				if (!secondActorId) return this.outPutCreateFromRoomActors("Use " + firstActor.name + " with what?", "use " + firstActor.id, true);//ask for second actor
 
 				if (secondActorId === "inventory") { return this.outPutCreateFromInventory("Use " + firstActor.name + " with what?", "use " + firstActor.id); }//'use bottle inventory' show inventory list
 
 				var secondActor = this.actorGetFromCurrentRoom(secondActorId) || this.actorGetFromInventory(secondActorId);//'use bottle fountain'
 
-				if (secondActor && !secondActor.state.removed && secondActor.state.visible) {//actor exist, not removed from game and is visible
+				if (secondActor && !secondActor.state.removed && secondActor.state.visible) {//actor exist, not removed and visible
 					//exec game scripts chain
 					outPut = this["use"] ? this["use"](firstActor, secondActor) : null;//game script
 					if (outPut) return outPut;

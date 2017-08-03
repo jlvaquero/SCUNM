@@ -94,7 +94,7 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 			var gameState = await store.get(storeKey);
 			engine.setState(JSON.parse(gameState));
 			var outPut = engine.execCommand(verb);
-			/*if (engine.updatedState) {*/ store.set(storeKey, JSON.stringify(engine.getState())); //}
+			if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState()));}
 			var inlineButtons = createInlineButtons(outPut.selection);
 			if (outPut.imgURL) {
 				await bot.sendDocument(userId, outPut.imgURL);
@@ -112,7 +112,7 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		engine.setState(JSON.parse(gameState));
 		var clientQuery = parseQueryData(msg.data);
 		var outPut = engine.execCommand.apply(engine, clientQuery);
-	/*	if (engine.updatedState) { */store.set(storeKey, JSON.stringify(engine.getState()));// }
+		if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState())); }
 		var inlineButtons = createInlineButtons(outPut.selection);
 		if (outPut.imgURL) {
 			await bot.sendDocument(userId, outPut.imgURL);
