@@ -1,4 +1,6 @@
-﻿# SCUNM
+![logo](logo.png)
+# SCUNM
+
 
 This is Script Creation Utility for Nodejs Maniacs; a text adventure game engine and Telegram bot as host, writen in node.js. The engine aims to be easily consumed by a Telegram ChatBot through standarized output that allows text, images (even animated gifs) and interactive selection although, thanks to the low coupling design, different hosts and UI are possible.
 
