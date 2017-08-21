@@ -67,7 +67,7 @@ function getProxyHandler(engine) {
 			Reflect.defineProperty(target, property, descriptor);
 			return true;
 		},
-		deleteProperty: function (target, prop) {
+		deleteProperty: function (target, prop) {//game scripts could delete states
 			engine.updatedState = true;
 			delete target[prop];
 			return true;

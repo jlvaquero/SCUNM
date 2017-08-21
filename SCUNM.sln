@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SCUNMEngine", "SCUNMEngine\SCUNMEngine.njsproj", "{DADD5F8E-1A85-4B26-9677-B54E94D5DE0F}"
 EndProject
@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{6DF6BD01-109E-403E-BB75-6E5081929C5E}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
+		logo.png = logo.png
 		README.md = README.md
 	EndProjectSection
 EndProject
