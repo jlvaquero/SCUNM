@@ -10,7 +10,7 @@ The engine keeps in memory shared game assets for all players and allows the hos
 
 Game assets are defined using plain javascript object initializer with embedded game custom scrips and images will be URL references from any host (your host site, google drive, dropbox, ms onedrive, etc should work).
 
-Keep in mind that the priority is to easy the content creation for game designers; so a lot of concessions was made to reach to a minimum viable product in its current state.
+Keep in mind that the priority is to easy the content creation for game designers; so a lot of concessions was made (read: technical debt and low resilence) to reach to a minimum viable product in its current state.
 
 It is in Alpha state. You can fork it and pull request.
 
