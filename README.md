@@ -26,7 +26,9 @@ Open SCUNM.sln in VS. Restore Nuget packages for Redis. Restore NPM dependecies.
 Other:
 Restore NPM dependecies. Run redis server. Modify Application\app.js with redis connection config. Run "npm start".
 
-You should be able to play Demo in your bot.
+You should be able to play Demo in your bot like in this video:
+
+[![SCUNM Engine Video](http://img.youtube.com/vi/DKBtBOK7imI/0.jpg)](https://www.youtube.com/watch?v=DKBtBOK7imI "SCUNM Engine demo")
 
 
 
