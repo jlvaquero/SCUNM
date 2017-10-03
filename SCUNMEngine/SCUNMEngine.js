@@ -197,9 +197,8 @@ function initVerbsHandlers(game) {
 		setAllDefaultHandlers();
 	}
 	else { //set individual handlers for every verb game has
-		if (game.globalResources.verbs.includes("go")) setGO();
-		if (game.globalResources.verbs.includes("inspect")) setInspect();
-		if (game.globalResources.verbs.includes("inventory")) setInventory();
+		if (game.globalResources.verbs.includes("go")) setGo();
+		if (game.globalResources.verbs.includes("inventory")) { setInventory(); setInspect(); }
 		if (game.globalResources.verbs.includes("use")) setUse();
 		if (game.globalResources.verbs.includes("give")) setGive();
 		if (game.globalResources.verbs.includes("look at")) setLookAt();

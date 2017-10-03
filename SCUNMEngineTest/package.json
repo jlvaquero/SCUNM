@@ -1,0 +1,17 @@
+{
+  "name": "scunmengine-test",
+  "version": "0.0.0",
+  "description": "SCUNMEngineTest",
+  "main": "app.js",
+  "author": {
+    "name": "joseluis.vaquero"
+  },
+  "dependencies": {
+    "SCUNMEngine": "file:..\\SCUNMEngine",
+    "mocha": "^4.0.0",
+    "rewire": "^2.5.2"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}
