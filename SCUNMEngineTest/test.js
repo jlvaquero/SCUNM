@@ -60,11 +60,10 @@ describe('Engine API injection', function () {
 });
 
 describe('Verbs Handler initialization', function () {
-
 	var initVerbsHandlers = engine.__get__('initVerbsHandlers');
-	
+
 	describe('initAllDefaultVerbsHandler (game.globalResources.verbs does not exist)', function () {
-		var game = { globalResources: {}}; //globalResources is mandatory
+		var game = { globalResources: {} }; //globalResources is mandatory
 		initVerbsHandlers(game);
 		it('Should create go function', function () {
 			assert.ok(game.globalCommands.go);
@@ -99,7 +98,7 @@ describe('Verbs Handler initialization', function () {
 	});
 
 	describe('initDefaultVerbsHandler (game.globalResources.verbs with all default verbs)', function () {
-		var game = { globalResources: {verbs: ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]}};
+		var game = { globalResources: { verbs: ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"] } };
 		initVerbsHandlers(game);
 		it('Should create go function', function () {
 			assert.ok(game.globalCommands.go);
@@ -141,6 +140,160 @@ describe('Verbs Handler initialization', function () {
 		});
 		it('Go function should return "go overridden" message', function () {
 			assert.equal(game.globalCommands.go(), "go overridden");
+		});
+	});
+
+	describe('create jump custom verb ()', function () {
+		var game = { globalResources: { verbs: ["jump"] }, globalCommands: { jump: function () { return "fence jumped"; } } };
+		initVerbsHandlers(game);
+		it('Should create jump function', function () {
+			assert.ok(game.globalCommands.jump);
+		});
+		it('jump function should return "fence jumped" message', function () {
+			assert.equal(game.globalCommands.jump(), "fence jumped");
+		});
+	});
+});
+
+describe('Actors and Rooms ID initialization', function () {
+	var initIDs = engine.__get__('initIDs');
+	var game = {
+		globalResources: {
+			actors: {
+				invCoin: {}
+			}
+		},
+		rooms: {
+			testRoom: {
+				actors: {
+					bonfire: {}
+				}
+			}
+		}
+	};
+	initIDs(game);
+	it('Should create game.globalResources.actors.invCoin.id', function () {
+		assert.ok(game.globalResources.actors.invCoin.id);
+	});
+	it('game.globalResources.actors.invCoin.id should be invCoin', function () {
+		assert.equal(game.globalResources.actors.invCoin.id, 'invCoin');
+	});
+	it('Should create game.rooms.testRoom.id', function () {
+		assert.ok(game.rooms.testRoom.id);
+	});
+	it('game.rooms.testRoom.id should be testRoom', function () {
+		assert.equal(game.rooms.testRoom.id, "testRoom");
+	});
+	it('Should create game.rooms.testRoom.actors.bonfire.id', function () {
+		assert.ok(game.rooms.testRoom.actors.bonfire.id);
+	});
+	it('game.rooms.testRoom.actors.bonfire.id should be bonfire', function () {
+		assert.equal(game.rooms.testRoom.actors.bonfire.id, "bonfire");
+	});
+});
+
+describe('Actors and Rooms state initialization', function () {
+	var initState = engine.__get__('initState');
+	describe('init all default game state', function () {
+		var defaultActorState = {
+			descriptionIndex: 0,
+			imageIndex: 0,
+			visible: true,
+			collectible: false,
+			removed: false
+		};
+		var defaultRoomState = {
+			descriptionIndex: 0,
+			imageIndex: 0
+		};
+		var game = {
+			state: {},
+			globalResources: {
+				actors: {
+					invCoin: {}
+				}
+			},
+			rooms: {
+				testRoom: {
+					actors: {
+						bonfire: {}
+					}
+				}
+			}
+		};
+		initState(game);
+		it('should create empty inventory', function () {
+			assert.ok(game.state.inventory);
+		});
+		it('should create game.state.actors', function () {
+			assert.ok(game.state.actors);
+		});
+		it('should create game.state.actors.invCoin', function () {
+			assert.ok(game.state.actors.invCoin);
+		});
+		it('should game.state.actors.invCoin be default state', function () {
+			assert.deepEqual(game.state.actors.invCoin, defaultActorState);
+		});
+		it('should create game.state.rooms state', function () {
+			assert.ok(game.state.rooms);
+		});
+		it('should create game.state.rooms.testRoom', function () {
+			assert.ok(game.state.rooms.testRoom);
+		});
+		it('should game.state.rooms.testRoom be default state', function () {
+			assert.deepEqual(game.state.rooms.testRoom, defaultRoomState);
+		});
+		it('should create ggame.state.actors.bonfire', function () {
+			assert.ok(game.state.actors.bonfire);
+		});
+		it('should game.state.actors.bonfire be default state', function () {
+			assert.deepEqual(game.state.actors.bonfire, defaultActorState);
+		});
+	});
+	describe('override default game state', function () {
+		var overrideActorState = {
+			descriptionIndex: 1,
+			imageIndex: 1,
+			visible: false,
+			collectible: true,
+			removed: true
+		};
+		var overrideRoomState = {
+			descriptionIndex: 1,
+			imageIndex: 1
+		};
+		var game = {
+			state: {
+				actors: {
+					invCoin: overrideActorState,
+					bonfire: overrideActorState
+				},
+				rooms: {
+					testRoom: overrideRoomState
+				}
+			},
+			globalResources: {
+				actors: {
+					invCoin: {}
+				}
+			},
+			rooms: {
+				testRoom: {
+					actors: {
+						bonfire: {}
+					}
+				}
+			}
+		};
+		initState(game);
+		it('should game.state.actors.invCoin be override state', function () {
+			assert.deepEqual(game.state.actors.invCoin, overrideActorState);
+		});
+		it('should game.state.rooms.testRoom be default state', function () {
+			assert.deepEqual(game.state.rooms.testRoom, overrideRoomState);
+		});
+		it('should game.state.actors.bonfire be default state', function () {
+			assert.deepEqual(game.state.actors.bonfire, overrideActorState);
 		});
 	});
 });

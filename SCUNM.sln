@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{6DF6BD
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SCUNMEngineTest", "SCUNMEngineTest\SCUNMEngineTest.njsproj", "{63DABB58-E8AA-4C86-A728-B8AD16796333}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SCUNMBotTest", "SCUNMBotTest\SCUNMBotTest.njsproj", "{2E5A9731-4385-42EB-9273-5E96AD509BBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{63DABB58-E8AA-4C86-A728-B8AD16796333}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63DABB58-E8AA-4C86-A728-B8AD16796333}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63DABB58-E8AA-4C86-A728-B8AD16796333}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E5A9731-4385-42EB-9273-5E96AD509BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5A9731-4385-42EB-9273-5E96AD509BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5A9731-4385-42EB-9273-5E96AD509BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5A9731-4385-42EB-9273-5E96AD509BBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
