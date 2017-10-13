@@ -1,16 +1,16 @@
 ﻿module.exports = initEngine();
 
 function initEngine() {
-
 	//define Engine constructor
 	function Engine(assets) {
 		injectGameAPI(assets);//inject functions to be used by scritps developers in the game
 		initVerbsHandlers(assets);//create command handlers that exec game scripts in order and default verb behaviour
-		initGame(assets); //initialize rooms and actors identifiers and its state
-		this.initialState = JSON.parse(JSON.stringify(assets.state));//brute copy constructor
+		initIDs(assets);
+		initState(assets); //initialize rooms and actors identifiers and its state
+		this.initialState = CreateInitialState(assets); //brute copy constructor
 		assets.state = new Proxy(assets.state, getProxyHandler(this));//proxy game state
-		this.assets = assets;
-		this.verbs = this.assets.globalResources.verbs || ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by UI and show custom keyboard
+		this.assets = assets; //keep a reference to assets
+		this.verbs = this.assets.globalResources.verbs || ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by engine host and show custom keyboard
 	}
 
 	//define engine public methods and atributes
@@ -142,7 +142,7 @@ function injectGameAPI(game) {
 	};
 	//create standard outPut with the list of actors in a room. Filters invisible and removed actors (player can not interact with that)
 	game.outPutCreateFromRoomActors = function (text, command, showInventory) { //showInventory=true to add inventory actor into the output
-	//	var currentGame = this;
+		//	var currentGame = this;
 		var room = this.roomGetCurrent();
 		var list = Object.keys(room.actors).filter(function (id) {
 			var actor = this.actorGetFromCurrentRoom(id);
@@ -231,7 +231,6 @@ function initVerbsHandlers(game) {
 	function setGo() {
 		//execute scripts chain (game script -> room script -> actor script ), stop on any script returning	outPut or exec default behaviour if not
 		globalCommands.go = function (direction) {
-
 			if (!direction) return this.outPutCreateFromRoomExits("Where to?", "go");//output list of directions
 
 			var destRoom = this.roomGetCurrent().exits[direction];
@@ -317,7 +316,7 @@ function initVerbsHandlers(game) {
 
 					outPut = firstActor["use"] ? firstActor.use(this, secondActor) : null;//actor script
 					if (outPut) return outPut; //return response
-					
+
 					return this.outPutCreateRaw("It does not work.");//no response means default action.
 				}
 			}
@@ -336,7 +335,6 @@ function initVerbsHandlers(game) {
 			var firstActor = this.actorGetFromInventory(firstActorId);
 
 			if (firstActor) {
-
 				if (!secondActorId) return this.outPutCreateFromRoomActors("Give " + firstActor.name + " to...", "give " + firstActor.id, true);
 
 				var secondActor = this.actorGetFromCurrentRoom(secondActorId);
@@ -361,7 +359,6 @@ function initVerbsHandlers(game) {
 
 	function setLookAt() {
 		globalCommands["look at"] = function (actorId) {
-
 			if (!actorId) return this.outPutCreateFromRoomActors("Look at what?", "look_at"); // ouput list of actors
 			var actor = this.actorGetFromCurrentRoom(actorId);
 			if (!actor) return this.outPutCreateRaw("You can not see that.");
@@ -429,7 +426,6 @@ function initVerbsHandlers(game) {
 			if (outPut) return outPut;
 
 			return this.outPutCreateRaw("It can not be opened.");
-
 		};
 	}
 
@@ -458,7 +454,6 @@ function initVerbsHandlers(game) {
 			if (outPut) return outPut;
 
 			return this.outPutCreateRaw("It can not be closed.");
-
 		};
 	}
 
@@ -480,7 +475,6 @@ function initVerbsHandlers(game) {
 			if (outPut) return outPut;
 
 			return this.outPutCreateRaw("I can not push that.");
-
 		};
 	}
 
@@ -502,7 +496,6 @@ function initVerbsHandlers(game) {
 			if (outPut) return outPut;
 
 			return this.outPutCreateRaw("I can not pull that.");
-
 		};
 	}
 
@@ -533,12 +526,6 @@ function initVerbsHandlers(game) {
 			}
 		};
 	}
-
-}
-
-function initGame(game) {
-	initIDs(game);
-	initState(game);
 }
 //initialize rooms and actors ID's
 function initIDs(game) {
@@ -576,11 +563,9 @@ function initState(game) {
 		else { //merge states
 			game.state.actors[actorName] = Object.assign(defaultActorState, currentActorState);
 		}
-
 	}
 
 	for (var roomName in game.rooms) {
-
 		var currentRoomState = game.state.rooms[roomName];
 		var defaultRoomState = {
 			descriptionIndex: 0,
@@ -605,10 +590,13 @@ function initState(game) {
 			if (!currentActorState) { //not exist, create it
 				game.state.actors[actorName] = defaultActorState;
 			}
-			else { //merge states 
+			else { //merge states
 				game.state.actors[actorName] = Object.assign(defaultActorState, currentActorState);
 			}
 		}
 	}
 }
 
+function CreateInitialState(game) {
+	return JSON.parse(JSON.stringify(game.state));
+}

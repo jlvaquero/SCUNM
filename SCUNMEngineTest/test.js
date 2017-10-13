@@ -143,7 +143,7 @@ describe('Verbs Handler initialization', function () {
 		});
 	});
 
-	describe('create jump custom verb ()', function () {
+	describe('create custom verb (jump)', function () {
 		var game = { globalResources: { verbs: ["jump"] }, globalCommands: { jump: function () { return "fence jumped"; } } };
 		initVerbsHandlers(game);
 		it('Should create jump function', function () {
@@ -243,7 +243,7 @@ describe('Actors and Rooms state initialization', function () {
 		it('should game.state.rooms.testRoom be default state', function () {
 			assert.deepEqual(game.state.rooms.testRoom, defaultRoomState);
 		});
-		it('should create ggame.state.actors.bonfire', function () {
+		it('should create game.state.actors.bonfire', function () {
 			assert.ok(game.state.actors.bonfire);
 		});
 		it('should game.state.actors.bonfire be default state', function () {
@@ -251,25 +251,25 @@ describe('Actors and Rooms state initialization', function () {
 		});
 	});
 	describe('override default game state', function () {
-		var overrideActorState = {
+		var overridenActorState = {
 			descriptionIndex: 1,
 			imageIndex: 1,
 			visible: false,
 			collectible: true,
 			removed: true
 		};
-		var overrideRoomState = {
+		var overridenRoomState = {
 			descriptionIndex: 1,
 			imageIndex: 1
 		};
 		var game = {
 			state: {
 				actors: {
-					invCoin: overrideActorState,
-					bonfire: overrideActorState
+					invCoin: overridenActorState,
+					bonfire: overridenActorState
 				},
 				rooms: {
-					testRoom: overrideRoomState
+					testRoom: overridenRoomState
 				}
 			},
 			globalResources: {
@@ -286,14 +286,95 @@ describe('Actors and Rooms state initialization', function () {
 			}
 		};
 		initState(game);
-		it('should game.state.actors.invCoin be override state', function () {
-			assert.deepEqual(game.state.actors.invCoin, overrideActorState);
+		it('should override global actor state (game.state.actors.invCoin)', function () {
+			assert.deepEqual(game.state.actors.invCoin, overridenActorState);
 		});
-		it('should game.state.rooms.testRoom be default state', function () {
-			assert.deepEqual(game.state.rooms.testRoom, overrideRoomState);
+		it('should override room state (game.state.rooms.testRoom)', function () {
+			assert.deepEqual(game.state.rooms.testRoom, overridenRoomState);
 		});
-		it('should game.state.actors.bonfire be default state', function () {
-			assert.deepEqual(game.state.actors.bonfire, overrideActorState);
+		it('should override local room actor (game.state.actors.bonfire)', function () {
+			assert.deepEqual(game.state.actors.bonfire, overridenActorState);
 		});
+	});
+	describe('keep custom game state', function () {
+		var game = {
+			state: {
+				player: {brokenleg: false}
+			},
+			globalResources: {
+				actors: {
+					invCoin: {}
+				}
+			},
+			rooms: {
+				testRoom: {
+					actors: {
+						bonfire: {}
+					}
+				}
+			}
+		};
+		initState(game);
+		it('should override global actor state (game.state.actors.invCoin)', function () {
+			assert.deepEqual(game.state.actors.invCoin, overridenActorState);
+		});
+		it('should override room state (game.state.rooms.testRoom)', function () {
+			assert.deepEqual(game.state.rooms.testRoom, overridenRoomState);
+		});
+		it('should override local room actor (game.state.actors.bonfire)', function () {
+			assert.deepEqual(game.state.actors.bonfire, overridenActorState);
+		});
+	});
+
+});
+
+describe('Initial state creation', function () {
+	var CreateInitialState = engine.__get__('CreateInitialState');
+	var game = {
+		state: {
+			actors: {
+				invCoin: {
+					descriptionIndex: 1,
+					imageIndex: 1,
+					visible: false,
+					collectible: true,
+					removed: true
+				},
+				bonfire: {
+					descriptionIndex: 1,
+					imageIndex: 1,
+					visible: false,
+					collectible: true,
+					removed: true
+				}
+			},
+			rooms: {
+				testRoom: {
+					descriptionIndex: 1,
+					imageIndex: 1
+				}
+			}
+		},
+		globalResources: {
+			actors: {
+				invCoin: {}
+			}
+		},
+		rooms: {
+			testRoom: {
+				actors: {
+					bonfire: {}
+				}
+			}
+		}
+	};
+	var expectedState = game.state;
+	var outputState = CreateInitialState(game);
+	it('states should be equal', function () {
+		assert.deepEqual(expectedState,outputState);
+	});
+	it('should not be a object reference', function () {
+		outputState.actors.invCoin.visible = true;
+		assert.notDeepEqual(expectedState,outputState);
 	});
 });

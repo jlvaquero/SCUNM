@@ -60,7 +60,7 @@
 				give: function (game, secondActor) { //script for give action (i.e. give coin guard)
 					if (secondActor.id !== "guard") return null; //let default behaviour works
 					secondActor.state.removed = true;//guard left
-					game.roomGetCurrent().guardLeft();
+					game.roomGetCurrent().guardLeft();//notify room to change its state
 					game.inventoryRemoveItem(this);//coin removed from inventory
 					return game.outPutCreateFromAction("giveCoin");//reference to globalResources.actions
 				},
