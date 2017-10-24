@@ -296,14 +296,25 @@ describe('Actors and Rooms state initialization', function () {
 			assert.deepEqual(game.state.actors.bonfire, overridenActorState);
 		});
 	});
-	describe('keep custom game state', function () {
+	describe('mantain custom game state', function () {
 		var game = {
 			state: {
-				player: {brokenleg: false}
+				player: { brokenLeg: true },
+				actors: {
+					bonfire: {
+						extinguished: true
+					},
+					invBottle: {
+						filled: true
+					}
+				},
+				rooms: {
+					testRoom: { fog: true }
+				}
 			},
 			globalResources: {
 				actors: {
-					invCoin: {}
+					invBottle: {}
 				}
 			},
 			rooms: {
@@ -315,17 +326,19 @@ describe('Actors and Rooms state initialization', function () {
 			}
 		};
 		initState(game);
-		it('should override global actor state (game.state.actors.invCoin)', function () {
-			assert.deepEqual(game.state.actors.invCoin, overridenActorState);
+		it('should keep player custom state (game.state.player.brokenLeg)', function () {
+			assert.ok(game.state.player.brokenLeg);
 		});
-		it('should override room state (game.state.rooms.testRoom)', function () {
-			assert.deepEqual(game.state.rooms.testRoom, overridenRoomState);
+		it('should keep room custom state (game.state.rooms.testRoom)', function () {
+			assert.ok(game.state.rooms.testRoom.fog);
 		});
-		it('should override local room actor (game.state.actors.bonfire)', function () {
-			assert.deepEqual(game.state.actors.bonfire, overridenActorState);
+		it('should keep global actor custom state (game.state.actors.invBottle.filled)', function () {
+			assert.ok(game.state.actors.invBottle.filled);
+		});
+		it('should keep local room actor custom state (game.state.actors.bonfire.extinguished)', function () {
+			assert.ok(game.state.actors.bonfire.extinguished);
 		});
 	});
-
 });
 
 describe('Initial state creation', function () {
@@ -371,10 +384,82 @@ describe('Initial state creation', function () {
 	var expectedState = game.state;
 	var outputState = CreateInitialState(game);
 	it('states should be equal', function () {
-		assert.deepEqual(expectedState,outputState);
+		assert.deepEqual(expectedState, outputState);
 	});
 	it('should not be a object reference', function () {
 		outputState.actors.invCoin.visible = true;
-		assert.notDeepEqual(expectedState,outputState);
+		assert.notDeepEqual(expectedState, outputState);
+	});
+});
+
+describe('Engine public interface', function () {
+	var game = {
+		meta: {
+			name: "Demo",
+			authors: ["jlvaquero"],
+			description: "Just a demo."
+		},
+		state: {
+			currentRoom: "testRoom",//The start room id
+			actors: {
+				invCoin: {
+					descriptionIndex: 1,
+					imageIndex: 1,
+					visible: false,
+					collectible: true,
+					removed: true
+				},
+				bonfire: {
+					descriptionIndex: 1,
+					imageIndex: 1,
+					visible: false,
+					collectible: true,
+					removed: true
+				}
+			},
+			rooms: {
+				testRoom: {
+					descriptionIndex: 1,
+					imageIndex: 1
+				}
+			}
+		},
+		globalResources: {
+			actors: {
+				invCoin: {}
+			}
+		},
+		rooms: {
+			testRoom: {
+				name: "test room",
+				descriptions: {
+					0: "Room for test"
+				},
+				images: {
+					0: "url"
+				},
+				actors: {
+					bonfire: {}
+				}
+			}
+		}
+	};
+	engine = new Engine(game);
+	it('should engine return game name', function () {
+		var expectedState = "Demo"
+		assert.equal(expectedState, engine.name);
+	});
+	it('should engine return current state', function () {
+		var expectedState = {};
+		assert.equal(expectedState, engine.getState());
+	});
+	it('should engine set state', function () {
+		var expectedState = {};
+		engine.setState({});
+		assert.equal(expectedState, engine.getState());
+	});
+	it('should engine return current room output', function () {
+		var expectedState = {};
+		assert.equal(expectedState, engine.continue());
 	});
 });

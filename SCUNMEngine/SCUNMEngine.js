@@ -5,9 +5,9 @@ function initEngine() {
 	function Engine(assets) {
 		injectGameAPI(assets);//inject functions to be used by scritps developers in the game
 		initVerbsHandlers(assets);//create command handlers that exec game scripts in order and default verb behaviour
-		initIDs(assets);
+		initIDs(assets); //initialize assets IDs
 		initState(assets); //initialize rooms and actors identifiers and its state
-		this.initialState = CreateInitialState(assets); //brute copy constructor
+		this.initialState = CreateInitialState(assets);
 		assets.state = new Proxy(assets.state, getProxyHandler(this));//proxy game state
 		this.assets = assets; //keep a reference to assets
 		this.verbs = this.assets.globalResources.verbs || ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"]; //needed to be retrieved by engine host and show custom keyboard
@@ -598,5 +598,5 @@ function initState(game) {
 }
 
 function CreateInitialState(game) {
-	return JSON.parse(JSON.stringify(game.state));
+	return JSON.parse(JSON.stringify(game.state)); //brute copy constructor
 }
