@@ -4,9 +4,11 @@
 	var verbsKeyboard = createKeyboard(engine.verbs);
 
 	bot = new TelegramBot(token, options);
-
+	engine.on("stateChanged", (state) => {
+		store.set(state.key, JSON.stringify(state));
+	});
 	setEvents(bot, engine, store, verbsKeyboard);
-
+	
 	/*bot.setWebHook(options.webHook.url + "/bot" + token, {
 		certificate: options.webHook.cert,
 		max_connections: options.webHook.maxconn,
@@ -91,10 +93,11 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		bot.onText(new RegExp("^" + verb + "$"), async function (msg) {
 			var userId = msg.from.id;
 			var storeKey = userId + ":" + engine.name();
-			var gameState = await store.get(storeKey);
-			engine.setState(JSON.parse(gameState));
+			var gameState = JSON.parse(await store.get(storeKey));
+			gameState.key = storeKey;
+			engine.setState(gameState);
 			var outPut = engine.execCommand(verb);
-			if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState()));}
+			//if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState()));}
 			var inlineButtons = createInlineButtons(outPut.selection);
 			if (outPut.imgURL) {
 				await bot.sendDocument(userId, outPut.imgURL);
@@ -108,11 +111,12 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 	bot.on("callback_query", async function (msg) {
 		var userId = msg.from.id;
 		var storeKey = userId + ":" + engine.name();
-		var gameState = await store.get(storeKey);
-		engine.setState(JSON.parse(gameState));
+			var gameState = JSON.parse(await store.get(storeKey));
+			gameState.key = storeKey;
+			engine.setState(gameState);
 		var clientQuery = parseQueryData(msg.data);
 		var outPut = engine.execCommand.apply(engine, clientQuery);
-		if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState())); }
+	//	if (engine.updatedState) { store.set(storeKey, JSON.stringify(engine.getState())); }
 		var inlineButtons = createInlineButtons(outPut.selection);
 		if (outPut.imgURL) {
 			await bot.sendDocument(userId, outPut.imgURL);

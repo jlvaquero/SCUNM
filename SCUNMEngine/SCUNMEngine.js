@@ -1,7 +1,11 @@
-﻿module.exports = initEngine();
+﻿const EventEmitter = require('events');
+const util = require('util');
+const stateChanged = "stateChanged";
+module.exports = initEngine();
 
 function initEngine() {
 	//define Engine constructor
+	util.inherits(Engine, EventEmitter);
 	function Engine(assets) {
 		injectGameAPI(assets);//inject functions to be used by scritps developers in the game
 		initVerbsHandlers(assets);//create command handlers that exec game scripts in order and default verb behaviour
@@ -26,6 +30,7 @@ function initEngine() {
 	Engine.prototype.execCommand = function (verb, dObject, iObject) {
 		this.updatedState = false;
 		outPut = this.assets.globalCommands[verb] ? this.assets.globalCommands[verb].call(this.assets, dObject, iObject) : { text: "What? Try again..." };
+		if (this.updatedState) this.emit(stateChanged, this.getState());
 		return outPut;
 	};
 

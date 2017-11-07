@@ -392,74 +392,74 @@ describe('Initial state creation', function () {
 	});
 });
 
-describe('Engine public interface', function () {
-	var game = {
-		meta: {
-			name: "Demo",
-			authors: ["jlvaquero"],
-			description: "Just a demo."
-		},
-		state: {
-			currentRoom: "testRoom",//The start room id
-			actors: {
-				invCoin: {
-					descriptionIndex: 1,
-					imageIndex: 1,
-					visible: false,
-					collectible: true,
-					removed: true
-				},
-				bonfire: {
-					descriptionIndex: 1,
-					imageIndex: 1,
-					visible: false,
-					collectible: true,
-					removed: true
-				}
-			},
-			rooms: {
-				testRoom: {
-					descriptionIndex: 1,
-					imageIndex: 1
-				}
-			}
-		},
-		globalResources: {
-			actors: {
-				invCoin: {}
-			}
-		},
-		rooms: {
-			testRoom: {
-				name: "test room",
-				descriptions: {
-					0: "Room for test"
-				},
-				images: {
-					0: "url"
-				},
-				actors: {
-					bonfire: {}
-				}
-			}
-		}
-	};
-	engine = new Engine(game);
-	it('should engine return game name', function () {
-		var expectedState = "Demo"
-		assert.equal(expectedState, engine.name);
-	});
-	it('should engine return current state', function () {
-		var expectedState = {};
-		assert.equal(expectedState, engine.getState());
-	});
-	it('should engine set state', function () {
-		var expectedState = {};
-		engine.setState({});
-		assert.equal(expectedState, engine.getState());
-	});
-	it('should engine return current room output', function () {
-		var expectedState = {};
-		assert.equal(expectedState, engine.continue());
-	});
-});
+//describe('Engine public interface', function () {
+//	var game = {
+//		meta: {
+//			name: "Demo",
+//			authors: ["jlvaquero"],
+//			description: "Just a demo."
+//		},
+//		state: {
+//			currentRoom: "testRoom",//The start room id
+//			actors: {
+//				invCoin: {
+//					descriptionIndex: 1,
+//					imageIndex: 1,
+//					visible: false,
+//					collectible: true,
+//					removed: true
+//				},
+//				bonfire: {
+//					descriptionIndex: 1,
+//					imageIndex: 1,
+//					visible: false,
+//					collectible: true,
+//					removed: true
+//				}
+//			},
+//			rooms: {
+//				testRoom: {
+//					descriptionIndex: 1,
+//					imageIndex: 1
+//				}
+//			}
+//		},
+//		globalResources: {
+//			actors: {
+//				invCoin: {}
+//			}
+//		},
+//		rooms: {
+//			testRoom: {
+//				name: "test room",
+//				descriptions: {
+//					0: "Room for test"
+//				},
+//				images: {
+//					0: "url"
+//				},
+//				actors: {
+//					bonfire: {}
+//				}
+//			}
+//		}
+//	};
+//	engine = new Engine(game);
+//	it('should engine return game name', function () {
+//		var expectedState = "Demo"
+//		assert.equal(expectedState, engine.name);
+//	});
+//	it('should engine return current state', function () {
+//		var expectedState = {};
+//		assert.equal(expectedState, engine.getState());
+//	});
+//	it('should engine set state', function () {
+//		var expectedState = {};
+//		engine.setState({});
+//		assert.equal(expectedState, engine.getState());
+//	});
+//	it('should engine return current room output', function () {
+//		var expectedState = {};
+//		assert.equal(expectedState, engine.continue());
+//	});
+//});
