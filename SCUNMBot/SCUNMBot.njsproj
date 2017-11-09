@@ -35,6 +35,7 @@
     <Compile Include="SCUNMBot.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="test.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>

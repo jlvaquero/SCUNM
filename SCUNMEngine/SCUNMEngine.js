@@ -1,6 +1,7 @@
 ﻿const EventEmitter = require('events');
 const util = require('util');
 const stateChanged = "stateChanged";
+var updatedState = false; //private state, engine will emmit a event at the end of execCommand method if this value is true
 module.exports = initEngine();
 
 function initEngine() {
@@ -20,7 +21,6 @@ function initEngine() {
 	//define engine public methods and atributes
 	Engine.prototype.assets = null;
 	Engine.prototype.initialState = null;
-	Engine.prototype.updatedState = false;
 	Engine.prototype.verbs = null;
 
 	Engine.prototype.continue = function () {
@@ -28,9 +28,9 @@ function initEngine() {
 	};
 
 	Engine.prototype.execCommand = function (verb, dObject, iObject) {
-		this.updatedState = false;
+		updatedState = false;
 		outPut = this.assets.globalCommands[verb] ? this.assets.globalCommands[verb].call(this.assets, dObject, iObject) : { text: "What? Try again..." };
-		if (this.updatedState) this.emit(stateChanged, this.getState());
+		if (updatedState) this.emit(stateChanged, this.getState());
 		return outPut;
 	};
 
@@ -58,7 +58,7 @@ function getProxyHandler(engine) {
 	return {
 		set: function (target, key, value) {
 			target[key] = value;
-			engine.updatedState = true;
+			updatedState = true;
 		},
 		get: function (target, key) {//proxy through state object graph
 			if (typeof target[key] === 'object' && target[key] !== null) {
@@ -68,12 +68,12 @@ function getProxyHandler(engine) {
 			}
 		},
 		defineProperty: function (target, property, descriptor) { //game scripts could add new states
-			engine.updatedState = true;
+			updatedState = true;
 			Reflect.defineProperty(target, property, descriptor);
 			return true;
 		},
 		deleteProperty: function (target, prop) {//game scripts could delete states
-			engine.updatedState = true;
+			updatedState = true;
 			delete target[prop];
 			return true;
 		}

@@ -1,12 +1,18 @@
 {
-	"name": "SCUNMEngine",
-	"version": "0.0.0",
-	"description": "SCUNM engine",
-	"license": "MIT",
-	"repository": "https://github.com/jlvaquero/SCUNM",
-	"main": "SCUNMEngine.js",
-	"author": {
-		"name": "joseluis.vaquero"
-	},
-	"dependencies": {}
+  "name": "SCUNMEngine",
+  "version": "0.0.0",
+  "description": "SCUNM engine",
+  "license": "MIT",
+  "repository": "https://github.com/jlvaquero/SCUNM",
+  "main": "SCUNMEngine.js",
+  "author": {
+    "name": "joseluis.vaquero"
+  },
+  "dependencies": {
+    "mocha": "^4.0.1",
+    "rewire": "^2.5.2"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
 }

@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="SCUNMEngine.js" />
+    <Compile Include="test.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
