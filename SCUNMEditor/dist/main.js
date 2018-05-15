@@ -25,8 +25,8 @@ function createWindow() {
       height = _electron$screen$getP.height;
   // Create the browser window.
 
-  mainWindow = new BrowserWindow({ width: width, height: height });
-  mainWindow.setMenu(null);
+  mainWindow = new BrowserWindow({ autoHideMenuBar: true });
+  mainWindow.maximize();
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
