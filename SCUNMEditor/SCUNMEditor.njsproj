@@ -31,6 +31,7 @@
   <ItemGroup>
     <Folder Include="dist\" />
     <Folder Include="src\" />
+    <Folder Include="src\store\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\index.html">
@@ -45,6 +46,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\main.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\store\index.js">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

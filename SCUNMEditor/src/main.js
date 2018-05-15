@@ -26,9 +26,11 @@ function createWindow() {
 
   // Open the DevTools.
   installExtension(REACT_DEVELOPER_TOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
+    .then((name) => {
+      console.log(`Added Extension:  ${name}`);
+      mainWindow.webContents.openDevTools();
+    })
     .catch((err) => console.log('An error occurred: ', err));
-  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
