@@ -243,3 +243,4 @@ ModelManifest.xml
 # Redis db
 *.rdb
 /SCUNMEditor/dist/store
+/SCUNMEditor/dist/*.js
