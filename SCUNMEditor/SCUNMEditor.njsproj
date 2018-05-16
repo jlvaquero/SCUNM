@@ -30,11 +30,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="dist\" />
+    <Folder Include="dist\res\" />
     <Folder Include="src\" />
+    <Folder Include="src\actions\" />
+    <Folder Include="src\components\" />
+    <Folder Include="src\reducers\" />
     <Folder Include="src\store\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\index.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="dist\res\style.css">
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
@@ -42,13 +49,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SCUNMEngine.js" />
+    <Compile Include="src\actions\action-types.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\actions\actions.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\components\App.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\index.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\main.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\store\index.js">
+    <Compile Include="src\reducers\reducer.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\store\reduxStore.js">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -244,3 +244,6 @@ ModelManifest.xml
 *.rdb
 /SCUNMEditor/dist/store
 /SCUNMEditor/dist/*.js
+/SCUNMEditor/dist/actions
+/SCUNMEditor/dist/reducers
+/SCUNMEditor/dist/components
