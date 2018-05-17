@@ -34,6 +34,9 @@
     <Folder Include="src\" />
     <Folder Include="src\actions\" />
     <Folder Include="src\components\" />
+    <Folder Include="src\components\editors\" />
+    <Folder Include="src\components\menu\" />
+    <Folder Include="src\state\" />
     <Folder Include="src\reducers\" />
     <Folder Include="src\store\" />
   </ItemGroup>
@@ -58,6 +61,24 @@
     <Compile Include="src\components\App.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\components\EditionWindow.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\components\Menu.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\components\editors\MetaEditor.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\components\editors\VerbEditor.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\components\menu\MetaMenu.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\components\menu\VerbMenu.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\index.js">
       <SubType>Code</SubType>
     </Compile>
@@ -65,6 +86,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\reducers\reducer.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\state\State.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\store\reduxStore.js">

@@ -247,3 +247,4 @@ ModelManifest.xml
 /SCUNMEditor/dist/actions
 /SCUNMEditor/dist/reducers
 /SCUNMEditor/dist/components
+/SCUNMEditor/dist/state
