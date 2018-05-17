@@ -51,7 +51,6 @@
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SCUNMEngine.js" />
     <Compile Include="src\actions\action-types.js">
       <SubType>Code</SubType>
     </Compile>

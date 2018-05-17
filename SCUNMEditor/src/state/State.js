@@ -1,7 +1,7 @@
 ﻿export const META_GAME_ELTO = 'meta';
 export const VERB_GAME_ELTO = 'verb';
 
-class GameMetaData {
+export class GameMetaData {
   constructor() {
     this.gameName = "";
     this.authors = [];
