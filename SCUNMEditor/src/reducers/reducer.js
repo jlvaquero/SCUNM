@@ -7,6 +7,8 @@ const rootReducer = (state = appState.initialState, action) => {
       return setMetaSelected(state);
     case actionTypes.SELECT_VERBS:
       return setVerbsSelected(state);
+    case actionTypes.SET_META:
+      return setMetaInfo(state, action);
     default:
       return state;
   }
@@ -19,4 +21,8 @@ function setVerbsSelected(state) {
 
 function setMetaSelected(state) {
   return Object.assign({}, state, { selectedGameElto: appState.META_GAME_ELTO });
+}
+
+function setMetaInfo(state, action) {
+  return Object.assign({}, state, { meta: action.payload });
 }

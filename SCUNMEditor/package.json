@@ -4,8 +4,8 @@
   "description": "SCUNM Game Editor",
   "main": "./dist/main.js",
   "scripts": {
-    "start": "npm run compile && electron dist/main.js",
-    "compile": "babel  ./src -d ./dist"
+    "start": "npm run transpile && electron dist/main.js",
+    "transpile": "babel  ./src -d ./dist"
   },
   "babel": {
     "presets": [

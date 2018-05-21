@@ -3,9 +3,9 @@ export const VERB_GAME_ELTO = 'verb';
 
 export class GameMetaData {
   constructor() {
-    this.gameName = "";
-    this.authors = [];
-    this.description = "";
+    this.gameName = "new game";
+    this.author = "put your name here";
+    this.description = "an awesome game";
   }
 }
 

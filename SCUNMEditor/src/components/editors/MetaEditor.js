@@ -2,43 +2,78 @@
 import { connect } from "react-redux";
 import { setMeta } from "../../actions/actions";
 
-class MetaEditor extends React.Component {
+class MetaEditorComponent extends React.Component {
+  get displayName() { return 'MetaEditorComponent'; }
+
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      gameName: this.props.meta.gameName,
+      description: this.props.meta.description,
+      author: this.props.meta.author
+    };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.setMeta(meta);
+  componentWillUnmount() {
+    this.props.setMeta({
+      gameName: this.state.gameName,
+      description: this.state.description,
+      author: this.state.author
+    });
+  }
+
+  handleChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <React.Fragment>
         <label>
           Game Name:
         <input
-            value={this.props.meta.gameName}
+            name="gameName"
+            value={this.state.gameName}
             type="text"
-            ref={(input) => this.inputName = input} />
+            onChange={this.handleChange}
+          />
         </label>
+        <br />
         <label>
           Description:
         <input
-            value={this.props.meta.description}
+            name="description"
+            value={this.state.description}
             type="text"
-            ref={(input) => this.inputDescription = input} />
+            onChange={this.handleChange}
+          />
         </label>
-        <input type="submit" value="Submit" />
-      </form>
+        <br />
+        <label>
+          Author:
+        <input
+            name="author"
+            value={this.state.author}
+            type="text"
+            onChange={this.handleChange}
+          />
+        </label>
+      </ React.Fragment>
     );
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setMeta: () => dispatch(selectMetaElto())
+    setMeta: meta => dispatch(setMeta(meta))
   };
 };
 
@@ -46,5 +81,5 @@ const mapStateToProps = state => {
   return { meta: state.meta };
 };
 
-const MetaMenuElmnt = connect(mapStateToProps, mapDispatchToProps)(MetaMenuElement);
-export default MetaMenuElmnt;
+const MetaEditor = connect(mapStateToProps, mapDispatchToProps)(MetaEditorComponent);
+export default MetaEditor;
