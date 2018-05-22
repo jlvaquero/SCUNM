@@ -37,30 +37,34 @@ class MetaEditorComponent extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <label>
+        <h1>Game Metadata</h1>
+        <label htmlFor="gameName">
           Game Name:
         <input
             name="gameName"
+            id="gameName"
             value={this.state.gameName}
             type="text"
             onChange={this.handleChange}
           />
         </label>
         <br />
-        <label>
+        <label htmlFor="description">
           Description:
         <input
             name="description"
+            id="description"
             value={this.state.description}
             type="text"
             onChange={this.handleChange}
           />
         </label>
         <br />
-        <label>
+        <label htmlFor="author" >
           Author:
         <input
             name="author"
+            id="author"
             value={this.state.author}
             type="text"
             onChange={this.handleChange}

@@ -13,6 +13,7 @@ export class State {
   constructor() {
     this.selectedGameElto = META_GAME_ELTO;
     this.meta = new GameMetaData();
+    this.verbs = ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"];
   }
 }
 

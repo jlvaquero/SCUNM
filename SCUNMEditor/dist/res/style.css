@@ -1,12 +1,23 @@
 ﻿.column-left {
   float: left;
   width: 20%;
-  background-color: aqua;
+  height: 100%;
+  background-color: #808080;
+  border-right-style: solid;
 }
 
 .column-center {
   display: inline-block;
   width: 60%;
+  height: 100%;
+}
+
+body, html {
+  height: 100%;
+}
+
+.container {
+  height: 100%;
 }
 
 ul {

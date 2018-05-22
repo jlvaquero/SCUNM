@@ -49,48 +49,50 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="src\components\editors\VerbList.jsx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\actions\action-types.js">
+    <Compile Include="src\actions\action-types.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\actions\actions.js">
+    <Compile Include="src\actions\actions.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\App.js">
+    <Compile Include="src\components\App.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\EditionWindow.js">
+    <Compile Include="src\components\EditionWindow.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\Menu.js">
+    <Compile Include="src\components\editors\VerbForm.jsx" />
+    <Compile Include="src\components\Menu.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\editors\MetaEditor.js">
+    <Compile Include="src\components\editors\MetaEditor.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\editors\VerbEditor.js">
+    <Compile Include="src\components\editors\VerbEditor.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\menu\MetaMenu.js">
+    <Compile Include="src\components\menu\MetaMenu.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\menu\VerbMenu.js">
+    <Compile Include="src\components\menu\VerbMenu.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\index.js">
+    <Compile Include="src\index.jsx">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\main.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\reducers\reducer.js">
+    <Compile Include="src\reducers\reducer.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\state\State.js">
+    <Compile Include="src\state\State.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\store\reduxStore.js">
+    <Compile Include="src\store\reduxStore.jsx">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -9,6 +9,10 @@ const rootReducer = (state = appState.initialState, action) => {
       return setVerbsSelected(state);
     case actionTypes.SET_META:
       return setMetaInfo(state, action);
+    case actionTypes.SET_VERB:
+      return setNewVerb(state, action);
+    case actionTypes.DEL_VERB:
+      return deleteVerb(state, action);
     default:
       return state;
   }
@@ -24,5 +28,16 @@ function setMetaSelected(state) {
 }
 
 function setMetaInfo(state, action) {
-  return Object.assign({}, state, { meta: action.payload });
+  const newMeta = action.payload;
+  return Object.assign({}, state, { meta: newMeta });
+}
+
+function setNewVerb(state, action) {
+  const newVerb = action.payload;
+  return Object.assign({}, state, { verbs: [].concat(state.verbs, newVerb) });
+}
+
+function deleteVerb(state, action) {
+  const index = action.payload;
+  return Object.assign({}, state, { verbs: state.verbs.slice(0, index).concat(state.verbs.slice(index + 1)) });
 }

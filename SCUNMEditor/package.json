@@ -1,32 +1,33 @@
 {
-  "name": "scunmeditor",
-  "version": "1.0.0",
-  "description": "SCUNM Game Editor",
-  "main": "./dist/main.js",
-  "scripts": {
-    "start": "npm run transpile && electron dist/main.js",
-    "transpile": "babel  ./src -d ./dist"
-  },
-  "babel": {
-    "presets": [
-      "env",
-      "react"
-    ]
-  },
-  "author": "JL Vaquero",
-  "license": "MIT",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "electron-devtools-installer": "^2.2.4"
-  },
-  "dependencies": {
-    "electron": "^2.0.0",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
-  }
+	"name": "scunmeditor",
+	"version": "1.0.0",
+	"description": "SCUNM Game Editor",
+	"main": "./dist/main.js",
+	"scripts": {
+		"start": "electron dist/main.js",
+		"transpile": "babel  ./src -d ./dist",
+		"watch": "babel  ./src -d ./dist --watch"
+	},
+	"babel": {
+		"presets": [
+			"env",
+			"react"
+		]
+	},
+	"author": "JL Vaquero",
+	"license": "MIT",
+	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-core": "^6.26.3",
+		"babel-preset-env": "^1.7.0",
+		"babel-preset-react": "^6.24.1",
+		"electron-devtools-installer": "^2.2.4"
+	},
+	"dependencies": {
+		"electron": "^2.0.0",
+		"react": "^16.3.2",
+		"react-dom": "^16.3.2",
+		"react-redux": "^5.0.7",
+		"redux": "^4.0.0"
+	}
 }
