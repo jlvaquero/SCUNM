@@ -4,3 +4,4 @@ export const SELECT_ACTIONS = "SELECT_ACTIONS";
 export const SET_META = "SET_META";
 export const SET_VERB = "SET_VERB";
 export const DEL_VERB = "DEL_VERB";
+export const SET_ACTION = "SET_ACTION";

@@ -2,11 +2,11 @@
 export const VERB_GAME_ELTO = 'verb';
 export const ACTION_GAME_ELTO = 'action';
 
-export class State {  //emulating gamedata file format as close as possible will alows JSONfn to stringfy most (if not all) of gamedata file just in one command.
-	//but not flat state makes inmutable a little bit harder
-	//check some inmutable library or, at least, use spread operator(...)
+export class State {  //honoring gamedata file format as close as possible will alows JSONfn to stringfy most (if not all) of gamedata file just in one command.
+	//but not flat state makes inmutable a little bit harder...
 	constructor() {
 		this.selectedGameElto = META_GAME_ELTO;
+		this.selectedActionElto = "";
 		this.gameData = {};
 		this.gameData.globalResources = {};
 		this.gameData.meta = {

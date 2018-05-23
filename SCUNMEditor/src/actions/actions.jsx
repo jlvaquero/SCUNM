@@ -5,3 +5,4 @@ export const selectActionElto = () => ({ type: actionTypes.SELECT_ACTIONS, paylo
 export const setMeta = newMeta => ({ type: actionTypes.SET_META, payload: newMeta });
 export const setVerb = newVerb => ({ type: actionTypes.SET_VERB, payload: newVerb });
 export const delVerb = index => ({ type: actionTypes.DEL_VERB, payload: index });
+export const setAction = newAction => ({ type: actionTypes.SET_ACTION, payload: newAction });

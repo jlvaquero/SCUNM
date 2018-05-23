@@ -11,11 +11,13 @@ const rootReducer = (state = appState.initialState, action) => {
 		case actionTypes.SELECT_ACTIONS:
 			return setActionsSelected(state);
 		case actionTypes.SET_META:
-			return setMetaInfo(state, action);
+			return setMetaInfo(state, action.payload);
 		case actionTypes.SET_VERB:
-			return setNewVerb(state, action);
+			return setNewVerb(state, action.payload);
 		case actionTypes.DEL_VERB:
-			return deleteVerb(state, action);
+			return deleteVerb(state, action.payload);
+		case actionTypes.SET_ACTION:
+			return setNewAction(state, action.payload);
 		default:
 			return state;
 	}
@@ -23,34 +25,35 @@ const rootReducer = (state = appState.initialState, action) => {
 export default rootReducer;
 
 function setVerbsSelected(state) {
-	//return Object.assign({}, state, { selectedGameElto: appState.VERB_GAME_ELTO });
 	return update(state, { selectedGameElto: { $set: appState.VERB_GAME_ELTO } });
 }
 
 function setMetaSelected(state) {
-	//return Object.assign({}, state, { selectedGameElto: appState.META_GAME_ELTO });
 	return update(state, { selectedGameElto: { $set: appState.META_GAME_ELTO } });
 }
 
 function setActionsSelected(state) {
-	//return Object.assign({}, state, { selectedGameElto: appState.ACTION_GAME_ELTO });
 	return update(state, { selectedGameElto: { $set: appState.ACTION_GAME_ELTO } });
 }
 
-function setMetaInfo(state, action) {
-	const newMeta = action.payload;
-	//return Object.assign({}, state, { gameData: { meta: newMeta } });
+function setMetaInfo(state, newMeta) {
 	return update(state, { gameData: { meta: { $set: newMeta } } });
 }
 
-function setNewVerb(state, action) {
-	const newVerb = action.payload;
-	//return Object.assign({}, state, { gameData: { verbs: [].concat(state.gameData.verbs, newVerb) } });
+function setNewVerb(state, newVerb) {
 	return update(state, { gameData: { verbs: { $push: [newVerb] } } });
 }
 
-function deleteVerb(state, action) {
-	const index = action.payload;
-	//	return Object.assign({}, state, { gameData: { verbs: state.gameData.verbs.slice(0, index).concat(state.gameData.verbs.slice(index + 1)) } });
+function deleteVerb(state, index) {
 	return update(state, { gameData: { verbs: { $splice: [[index, 1]] } } });
+}
+
+function setNewAction(state, newAction) {
+	const actionName = newAction.name;
+	const actionData = {
+		description: newAction.description,
+		image: newAction.image
+	};
+	//create property dinamicaly
+	return update(state, { gameData: { globalResources: { actions: { [actionName]: { $set: actionData } } } } });
 }

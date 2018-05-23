@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { connect } from "react-redux";
+import ActionForm from "./ActionForm";
 
 class ActionEditorComponent extends React.Component {
 	get displayName() { return 'ActionEditorComponent'; }
@@ -10,9 +10,10 @@ class ActionEditorComponent extends React.Component {
 
 	render() {
 		return (
-			<div>
-				{"this is action editor"}
-			</div>
+			<React.Fragment>
+				<h1>Game Actions</h1>
+				<ActionForm />
+			</React.Fragment >
 		);
 	}
 }
