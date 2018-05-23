@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as appState from "../state/State";
 import MetaEditor from "./editors/MetaEditor";
 import VerbEditor from "./editors/VerbEditor";
+import ActionEditor from "./editors/ActionEditor";
 
 class EditionWindowManager extends React.Component {
 	get displayName() { return 'EditionWindowManager'; }
@@ -20,8 +21,8 @@ class EditionWindowManager extends React.Component {
 			case appState.VERB_GAME_ELTO:
 				editorToShow = (<VerbEditor />);
 				break;
-			default:
-				editorToShow = (<MetaEditor />);
+			case appState.ACTION_GAME_ELTO:
+				editorToShow = (<ActionEditor />);
 				break;
 		}
 

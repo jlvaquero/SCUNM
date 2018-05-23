@@ -24,6 +24,7 @@ class VerbListComponent extends React.Component {
 					<li
 						key={index}
 						value={index}
+						className="verb"
 						onClick={this.handleClick}>
 						{verb}
 					</li>
@@ -40,7 +41,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => {
-	return { verbs: state.verbs };
+	return { verbs: state.gameData.verbs };
 };
 
 const VerbList = connect(mapStateToProps, mapDispatchToProps)(VerbListComponent);

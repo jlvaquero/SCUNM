@@ -49,6 +49,7 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="src\components\editors\ActionEditor.js" />
     <Content Include="src\components\editors\VerbList.jsx" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +75,7 @@
     <Compile Include="src\components\editors\VerbEditor.jsx">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="src\components\menu\ActionMenu.js" />
     <Compile Include="src\components\menu\MetaMenu.jsx">
       <SubType>Code</SubType>
     </Compile>

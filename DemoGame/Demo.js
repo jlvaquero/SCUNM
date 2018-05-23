@@ -1,13 +1,13 @@
 ﻿module.exports.Demo = {
 	meta: {
 		name: "Demo",
-		authors: ["jlvaquero"],
+		author: "jlvaquero",
 		description: "Just a demo."
 	},
 	state: { //game state data
-	//	player: {brokenleg: false}, //developer can add its own state at convenience
+		//	player: {brokenleg: false}, //developer can add its own state at convenience
 		currentRoom: "Start Gate",//The start room id
-	//	inventory: null,//optional; no initial inventory in this game; engine will create empty inventory
+		//	inventory: null,//optional; no initial inventory in this game; engine will create empty inventory
 		//rooms: null,//optional; no need of custom room state in this game; engine will create default room state values  {descriptionIndex: 0, imageIndex: 0}
 		actors: { //optional; need custom state and non default values in this game
 			bonfire: {
@@ -17,7 +17,7 @@
 				collectible: true //default collectible state is false. need true for the bottle
 			},
 			invBottle: {
-				filled: false //custom state 
+				filled: false //custom state
 			},
 			"silver coin": {
 				visible: false //default visible state is true, need false for the coin
@@ -175,7 +175,7 @@
 			exits: {//exits from this room (exitText : roomID)
 				"Mansion yard": "A Fountain"
 				//east: null, //a null value shows the player the option but response with "No way to go"
-				//south: null, 
+				//south: null,
 				//west: null
 			}
 		},
