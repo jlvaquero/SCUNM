@@ -5,7 +5,7 @@ import ActionMenu from "./menu/ActionMenu";
 
 const Menu = () => (
 	<div className="column-left">
-		<ul>
+		<ul className="menu">
 			<MetaMenu />
 			<VerbMenu />
 			<ActionMenu />

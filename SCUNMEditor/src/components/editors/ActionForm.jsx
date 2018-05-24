@@ -28,7 +28,11 @@ class ActionFormComponent extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		this.props.setAction(this.state);
-		//	this.setState({ verbToAdd: "Verb name here" });
+		this.setState({
+			name: "Action name here",
+			description: "Description to show ",
+			image: "image URL"
+		});
 	}
 
 	render() {

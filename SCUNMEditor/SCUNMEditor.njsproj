@@ -66,6 +66,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\components\editors\ActionForm.jsx" />
+    <Compile Include="src\components\editors\ActionList.jsx" />
     <Compile Include="src\components\editors\VerbForm.jsx" />
     <Compile Include="src\components\Menu.jsx">
       <SubType>Code</SubType>

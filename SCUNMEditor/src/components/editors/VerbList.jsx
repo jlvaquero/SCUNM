@@ -19,7 +19,7 @@ class VerbListComponent extends React.Component {
 
 	render() {
 		return (
-			<ul >
+			<ul className="verb" >
 				{this.props.verbs.map((verb, index) => (
 					<li
 						key={index}

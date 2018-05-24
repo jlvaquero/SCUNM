@@ -17,7 +17,7 @@ class VerbMenuElement extends React.Component {
 
 	render() {
 		return (
-			<li onClick={this.handleClick}>
+			<li className="menu" onClick={this.handleClick}>
 				Verbs
       </li>
 		);
