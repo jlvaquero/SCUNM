@@ -12,21 +12,20 @@ class ActionListComponent extends React.Component {
 		return (
 			<ul>
 				{Object.keys(this.props.actions).map((name, index) => (
-					<React.Fragment key="{name}">
+					<React.Fragment>
 						<li value={name}>{name}</li>
 						<ul className="action" value={name}>
 							<li>{this.props.actions[name].description}</li>
 							<li>{this.props.actions[name].image}</li>
 							{this.props.actions[name].image &&
 								<li>
-									<img src={this.props.actions[name].image} height="100px" width="100px"></img>
+									<img src={this.props.actions[name].image} className="action"></img>
 								</li>
 							}
 						</ul>
 					</React.Fragment>
 				))}
 			</ul>
-
 		);
 	}
 }
