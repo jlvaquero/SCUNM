@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
+import { delAction } from "../../actions/actions";
 
 class ActionListComponent extends React.Component {
 	get displayName() { return 'ActionListComponent'; }
@@ -8,13 +9,17 @@ class ActionListComponent extends React.Component {
 		super(props);
 	}
 
+	handleClick(name) {
+		this.props.delAction(name);
+	}
+
 	render() {
 		return (
 			<ul>
 				{Object.keys(this.props.actions).map((name, index) => (
-					<React.Fragment>
-						<li value={name}>{name}</li>
-						<ul className="action" value={name}>
+					<div className="action" key={name} onClick={this.handleClick.bind(this, name)}>
+						<li>{name}</li>
+						<ul className="action">
 							<li>{this.props.actions[name].description}</li>
 							<li>{this.props.actions[name].image}</li>
 							{this.props.actions[name].image &&
@@ -23,16 +28,22 @@ class ActionListComponent extends React.Component {
 								</li>
 							}
 						</ul>
-					</React.Fragment>
+					</div>
 				))}
 			</ul>
 		);
 	}
 }
 
+const mapDispatchToProps = dispatch => {
+	return {
+		delAction: name => dispatch(delAction(name))
+	};
+};
+
 const mapStateToProps = state => {
 	return { actions: state.gameData.globalResources.actions };
 };
 
-const ActionList = connect(mapStateToProps)(ActionListComponent);
+const ActionList = connect(mapStateToProps, mapDispatchToProps)(ActionListComponent);
 export default ActionList;

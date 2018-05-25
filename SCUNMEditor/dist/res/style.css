@@ -36,8 +36,9 @@ width: 100%;
 background-color: #f1f1f1;
 }
 
-ul.action {
-background-color: cadetblue;
+div.action:hover {
+text-decoration: line-through;
+cursor: pointer;
 }
 
 li.menu {

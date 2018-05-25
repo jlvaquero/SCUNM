@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import VerbForm from "./VerbForm";
 import { delVerb } from "../../actions/actions";
 
 class VerbListComponent extends React.Component {
@@ -8,12 +7,9 @@ class VerbListComponent extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick(event) {
-		event.preventDefault();
-		const index = event.target.value;
+	handleClick(index) {
 		this.props.delVerb(index);
 	}
 
@@ -23,9 +19,8 @@ class VerbListComponent extends React.Component {
 				{this.props.verbs.map((verb, index) => (
 					<li
 						key={index}
-						value={index}
 						className="verb"
-						onClick={this.handleClick}>
+						onClick={this.handleClick.bind(this, index)}>
 						{verb}
 					</li>
 				))}

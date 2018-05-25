@@ -18,6 +18,8 @@ const rootReducer = (state = appState.initialState, action) => {
 			return deleteVerb(state, action.payload);
 		case actionTypes.SET_ACTION:
 			return setNewAction(state, action.payload);
+		case actionTypes.DEL_ACTION:
+			return deleteAction(state, action.payload);
 		default:
 			return state;
 	}
@@ -56,4 +58,8 @@ function setNewAction(state, newAction) {
 	};
 	//create property dinamicaly
 	return update(state, { gameData: { globalResources: { actions: { [actionName]: { $set: actionData } } } } });
+}
+
+function deleteAction(state, actionName) {
+	return update(state, { gameData: { globalResources: { actions: { $unset: [actionName] } } } });
 }
