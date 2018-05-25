@@ -15,7 +15,12 @@ export class State {  //honoring gamedata file format as close as possible will 
 			description: "an awesome game"
 		};
 		this.gameData.verbs = ["give", "pick up", "use", "open", "look at", "push", "close", "talk to", "pull", "go", "inventory"];
-		this.gameData.globalResources.actions = {};
+		this.gameData.globalResources.actions = {
+			tentacleDance: {
+				description: "The tentacle is happy now and start dancing without legs",
+				image: "https://cdn.weasyl.com/static/media/5c/5b/cd/5c5bcd54c73d0e2aa76e89108e0a9740b02dcadc8b1006cc5dafebfe75b38665.gif"
+			},
+		};
 	}
 }
 

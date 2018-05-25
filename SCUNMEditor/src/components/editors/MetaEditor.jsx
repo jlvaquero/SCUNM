@@ -25,9 +25,7 @@ class MetaEditorComponent extends React.Component {
 	}
 
 	handleChange(event) {
-		const target = event.target;
-		const value = target.value;
-		const name = target.name;
+		const { name, value } = event.target;
 
 		this.setState({
 			[name]: value

@@ -51,6 +51,7 @@
     <Content Include="README.md" />
     <Content Include="src\components\editors\ActionEditor.jsx" />
     <Content Include="src\components\editors\VerbList.jsx" />
+    <Content Include="src\components\editors\VerbModifier.jsx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\actions\action-types.jsx">

@@ -17,8 +17,7 @@ class ActionFormComponent extends React.Component {
 	}
 
 	handleChange(event) {
-		const value = event.target.value;
-		const name = event.target.name;
+		const { name, value } = event.target;
 
 		this.setState({
 			[name]: value

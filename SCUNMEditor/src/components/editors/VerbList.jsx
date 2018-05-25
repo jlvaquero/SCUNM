@@ -1,29 +1,43 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { delVerb } from "../../actions/actions";
+import VerbModifier from "./VerbModifier";
 
 class VerbListComponent extends React.Component {
 	get displayName() { return 'VerbListComponent'; }
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			editIndex: -1
+		};
 	}
 
-	handleClick(index) {
-		this.props.delVerb(index);
+	handleModifySelection(index, value) {
+		this.setState({ editIndex: index });
 	}
 
 	render() {
 		return (
 			<ul className="verb" >
-				{this.props.verbs.map((verb, index) => (
-					<li
-						key={index}
-						className="verb"
-						onClick={this.handleClick.bind(this, index)}>
-						{verb}
-					</li>
-				))}
+				{this.props.verbs.map((verb, index) => {
+					let outPut;
+					if (index != this.state.editIndex) {
+						outPut = (
+							<li
+								key={index}
+								className="verb"
+								onClick={this.handleModifySelection.bind(this, index, verb)}>
+								{verb}
+							</li>
+						);
+					}
+					else {
+						outPut = (
+							<VerbModifier key={index} index={index} value={verb} />
+						);
+					}
+					return outPut;
+				})}
 			</ul>
 		);
 	}
