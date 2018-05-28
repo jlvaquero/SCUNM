@@ -12,6 +12,8 @@ Game assets are defined using plain javascript object initializer with embedded 
 
 Keep in mind that the priority is to easy the content creation for game designers; so a lot of concessions was made (read: technical debt and low resilence) to reach to a minimum viable product in its current state.
 
+Game editor has just been born. Electron-React-Redux makes things easy ;)
+
 It is in Alpha state. You can fork it and pull request.
 
 # Runing in your machine
