@@ -16,6 +16,10 @@ class VerbListComponent extends React.Component {
 		this.setState({ editIndex: index });
 	}
 
+	resetEditIndex() {
+		this.setState({ editIndex: -1 });
+	}
+
 	render() {
 		return (
 			<ul className="verb" >
@@ -33,7 +37,7 @@ class VerbListComponent extends React.Component {
 					}
 					else {
 						outPut = (
-							<VerbModifier key={index} index={index} value={verb} />
+							<VerbModifier key={index} index={index} value={verb} notifyChange={this.resetEditIndex.bind(this)} />
 						);
 					}
 					return outPut;

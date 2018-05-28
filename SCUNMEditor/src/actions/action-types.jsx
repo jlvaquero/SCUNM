@@ -6,3 +6,4 @@ export const SET_VERB = "SET_VERB";
 export const DEL_VERB = "DEL_VERB";
 export const SET_ACTION = "SET_ACTION";
 export const DEL_ACTION = "DEL_ACTION";
+export const MOD_VERB = "MOD_VERB";

@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
 import { delVerb } from "../../actions/actions";
+import { modVerb } from "../../actions/actions";
 
 class VerbModifierComponent extends React.Component {
 	get displayName() { return 'VerbModifierComponent'; }
@@ -15,6 +16,7 @@ class VerbModifierComponent extends React.Component {
 
 	handleDelete(index) {
 		this.props.delVerb(index);
+		this.props.notifyChange();
 	}
 
 	handleChange(event) {
@@ -22,7 +24,9 @@ class VerbModifierComponent extends React.Component {
 	}
 
 	handleAccept() {
-		//	this.props.modVerb(this.state.index, this.state.value);
+		if (this.state.value) { this.props.modVerb(this.state.index, this.state.value); }
+		else { this.props.delVerb(index); }
+		this.props.notifyChange();
 	}
 
 	render() {
@@ -32,6 +36,7 @@ class VerbModifierComponent extends React.Component {
 					value={this.state.value}
 					type="text"
 					onChange={this.handleChange.bind(this)}
+					autoFocus
 				/>
 				<button type="button" onClick={this.handleAccept.bind(this)}>Accept</button>
 				<button type="button" onClick={this.handleDelete.bind(this, this.state.index)}>Delete</button>
@@ -42,7 +47,8 @@ class VerbModifierComponent extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		delVerb: index => dispatch(delVerb(index))
+		delVerb: index => dispatch(delVerb(index)),
+		modVerb: (index, newValue) => dispatch(modVerb(index, newValue))
 	};
 };
 

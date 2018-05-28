@@ -20,6 +20,8 @@ const rootReducer = (state = appState.initialState, action) => {
 			return setNewAction(state, action.payload);
 		case actionTypes.DEL_ACTION:
 			return deleteAction(state, action.payload);
+		case actionTypes.MOD_VERB:
+			return modifyVerb(state, action.payload);
 		default:
 			return state;
 	}
@@ -62,4 +64,8 @@ function setNewAction(state, newAction) {
 
 function deleteAction(state, actionName) {
 	return update(state, { gameData: { globalResources: { actions: { $unset: [actionName] } } } });
+}
+
+function modifyVerb(state, modifyData) {
+	return update(state, { gameData: { verbs: { $splice: [[modifyData.index, 1, modifyData.newValue]] } } });
 }

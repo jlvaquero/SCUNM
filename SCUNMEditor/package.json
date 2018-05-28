@@ -10,8 +10,15 @@
 	},
 	"babel": {
 		"presets": [
-			"env",
-			"react"
+			"react",
+			[
+				"env",
+				{
+					"targets": {
+						"browsers": [ "last 2 Chrome versions" ]
+					}
+				}
+			]
 		]
 	},
 	"author": "JL Vaquero",
