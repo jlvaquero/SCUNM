@@ -1,9 +1,9 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
 import * as appState from "../state/State";
-import MetaEditor from "./editors/MetaEditor";
-import VerbEditor from "./editors/VerbEditor";
-import ActionEditor from "./editors/ActionEditor";
+import MetaEditor from "./editors/Meta/MetaEditor";
+import VerbEditor from "./editors/Verbs/VerbEditor";
+import ActionEditor from "./editors/Actions/ActionEditor";
 
 class EditionWindowManager extends React.Component {
 	get displayName() { return 'EditionWindowManager'; }

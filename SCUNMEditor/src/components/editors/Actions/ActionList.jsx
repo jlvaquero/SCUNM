@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { delAction } from "../../actions/actions";
+import { delAction } from "../../../actions/actions";
 
 class ActionListComponent extends React.Component {
 	get displayName() { return 'ActionListComponent'; }

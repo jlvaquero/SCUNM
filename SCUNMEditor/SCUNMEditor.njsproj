@@ -35,6 +35,9 @@
     <Folder Include="src\actions\" />
     <Folder Include="src\components\" />
     <Folder Include="src\components\editors\" />
+    <Folder Include="src\components\editors\Actions\" />
+    <Folder Include="src\components\editors\Meta\" />
+    <Folder Include="src\components\editors\Verbs\" />
     <Folder Include="src\components\menu\" />
     <Folder Include="src\state\" />
     <Folder Include="src\reducers\" />
@@ -49,9 +52,9 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Content Include="src\components\editors\ActionEditor.jsx" />
-    <Content Include="src\components\editors\VerbList.jsx" />
-    <Content Include="src\components\editors\VerbModifier.jsx" />
+    <Content Include="src\components\editors\Actions\ActionEditor.jsx" />
+    <Content Include="src\components\editors\Verbs\VerbList.jsx" />
+    <Content Include="src\components\editors\Verbs\VerbModifier.jsx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\actions\action-types.jsx">
@@ -66,16 +69,16 @@
     <Compile Include="src\components\EditionWindow.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\editors\ActionForm.jsx" />
-    <Compile Include="src\components\editors\ActionList.jsx" />
-    <Compile Include="src\components\editors\VerbForm.jsx" />
+    <Compile Include="src\components\editors\Actions\ActionForm.jsx" />
+    <Compile Include="src\components\editors\Actions\ActionList.jsx" />
+    <Compile Include="src\components\editors\Verbs\VerbForm.jsx" />
     <Compile Include="src\components\Menu.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\editors\MetaEditor.jsx">
+    <Compile Include="src\components\editors\Meta\MetaEditor.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\components\editors\VerbEditor.jsx">
+    <Compile Include="src\components\editors\Verbs\VerbEditor.jsx">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\components\menu\ActionMenu.js" />

@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { setAction } from "../../actions/actions";
+import { setAction } from "../../../actions/actions";
 
 class ActionFormComponent extends React.Component {
 	get displayName() { return 'ActionFormComponent'; }
