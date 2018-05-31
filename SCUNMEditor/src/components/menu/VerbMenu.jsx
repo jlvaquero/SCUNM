@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { selectVerbElto } from "../../actions/actions";
+import { selectVerbElto } from "../../reduxActions/actions";
 
 class VerbMenuElement extends React.Component {
 	get displayName() { return 'VerbMenuElement'; }

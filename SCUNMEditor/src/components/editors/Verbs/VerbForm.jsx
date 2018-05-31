@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { setVerb } from "../../../actions/actions";
+import { setVerb } from "../../../reduxActions/actions";
 
 class VerbFormComponent extends React.Component {
 	get displayName() { return 'VerbFormComponent'; }

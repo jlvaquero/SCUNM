@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { selectMetaElto } from "../../actions/actions";
+import { selectMetaElto } from "../../reduxActions/actions";
 
 class MetaMenuElement extends React.Component {
 	get displayName() { return 'MetaMenuElement'; }

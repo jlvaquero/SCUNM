@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { selectActionElto } from "../../actions/actions";
+import { selectActionElto } from "../../reduxActions/actions";
 
 class ActionMenuElement extends React.Component {
 	get displayName() { return 'ActionMenuElement'; }

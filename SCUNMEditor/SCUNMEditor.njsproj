@@ -32,7 +32,7 @@
     <Folder Include="dist\" />
     <Folder Include="dist\res\" />
     <Folder Include="src\" />
-    <Folder Include="src\actions\" />
+    <Folder Include="src\reduxActions\" />
     <Folder Include="src\components\" />
     <Folder Include="src\components\editors\" />
     <Folder Include="src\components\editors\Actions\" />
@@ -57,10 +57,10 @@
     <Content Include="src\components\editors\Verbs\VerbModifier.jsx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\actions\action-types.jsx">
+    <Compile Include="src\reduxActions\action-types.jsx">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\actions\actions.jsx">
+    <Compile Include="src\reduxActions\actions.jsx">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\components\App.jsx">
@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="src\components\editors\Actions\ActionForm.jsx" />
     <Compile Include="src\components\editors\Actions\ActionList.jsx" />
+    <Compile Include="src\components\editors\Actions\ActionModifier.jsx" />
     <Compile Include="src\components\editors\Verbs\VerbForm.jsx" />
     <Compile Include="src\components\Menu.jsx">
       <SubType>Code</SubType>

@@ -1,4 +1,4 @@
-﻿import * as actionTypes from "../actions/action-types";
+﻿import * as actionTypes from "./action-types";
 export const selectMetaElto = () => ({ type: actionTypes.SELECT_META, payload: null });
 export const selectVerbElto = () => ({ type: actionTypes.SELECT_VERBS, payload: null });
 export const selectActionElto = () => ({ type: actionTypes.SELECT_ACTIONS, payload: null });
@@ -8,3 +8,4 @@ export const delVerb = index => ({ type: actionTypes.DEL_VERB, payload: index })
 export const modVerb = (index, newValue) => ({ type: actionTypes.MOD_VERB, payload: { index, newValue } });
 export const setAction = newAction => ({ type: actionTypes.SET_ACTION, payload: newAction });
 export const delAction = name => ({ type: actionTypes.DEL_ACTION, payload: name });
+export const modAction = (actionName, actionData) => ({ type: actionTypes.MOD_ACTION, payload: { actionName, actionData } });

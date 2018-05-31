@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { delVerb } from "../../../actions/actions";
-import { modVerb } from "../../../actions/actions";
+import { delVerb } from "../../../reduxActions/actions";
+import { modVerb } from "../../../reduxActions/actions";
 
 class VerbModifierComponent extends React.Component {
 	get displayName() { return 'VerbModifierComponent'; }

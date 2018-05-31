@@ -1,4 +1,4 @@
-﻿import * as actionTypes from "../actions/action-types";
+﻿import * as actionTypes from "../reduxActions/action-types";
 import * as appState from "../state/State";
 import update from 'immutability-helper';
 
@@ -16,12 +16,15 @@ const rootReducer = (state = appState.initialState, action) => {
 			return setNewVerb(state, action.payload);
 		case actionTypes.DEL_VERB:
 			return deleteVerb(state, action.payload);
+		case actionTypes.MOD_VERB:
+			return modifyVerb(state, action.payload);
 		case actionTypes.SET_ACTION:
 			return setNewAction(state, action.payload);
 		case actionTypes.DEL_ACTION:
 			return deleteAction(state, action.payload);
-		case actionTypes.MOD_VERB:
-			return modifyVerb(state, action.payload);
+		case actionTypes.MOD_ACTION:
+			return modifyAction(state, action.payload);
+
 		default:
 			return state;
 	}
@@ -68,4 +71,16 @@ function deleteAction(state, actionName) {
 
 function modifyVerb(state, modifyData) {
 	return update(state, { gameData: { verbs: { $splice: [[modifyData.index, 1, modifyData.newValue]] } } });
+}
+
+function modifyAction(state, modifyData) {
+	const actionToDel = modifyData.actionName;
+	const newAction = {
+		name: modifyData.actionData.name,
+		description: modifyData.actionData.description,
+		image: modifyData.actionData.image
+	};
+	//just del currAction and set up a new one
+	const currState = deleteAction(state, actionToDel);
+	return setNewAction(currState, newAction);
 }

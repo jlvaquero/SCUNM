@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { setMeta } from "../../../actions/actions"
+import { setMeta } from "../../../reduxActions/actions"
 
 class MetaEditorComponent extends React.Component {
 	get displayName() { return 'MetaEditorComponent'; }
