@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.modAction = exports.delAction = exports.setAction = exports.modVerb = exports.delVerb = exports.setVerb = exports.setMeta = exports.selectActionElto = exports.selectVerbElto = exports.selectMetaElto = undefined;
+exports.modAction = exports.delAction = exports.setAction = exports.modVerb = exports.delVerb = exports.setVerb = exports.setMeta = exports.selectActorElto = exports.selectActionElto = exports.selectVerbElto = exports.selectMetaElto = undefined;
 
 var _actionTypes = require("./action-types");
 
@@ -14,6 +14,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 const selectMetaElto = exports.selectMetaElto = () => ({ type: actionTypes.SELECT_META, payload: null });
 const selectVerbElto = exports.selectVerbElto = () => ({ type: actionTypes.SELECT_VERBS, payload: null });
 const selectActionElto = exports.selectActionElto = () => ({ type: actionTypes.SELECT_ACTIONS, payload: null });
+const selectActorElto = exports.selectActorElto = () => ({ type: actionTypes.SELECT_ACTORS, payload: null });
 const setMeta = exports.setMeta = newMeta => ({ type: actionTypes.SET_META, payload: newMeta });
 const setVerb = exports.setVerb = newVerb => ({ type: actionTypes.SET_VERB, payload: newVerb });
 const delVerb = exports.delVerb = index => ({ type: actionTypes.DEL_VERB, payload: index });

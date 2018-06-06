@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 const SELECT_META = exports.SELECT_META = "SELECT_META";
 const SELECT_VERBS = exports.SELECT_VERBS = "SELECT_VERBS";
 const SELECT_ACTIONS = exports.SELECT_ACTIONS = "SELECT_ACTIONS";
+const SELECT_ACTORS = exports.SELECT_ACTORS = "SELECT_ACTORS";
 const SET_META = exports.SET_META = "SET_META";
 const SET_VERB = exports.SET_VERB = "SET_VERB";
 const DEL_VERB = exports.DEL_VERB = "DEL_VERB";

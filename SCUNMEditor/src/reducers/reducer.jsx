@@ -10,6 +10,8 @@ const rootReducer = (state = appState.initialState, action) => {
 			return setVerbsSelected(state);
 		case actionTypes.SELECT_ACTIONS:
 			return setActionsSelected(state);
+		case actionTypes.SELECT_ACTORS:
+			return setActorsSelected(state);
 		case actionTypes.SET_META:
 			return setMetaInfo(state, action.payload);
 		case actionTypes.SET_VERB:
@@ -43,6 +45,10 @@ function setActionsSelected(state) {
 	return update(state, { selectedGameElto: { $set: appState.ACTION_GAME_ELTO } });
 }
 
+function setActorsSelected(state) {
+	return update(state, { selectedGameElto: { $set: appState.ACTOR_GAME_ELTO } });
+}
+
 function setMetaInfo(state, newMeta) {
 	return update(state, { gameData: { meta: { $set: newMeta } } });
 }
@@ -69,16 +75,16 @@ function deleteAction(state, actionName) {
 	return update(state, { gameData: { globalResources: { actions: { $unset: [actionName] } } } });
 }
 
-function modifyVerb(state, modifyData) {
-	return update(state, { gameData: { verbs: { $splice: [[modifyData.index, 1, modifyData.newValue]] } } });
+function modifyVerb(state, newData) {
+	return update(state, { gameData: { verbs: { $splice: [[newData.index, 1, newData.newValue]] } } });
 }
 
-function modifyAction(state, modifyData) {
-	const actionToDel = modifyData.actionName;
+function modifyAction(state, modifiedData) {
+	const actionToDel = modifiedData.actionName;
 	const newAction = {
-		name: modifyData.actionData.name,
-		description: modifyData.actionData.description,
-		image: modifyData.actionData.image
+		name: modifiedData.actionData.name,
+		description: modifiedData.actionData.description,
+		image: modifiedData.actionData.image
 	};
 	//just del currAction and set up a new one
 	const currState = deleteAction(state, actionToDel);

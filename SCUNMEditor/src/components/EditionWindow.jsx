@@ -24,6 +24,9 @@ class EditionWindowManager extends React.Component {
 			case appState.ACTION_GAME_ELTO:
 				editorToShow = (<ActionEditor />);
 				break;
+			case appState.ACTOR_GAME_ELTO:
+				editorToShow = (<MetaEditor />);
+				break;
 		}
 
 		return (

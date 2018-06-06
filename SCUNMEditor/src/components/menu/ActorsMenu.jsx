@@ -1,9 +1,9 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
-import { selectVerbElto } from "../../reduxActions/actions";
+import { selectActorElto } from "../../reduxActions/actions";
 
-class VerbMenuElement extends React.Component {
-	get displayName() { return 'VerbMenuElement'; }
+class ActorMenuElement extends React.Component {
+	get displayName() { return 'ActorMenuElement'; }
 
 	constructor() {
 		super();
@@ -12,13 +12,13 @@ class VerbMenuElement extends React.Component {
 
 	handleClick(event) {
 		event.preventDefault();
-		this.props.selectVerbElto();
+		this.props.selectActorElto();
 	}
 
 	render() {
 		return (
 			<li className="menu" onClick={this.handleClick}>
-				Verbs
+				Actors
       </li>
 		);
 	}
@@ -26,9 +26,9 @@ class VerbMenuElement extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		selectVerbElto: () => dispatch(selectVerbElto())
+		selectActorElto: () => dispatch(selectActorElto())
 	};
 };
 
-const VerbMenu = connect(null, mapDispatchToProps)(VerbMenuElement);
-export default VerbMenu;
+const ActorMenu = connect(null, mapDispatchToProps)(ActorMenuElement);
+export default ActorMenu;

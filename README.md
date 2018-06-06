@@ -1,6 +1,7 @@
-![logo](logo.png)
+![logo](logo.png)              
 # SCUNM
-
+ 
+![badge](https://cdn4.iconfinder.com/data/icons/competition-soft/512/second_medal-128.png) Second prize winner in Spaghetti Code Fest at [ETSIS University](https://coredumped.es/2018/spaghetti-code-fest-resumen-premios/)
 
 This is Script Creation Utility for Nodejs Maniacs; a text adventure game engine and Telegram bot as host, writen in node.js. The engine aims to be easily consumed by a Telegram ChatBot through standarized output that allows text, images (even animated gifs) and interactive selection although, thanks to the low coupling design, different hosts and UI are possible.
 

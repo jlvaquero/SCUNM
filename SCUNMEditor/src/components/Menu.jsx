@@ -2,6 +2,7 @@
 import MetaMenu from "./menu/MetaMenu";
 import VerbMenu from "./menu/VerbMenu";
 import ActionMenu from "./menu/ActionMenu";
+import ActorMenu from "./menu/ActorsMenu";
 
 const Menu = () => (
 	<div className="column-left">
@@ -9,6 +10,7 @@ const Menu = () => (
 			<MetaMenu />
 			<VerbMenu />
 			<ActionMenu />
+			<ActorMenu />
 		</ul>
 	</div>
 );

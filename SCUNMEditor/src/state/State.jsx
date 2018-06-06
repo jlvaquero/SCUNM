@@ -1,6 +1,7 @@
 ﻿export const META_GAME_ELTO = 'meta';
 export const VERB_GAME_ELTO = 'verb';
 export const ACTION_GAME_ELTO = 'action';
+export const ACTOR_GAME_ELTO = 'actor';
 
 export class State {  //honoring gamedata file format as close as possible will alows JSONfn to stringfy most (if not all) of gamedata file just in one command.
 	//but not flat state makes inmutable a little bit harder...

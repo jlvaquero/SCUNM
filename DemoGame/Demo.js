@@ -66,7 +66,7 @@
 				},
 				use: function (game, secondActor) { //script for use action (i.e. use coin fountain)
 					if (secondActor.doNotExist) return null;
-					if (secondActor.id === "fountain") return game.outPutCreateRaw("My only wish is not loosing this coin...");
+					if (secondActor.id === "fountain") return game.outPutCreateRaw("My only wish is not loosing this coin..."); //funny easter eggs
 					return game.outPutCreateRaw("There is no coin slot!"); //no coin slot exist in this game
 				}
 			},
