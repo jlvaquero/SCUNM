@@ -4,6 +4,7 @@ import * as appState from "../state/State";
 import MetaEditor from "./editors/Meta/MetaEditor";
 import VerbEditor from "./editors/Verbs/VerbEditor";
 import ActionEditor from "./editors/Actions/ActionEditor";
+import ActorsEditor from "./editors/Actors/ActorsEditor";
 
 class EditionWindowManager extends React.Component {
 	get displayName() { return 'EditionWindowManager'; }
@@ -25,7 +26,7 @@ class EditionWindowManager extends React.Component {
 				editorToShow = (<ActionEditor />);
 				break;
 			case appState.ACTOR_GAME_ELTO:
-				editorToShow = (<MetaEditor />);
+				editorToShow = (<ActorsEditor />);
 				break;
 		}
 

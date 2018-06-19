@@ -58,6 +58,7 @@
     <Content Include="src\components\editors\Verbs\VerbModifier.jsx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\components\editors\Actors\ActorsEditor.jsx" />
     <Compile Include="src\components\menu\ActorsMenu.jsx" />
     <Compile Include="src\reduxActions\action-types.jsx">
       <SubType>Code</SubType>

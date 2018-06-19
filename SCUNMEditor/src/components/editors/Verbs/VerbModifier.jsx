@@ -14,8 +14,8 @@ class VerbModifierComponent extends React.Component {
 		};
 	}
 
-	handleDelete(index) {
-		this.props.delVerb(index);
+	handleDelete() {
+		this.props.delVerb(this.state.index);
 		this.props.notifyChange();
 	}
 
@@ -25,7 +25,7 @@ class VerbModifierComponent extends React.Component {
 
 	handleAccept() {
 		if (this.state.value) { this.props.modVerb(this.state.index, this.state.value); }
-		else { this.props.delVerb(index); }
+		else { this.props.delVerb(this.state.index); }
 		this.props.notifyChange();
 	}
 
@@ -39,7 +39,7 @@ class VerbModifierComponent extends React.Component {
 					autoFocus
 				/>
 				<button type="button" onClick={this.handleAccept.bind(this)}>Accept</button>
-				<button type="button" onClick={this.handleDelete.bind(this, this.state.index)}>Delete</button>
+				<button type="button" onClick={this.handleDelete.bind(this)}>Delete</button>
 			</React.Fragment>
 		);
 	}
