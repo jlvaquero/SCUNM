@@ -68,7 +68,7 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		engine.setState(gameState);
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
-			await bot.sendDocument(userId, outPut.imgURL);  //away to always send img first
+			await bot.sendDocument(userId, outPut.imgURL);  //await to always send img first
 		}
 		await bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard
@@ -82,7 +82,7 @@ function setEvents(bot, engine, store, verbsKeyboard) {
 		store.set(storeKey, JSON.stringify(engine.getState()));
 		var outPut = engine.continue();
 		if (outPut.imgURL) {
-			await bot.sendDocument(userId, outPut.imgURL);  //away to always send img first
+			await bot.sendDocument(userId, outPut.imgURL);  //await to always send img first
 		}
 		await bot.sendMessage(userId, outPut.text, {
 			reply_markup: verbsKeyboard

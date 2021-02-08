@@ -7,11 +7,12 @@ import ActionEditor from "./editors/Actions/ActionEditor";
 import ActorsEditor from "./editors/Actors/ActorsEditor";
 
 class EditionWindowManager extends React.Component {
-	get displayName() { return 'EditionWindowManager'; }
-
+	
 	constructor(props) {
 		super(props);
-	}
+  }
+
+  get displayName() { return 'EditionWindowManager'; }
 
 	render() {
 		let editorToShow;

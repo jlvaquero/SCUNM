@@ -20,7 +20,7 @@ export class State {  //honoring gamedata file format as close as possible will 
 			tentacleDance: {
 				description: "The tentacle is happy now and he starts dancing",
 				image: "https://cdn.weasyl.com/static/media/5c/5b/cd/5c5bcd54c73d0e2aa76e89108e0a9740b02dcadc8b1006cc5dafebfe75b38665.gif"
-			},
+			}
 		};
 	}
 }

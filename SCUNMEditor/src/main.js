@@ -15,7 +15,7 @@ let mainWindow;
 function createWindow() {
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
   // Create the browser window.
-  mainWindow = new BrowserWindow({ autoHideMenuBar: true });
+  mainWindow = new BrowserWindow({ autoHideMenuBar: true, webPreferences: {nodeIntegration:true}});
   mainWindow.maximize();
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
