@@ -58,6 +58,9 @@
     <Content Include="src\components\editors\Verbs\VerbModifier.jsx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\components\editors\Actions\ActionItem.jsx">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\components\editors\Actors\ActorsEditor.jsx" />
     <Compile Include="src\components\menu\MenuItem.jsx">
       <SubType>Code</SubType>
