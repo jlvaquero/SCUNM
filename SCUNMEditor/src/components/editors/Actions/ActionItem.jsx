@@ -5,9 +5,6 @@ class ActionItemComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      actionData : props.data
-    };
   }
 
   get displayName() { return 'ActionItemComponent'; }
@@ -18,9 +15,9 @@ class ActionItemComponent extends React.Component {
        <li>{name}</li>
         <ul className="action">
           <li>{this.props.actionName}</li>
-           <li>{this.props.actionData.description}</li>
-           <li>{this.props.actionData.image}</li>
-           {this.props.actionData.image &&
+          <li>{this.props.actionData.description}</li>
+          <li>{this.props.actionData.image}</li>
+          {this.props.actionData.image &&
              <li>
             <img src={this.props.actionData.image} className="action" />
              </li>
