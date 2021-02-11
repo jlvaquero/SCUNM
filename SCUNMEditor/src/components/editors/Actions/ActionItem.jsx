@@ -16,7 +16,8 @@ class ActionItemComponent extends React.Component {
     return (
       <React.Fragment>
        <li>{name}</li>
-       <ul className="action">
+        <ul className="action">
+          <li>{this.props.actionName}</li>
            <li>{this.props.actionData.description}</li>
            <li>{this.props.actionData.image}</li>
            {this.props.actionData.image &&

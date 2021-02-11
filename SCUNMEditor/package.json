@@ -1,44 +1,44 @@
 {
-	"name": "scunmeditor",
-	"version": "1.0.0",
-	"description": "SCUNM Game Editor",
-	"main": "./dist/main.js",
-	"scripts": {
-		"start": "electron dist/main.js",
-		"transpile": "babel  ./src -d ./dist",
-		"watch": "babel  ./src -d ./dist --watch"
-	},
-	"babel": {
-		"presets": [
-			"@babel/react",
-			[
-				"@babel/env",
-				{
-					"targets": {
-						"browsers": [
-							"last 2 Chrome versions"
-						]
-					}
-				}
-			]
-		]
-	},
-	"author": "JL Vaquero",
-	"license": "MIT",
-	"devDependencies": {
-		"@babel/cli": "^7.12.13",
-		"@babel/core": "^7.12.13",
-		"@babel/preset-env": "^7.12.13",
-		"@babel/preset-react": "^7.12.13",
-		"@babel/runtime": "^7.12.13",
-		"electron-devtools-installer": "^3.1.1"
-	},
-	"dependencies": {
-		"electron": "^11.2.3",
-		"immutability-helper": "^2.9.1",
-		"react": "^16.14.0",
-		"react-dom": "^16.14.0",
-		"react-redux": "^5.1.2",
-		"redux": "^4.0.5"
-	}
+  "name": "scunmeditor",
+  "version": "1.0.0",
+  "description": "SCUNM Game Editor",
+  "main": "./dist/main.js",
+  "scripts": {
+    "start": "electron dist/main.js",
+    "transpile": "babel  ./src -d ./dist",
+    "watch": "babel  ./src -d ./dist --watch"
+  },
+  "babel": {
+    "presets": [
+      "@babel/react",
+      [
+        "@babel/env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 Chrome versions"
+            ]
+          }
+        }
+      ]
+    ]
+  },
+  "author": "JL Vaquero",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.12.13",
+    "@babel/core": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
+    "@babel/preset-react": "^7.12.13",
+    "@babel/runtime": "^7.12.13",
+    "electron-devtools-installer": "^3.1.1"
+  },
+  "dependencies": {
+    "electron": "^11.2.3",
+    "immutability-helper": "^2.9.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-redux": "^5.1.2",
+    "redux": "^4.0.5"
+  }
 }
