@@ -34,7 +34,7 @@ class MetaEditorComponent extends React.Component {
 
 	render() {
 		return (
-			<React.Fragment>
+      <div className="column-center">
 				<h1>Game Metadata</h1>
 				<label htmlFor="gameName">
 					Game Name:
@@ -68,7 +68,7 @@ class MetaEditorComponent extends React.Component {
 						onChange={this.handleChange}
 					/>
 				</label>
-			</ React.Fragment>
+			</div>
 		);
 	}
 }

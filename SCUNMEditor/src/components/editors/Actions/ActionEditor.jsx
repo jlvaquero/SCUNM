@@ -12,11 +12,11 @@ class ActionEditorComponent extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="column-center">
         <h1>Game Actions</h1>
         <ActionForm />
         <ActionList />
-      </React.Fragment >
+     </div>
     );
   }
 }

@@ -29,12 +29,10 @@ class EditionWindowManager extends React.Component {
 			case appState.ACTOR_GAME_ELTO:
 				editorToShow = (<ActorsEditor />);
 				break;
-		}
 
+		}
 		return (
-			<div className="column-center">
-				{editorToShow}
-			</div>
+				editorToShow
 		);
 	}
 }

@@ -11,11 +11,11 @@ class VerbEditorComponent extends React.Component {
 
 	render() {
 		return (
-			<React.Fragment>
+      <div className="column-center">
 				<h1>Game Verbs</h1>
 				<VerbForm />
 				<VerbList />
-			</React.Fragment >
+			</div>
 		);
 	}
 }
