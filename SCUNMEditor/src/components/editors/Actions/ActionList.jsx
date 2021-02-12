@@ -29,9 +29,7 @@ class ActionListComponent extends React.Component {
 					let outPut;
 					if (name !== this.state.editAction) {
 						outPut = (
-							<div className="action" key={name} onClick={this.handleClick.bind(this, name)}>
-                <ActionItem actionName={name} actionData={this.props.actions[name]} />
-							</div>
+              <ActionItem key={name} actionName={name} actionData={this.props.actions[name]} onChildClick={this.handleClick.bind(this, name)} />
             );
 					}
 					else {

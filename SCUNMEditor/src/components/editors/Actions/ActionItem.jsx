@@ -11,7 +11,7 @@ class ActionItemComponent extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="action" onClick={this.props.onChildClick}>
        <li>{name}</li>
         <ul className="action">
           <li>{this.props.actionName}</li>
@@ -23,7 +23,7 @@ class ActionItemComponent extends React.Component {
              </li>
            }
         </ul>
-       </React.Fragment>
+       </div>
     );
   }
 }
