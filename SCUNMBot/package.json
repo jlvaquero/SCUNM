@@ -9,7 +9,7 @@
     "name": "joseluis.vaquero"
   },
   "dependencies": {
-    "mocha": "^4.0.1",
+    "mocha": "^10.2.0",
     "node-telegram-bot-api": "^0.27.1",
     "rewire": "^2.5.2"
   },
