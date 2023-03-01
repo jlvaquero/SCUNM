@@ -9,7 +9,7 @@
     "name": "joseluis.vaquero"
   },
   "dependencies": {
-    "mocha": "^4.0.1",
+    "mocha": "^10.2.0",
     "rewire": "^2.5.2"
   },
   "scripts": {
